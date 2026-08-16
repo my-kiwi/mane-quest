@@ -22,6 +22,7 @@ const unicorn = {
   width: 80,
   height: 80,
   speed: 5,
+  direction: -1, // -1 for left, 1 for right
 };
 
 // Load unicorn image
@@ -86,9 +87,11 @@ function update() {
   // Keyboard movement
   if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
     unicorn.x -= unicorn.speed;
+    unicorn.direction = -1;
   }
   if (keys['ArrowRight'] || keys['d'] || keys['D']) {
     unicorn.x += unicorn.speed;
+    unicorn.direction = 1;
   }
   if (keys['ArrowUp'] || keys['w'] || keys['W']) {
     unicorn.y -= unicorn.speed;
@@ -116,6 +119,10 @@ function update() {
     const moveSpeed = Math.min(unicorn.speed, distance);
     unicorn.x += (dx / distance) * moveSpeed;
     unicorn.y += (dy / distance) * moveSpeed;
+    // Update direction based on movement
+    if (dx !== 0) {
+      unicorn.direction = dx > 0 ? 1 : -1;
+    }
   }
 }
 
@@ -139,13 +146,19 @@ function draw() {
 
   // Draw unicorn
   if (unicorn.image.complete) {
+    ctx.save();
+    ctx.translate(unicorn.x, unicorn.y - unicorn.height / 2);
+    if (unicorn.direction === 1) {
+      ctx.scale(-1, 1);
+    }
     ctx.drawImage(
       unicorn.image,
-      unicorn.x - unicorn.width / 2,
-      unicorn.y - unicorn.height / 2,
+      -unicorn.width / 2,
+      0,
       unicorn.width,
       unicorn.height
     );
+    ctx.restore();
   }
 }
 
