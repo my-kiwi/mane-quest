@@ -69,10 +69,19 @@ function update() {
   const minY = grassY - unicorn.height / 2;
 
   // Check if keyboard is being used
-  const isKeyboardInput = keys['ArrowLeft'] || keys['a'] || keys['A'] || 
-                          keys['ArrowRight'] || keys['d'] || keys['D'] || 
-                          keys['ArrowUp'] || keys['w'] || keys['W'] || 
-                          keys['ArrowDown'] || keys['s'] || keys['S'];
+  const isKeyboardInput =
+    keys['ArrowLeft'] ||
+    keys['a'] ||
+    keys['A'] ||
+    keys['ArrowRight'] ||
+    keys['d'] ||
+    keys['D'] ||
+    keys['ArrowUp'] ||
+    keys['w'] ||
+    keys['W'] ||
+    keys['ArrowDown'] ||
+    keys['s'] ||
+    keys['S'];
 
   // Keyboard movement
   if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
