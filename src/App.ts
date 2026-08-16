@@ -33,7 +33,7 @@ export const unicorn = {
 };
 
 // Load unicorn image
-unicorn.image.src = './public/uni-red.png';
+unicorn.image.src = './uni-red.png';
 
 // Input handling
 const keys: { [key: string]: boolean } = {};
@@ -169,4 +169,3 @@ function gameLoop() {
 }
 
 gameLoop();
-
