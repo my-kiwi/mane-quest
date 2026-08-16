@@ -1,4 +1,4 @@
-import { unicorn } from './App';
+import { unicorn } from './unicorn';
 
 // Get canvas and context from the DOM
 const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
