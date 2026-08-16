@@ -14,8 +14,10 @@ window.addEventListener('resize', resizeCanvas);
 const SKY_HEIGHT_RATIO = 2 / 3;
 const GRASS_HEIGHT_RATIO = 1 / 3;
 
+const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+
 // Unicorn properties
-const unicorn = {
+export const unicorn = {
   image: new Image(),
   x: canvas.width / 2,
   y: 0,
@@ -23,6 +25,11 @@ const unicorn = {
   height: 80,
   speed: 5,
   direction: -1, // -1 for left, 1 for right
+  isJumping: false,
+  velocityY: 0,
+  jumpStrength: 13,
+  gravity: 0.7,
+  rotation: 0,
 };
 
 // Load unicorn image
@@ -33,25 +40,48 @@ const keys: { [key: string]: boolean } = {};
 let targetX = unicorn.x;
 let targetY = unicorn.y;
 
+const getGroundY = () => canvas.height * SKY_HEIGHT_RATIO - unicorn.height / 3;
+
+export function triggerJump() {
+  if (unicorn.isJumping) {
+    return;
+  }
+
+  unicorn.isJumping = true;
+  unicorn.velocityY = -unicorn.jumpStrength;
+  unicorn.rotation = -0.65;
+}
+
 document.addEventListener('keydown', (e) => {
+  const key = e.key.toLowerCase();
   keys[e.key] = true;
+
+  if ((e.key === 'ArrowUp' || key === 'w') && !e.repeat) {
+    triggerJump();
+  }
 });
 
 document.addEventListener('keyup', (e) => {
   keys[e.key] = false;
 });
 
-const getMinY = () => canvas.height * SKY_HEIGHT_RATIO - unicorn.height / 3;
+// Handle canvas interaction (click and touch)
+function handleCanvasInteraction(x: number, y: number) {
+  targetX = clamp(x, unicorn.width / 2, canvas.width - unicorn.width / 2);
+  targetY = getGroundY();
 
-// Click to move
+  if (y < unicorn.y - 50) {
+    triggerJump();
+  }
+}
+
+// Click to move / jump
 canvas.addEventListener('click', (e) => {
   const rect = canvas.getBoundingClientRect();
   const clickX = e.clientX - rect.left;
   const clickY = e.clientY - rect.top;
-  const grassY = canvas.height * SKY_HEIGHT_RATIO;
 
-  targetX = Math.max(unicorn.width / 2, Math.min(clickX, canvas.width - unicorn.width / 2));
-  targetY = getMinY();
+  handleCanvasInteraction(clickX, clickY);
 });
 
 // Touch support
@@ -60,33 +90,18 @@ canvas.addEventListener('touchstart', (e) => {
   const touch = e.touches[0];
   const touchX = touch.clientX - rect.left;
   const touchY = touch.clientY - rect.top;
-  const grassY = canvas.height * SKY_HEIGHT_RATIO;
 
-  targetX = Math.max(unicorn.width / 2, Math.min(touchX, canvas.width - unicorn.width / 2));
-  targetY = getMinY();
+  handleCanvasInteraction(touchX, touchY);
 });
 
 // Update unicorn position
-function update() {
-  const grassY = canvas.height * SKY_HEIGHT_RATIO;
-  const minY = getMinY();
+export function update() {
+  const minY = getGroundY();
 
   // Check if keyboard is being used
   const isKeyboardInput =
-    keys['ArrowLeft'] ||
-    keys['a'] ||
-    keys['A'] ||
-    keys['ArrowRight'] ||
-    keys['d'] ||
-    keys['D'] ||
-    keys['ArrowUp'] ||
-    keys['w'] ||
-    keys['W'] ||
-    keys['ArrowDown'] ||
-    keys['s'] ||
-    keys['S'];
+    keys['ArrowLeft'] || keys['a'] || keys['A'] || keys['ArrowRight'] || keys['d'] || keys['D'];
 
-  // Keyboard movement
   if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
     unicorn.x -= unicorn.speed;
     unicorn.direction = -1;
@@ -95,34 +110,52 @@ function update() {
     unicorn.x += unicorn.speed;
     unicorn.direction = 1;
   }
-  if (keys['ArrowUp'] || keys['w'] || keys['W']) {
-    unicorn.y -= unicorn.speed;
-  }
-  if (keys['ArrowDown'] || keys['s'] || keys['S']) {
-    unicorn.y += unicorn.speed;
+
+  unicorn.x = clamp(unicorn.x, unicorn.width / 2, canvas.width - unicorn.width / 2);
+
+  if (unicorn.isJumping) {
+    unicorn.velocityY += unicorn.gravity;
+    unicorn.y += unicorn.velocityY;
+    unicorn.rotation = clamp(unicorn.velocityY * 0.08, -1.5, 1.5);
+
+    if (unicorn.y >= minY) {
+      unicorn.y = minY;
+      unicorn.isJumping = false;
+      unicorn.velocityY = 0;
+      unicorn.rotation = 0;
+    }
+  } else {
+    unicorn.y = minY;
+    unicorn.rotation = 0;
   }
 
-  // Keep unicorn in bounds
-  unicorn.x = Math.max(unicorn.width / 2, Math.min(unicorn.x, canvas.width - unicorn.width / 2));
-  unicorn.y = Math.max(minY, Math.min(unicorn.y, minY));
-
-  // When using keyboard, update target to current position to prevent smooth movement interference
   if (isKeyboardInput) {
     targetX = unicorn.x;
-    targetY = unicorn.y;
+    targetY = minY;
   }
 
   // Smooth movement towards click target
-  const dx = targetX - unicorn.x;
-  const dy = targetY - unicorn.y;
-  const distance = Math.sqrt(dx * dx + dy * dy);
+  if (!unicorn.isJumping) {
+    const dx = targetX - unicorn.x;
+    const dy = targetY - unicorn.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
 
-  if (distance > 5) {
-    const moveSpeed = Math.min(unicorn.speed, distance);
-    unicorn.x += (dx / distance) * moveSpeed;
-    unicorn.y += (dy / distance) * moveSpeed;
-    // Update direction based on movement
-    if (dx !== 0) {
+    if (distance > 5) {
+      const moveSpeed = Math.min(unicorn.speed, distance);
+      unicorn.x += (dx / distance) * moveSpeed;
+      unicorn.y += (dy / distance) * moveSpeed;
+
+      if (dx !== 0) {
+        unicorn.direction = dx > 0 ? 1 : -1;
+      }
+    }
+  } else {
+    const dx = targetX - unicorn.x;
+    const distance = Math.abs(dx);
+
+    if (distance > 5) {
+      const moveSpeed = Math.min(unicorn.speed, distance);
+      unicorn.x += (dx / distance) * moveSpeed;
       unicorn.direction = dx > 0 ? 1 : -1;
     }
   }
@@ -149,14 +182,15 @@ function draw() {
   // Draw unicorn
   if (unicorn.image.complete) {
     ctx.save();
-    ctx.translate(unicorn.x, unicorn.y - unicorn.height / 2);
+    ctx.translate(unicorn.x, unicorn.y);
+    ctx.rotate(unicorn.rotation * (unicorn.direction === 1 ? 1 : -1));
     if (unicorn.direction === 1) {
       ctx.scale(-1, 1);
     }
     ctx.drawImage(
       unicorn.image,
       -unicorn.width / 2,
-      0,
+      -unicorn.height / 2,
       unicorn.width,
       unicorn.height
     );
