@@ -68,6 +68,12 @@ function update() {
   const grassY = canvas.height * SKY_HEIGHT_RATIO;
   const minY = grassY - unicorn.height / 2;
 
+  // Check if keyboard is being used
+  const isKeyboardInput = keys['ArrowLeft'] || keys['a'] || keys['A'] || 
+                          keys['ArrowRight'] || keys['d'] || keys['D'] || 
+                          keys['ArrowUp'] || keys['w'] || keys['W'] || 
+                          keys['ArrowDown'] || keys['s'] || keys['S'];
+
   // Keyboard movement
   if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
     unicorn.x -= unicorn.speed;
@@ -86,16 +92,22 @@ function update() {
   unicorn.x = Math.max(unicorn.width / 2, Math.min(unicorn.x, canvas.width - unicorn.width / 2));
   unicorn.y = Math.max(minY, Math.min(unicorn.y, minY));
 
-  // Smooth movement towards click target
-  // const dx = targetX - unicorn.x;
-  // const dy = targetY - unicorn.y;
-  // const distance = Math.sqrt(dx * dx + dy * dy);
+  // When using keyboard, update target to current position to prevent smooth movement interference
+  if (isKeyboardInput) {
+    targetX = unicorn.x;
+    targetY = unicorn.y;
+  }
 
-  // if (distance > 5) {
-  //   const moveSpeed = Math.min(unicorn.speed, distance);
-  //   unicorn.x += (dx / distance) * moveSpeed;
-  //   unicorn.y += (dy / distance) * moveSpeed;
-  // }
+  // Smooth movement towards click target
+  const dx = targetX - unicorn.x;
+  const dy = targetY - unicorn.y;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+
+  if (distance > 5) {
+    const moveSpeed = Math.min(unicorn.speed, distance);
+    unicorn.x += (dx / distance) * moveSpeed;
+    unicorn.y += (dy / distance) * moveSpeed;
+  }
 }
 
 // Draw the level
