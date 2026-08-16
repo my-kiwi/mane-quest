@@ -41,6 +41,8 @@ document.addEventListener('keyup', (e) => {
   keys[e.key] = false;
 });
 
+const getMinY = () => canvas.height * SKY_HEIGHT_RATIO - unicorn.height / 3;
+
 // Click to move
 canvas.addEventListener('click', (e) => {
   const rect = canvas.getBoundingClientRect();
@@ -49,7 +51,7 @@ canvas.addEventListener('click', (e) => {
   const grassY = canvas.height * SKY_HEIGHT_RATIO;
 
   targetX = Math.max(unicorn.width / 2, Math.min(clickX, canvas.width - unicorn.width / 2));
-  targetY = grassY - unicorn.height / 2;
+  targetY = getMinY();
 });
 
 // Touch support
@@ -61,13 +63,13 @@ canvas.addEventListener('touchstart', (e) => {
   const grassY = canvas.height * SKY_HEIGHT_RATIO;
 
   targetX = Math.max(unicorn.width / 2, Math.min(touchX, canvas.width - unicorn.width / 2));
-  targetY = grassY - unicorn.height / 2;
+  targetY = getMinY();
 });
 
 // Update unicorn position
 function update() {
   const grassY = canvas.height * SKY_HEIGHT_RATIO;
-  const minY = grassY - unicorn.height / 2;
+  const minY = getMinY();
 
   // Check if keyboard is being used
   const isKeyboardInput =
