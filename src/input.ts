@@ -9,13 +9,17 @@ export const keys: { [key: string]: boolean } = {};
 export let targetX = 0;
 export let targetY = 0;
 
+export function setTargetPosition(x: number, y: number): void {
+  targetX = x;
+  targetY = y;
+}
+
 export function getGroundY(): number {
   return canvas.height * SKY_HEIGHT_RATIO - unicorn.height / 3;
 }
 
 function handleCanvasInteraction(x: number, y: number): void {
-  targetX = clamp(x, unicorn.width / 2, canvas.width - unicorn.width / 2);
-  targetY = getGroundY();
+  setTargetPosition(clamp(x, unicorn.width / 2, canvas.width - unicorn.width / 2), getGroundY());
 
   if (y < unicorn.y - 50) {
     triggerJump();
@@ -57,6 +61,5 @@ export function initializeInput(): void {
   });
 
   // Initialize target position
-  targetX = unicorn.x;
-  targetY = getGroundY();
+  setTargetPosition(unicorn.x, getGroundY());
 }

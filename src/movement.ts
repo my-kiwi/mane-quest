@@ -1,5 +1,5 @@
 import { unicorn } from './unicorn';
-import { keys, targetX, targetY, getGroundY } from './input';
+import { keys, targetX, targetY, getGroundY, setTargetPosition } from './input';
 import { canvas } from './canvas';
 import { clamp } from './utils';
 
@@ -22,18 +22,11 @@ export function updateMovement(): void {
   unicorn.x = clamp(unicorn.x, unicorn.width / 2, canvas.width - unicorn.width / 2);
 
   if (isKeyboardInput) {
-    // Update target when using keyboard
-    const dx = targetX - unicorn.x;
-    const dy = targetY - minY;
-
-    // Only update targetX and targetY on keyboard input
-    if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
-      // Keep target at keyboard input position
-    }
+    setTargetPosition(unicorn.x, minY);
   }
 
-  // Smooth movement towards click target
-  if (!unicorn.isJumping) {
+  // Smooth movement towards click target when the keyboard is idle
+  if (!isKeyboardInput && !unicorn.isJumping) {
     const dx = targetX - unicorn.x;
     const dy = targetY - unicorn.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
@@ -47,7 +40,7 @@ export function updateMovement(): void {
         unicorn.direction = dx > 0 ? 1 : -1;
       }
     }
-  } else {
+  } else if (!isKeyboardInput) {
     const dx = targetX - unicorn.x;
     const distance = Math.abs(dx);
 
