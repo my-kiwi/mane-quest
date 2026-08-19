@@ -1,13 +1,10 @@
 import { draw } from './drawing';
 import { updateMovement } from './movement';
 import { updatePhysics } from './physics';
-import { getGroundY } from './input';
 
 export function update(): void {
-  const minY = getGroundY();
-
   // Update physics first (handle jumping and gravity)
-  updatePhysics(minY);
+  updatePhysics();
 
   // Update movement (handle input and target movement)
   updateMovement();

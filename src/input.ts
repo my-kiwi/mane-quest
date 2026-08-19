@@ -2,7 +2,7 @@ import { canvas } from './canvas';
 import { unicorn } from './unicorn';
 import { triggerJump } from './physics';
 import { clamp } from './utils';
-import { SKY_HEIGHT_RATIO } from './constants';
+import { levels, NB_OF_TILES_VERTICALLY, TileType } from './levels';
 
 // Input state
 export const keys: { [key: string]: boolean } = {};
@@ -15,7 +15,12 @@ export function setTargetPosition(x: number, y: number): void {
 }
 
 export function getGroundY(): number {
-  return canvas.height * SKY_HEIGHT_RATIO - unicorn.height / 3;
+  const groundRow = levels[0].map.findIndex((row) => row.includes(TileType.GROUND));
+  const groundTop =
+    (groundRow >= 0 ? groundRow : NB_OF_TILES_VERTICALLY) *
+    (canvas.height / NB_OF_TILES_VERTICALLY);
+
+  return groundTop - unicorn.height / 2;
 }
 
 function handleCanvasInteraction(x: number, y: number): void {
