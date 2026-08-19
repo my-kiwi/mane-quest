@@ -2,7 +2,8 @@ import { canvas } from './canvas';
 import { unicorn } from './unicorn';
 import { triggerJump } from './physics';
 import { clamp } from './utils';
-import { levels, NB_OF_TILES_VERTICALLY, TileType } from './levels';
+import { levels, TileType } from './levels';
+import { getTileDimensions } from './levelGeometry';
 
 // Input state
 export const keys: { [key: string]: boolean } = {};
@@ -17,8 +18,7 @@ export function setTargetPosition(x: number, y: number): void {
 export function getGroundY(): number {
   const groundRow = levels[0].map.findIndex((row) => row.includes(TileType.GROUND));
   const groundTop =
-    (groundRow >= 0 ? groundRow : NB_OF_TILES_VERTICALLY) *
-    (canvas.height / NB_OF_TILES_VERTICALLY);
+    (groundRow >= 0 ? groundRow : levels[0].map.length) * getTileDimensions().height;
 
   return groundTop - unicorn.height / 2;
 }

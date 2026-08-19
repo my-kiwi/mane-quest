@@ -2,15 +2,11 @@ import { unicorn } from './unicorn';
 import { keys, targetX, setTargetPosition } from './input';
 import { canvas } from './canvas';
 import { clamp } from './utils';
-import { levels, NB_OF_TILES_HORIZONTALLY, NB_OF_TILES_VERTICALLY, TileType } from './levels';
-
-function isSolid(tile: string | undefined): boolean {
-  return tile === TileType.GROUND || tile === TileType.PLATFORM;
-}
+import { levels, NB_OF_TILES_HORIZONTALLY, NB_OF_TILES_VERTICALLY } from './levels';
+import { getTileDimensions, isSolid } from './levelGeometry';
 
 function moveHorizontally(nextX: number): void {
-  const tileWidth = canvas.width / NB_OF_TILES_HORIZONTALLY;
-  const tileHeight = canvas.height / NB_OF_TILES_VERTICALLY;
+  const { width: tileWidth, height: tileHeight } = getTileDimensions();
   const collisionTolerance = tileHeight * 1e-6;
   const halfWidth = unicorn.width / 2;
   const currentLeft = unicorn.x - halfWidth;
@@ -71,19 +67,7 @@ export function updateMovement(): void {
   }
 
   // Smooth movement towards click target when the keyboard is idle
-  if (!isKeyboardInput && !unicorn.isJumping) {
-    const dx = targetX - unicorn.x;
-    const distance = Math.abs(dx);
-
-    if (distance > 5) {
-      const moveSpeed = Math.min(unicorn.speed, distance);
-      moveHorizontally(unicorn.x + (dx / distance) * moveSpeed);
-
-      if (dx !== 0) {
-        unicorn.direction = dx > 0 ? 1 : -1;
-      }
-    }
-  } else if (!isKeyboardInput) {
+  if (!isKeyboardInput) {
     const dx = targetX - unicorn.x;
     const distance = Math.abs(dx);
 

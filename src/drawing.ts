@@ -1,5 +1,6 @@
 import { unicorn } from './unicorn';
-import { NB_OF_TILES_HORIZONTALLY, levels, TileType, NB_OF_TILES_VERTICALLY } from './levels';
+import { levels, NB_OF_TILES_HORIZONTALLY, TileType } from './levels';
+import { getTileDimensions } from './levelGeometry';
 
 // Get canvas and context from the DOM
 const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
@@ -20,8 +21,7 @@ const getRandomColor = (columnIndex: number, rowIndex: number) => {
  */
 export function draw() {
   const level = levels[0];
-  const tileWidth = canvas.width / NB_OF_TILES_HORIZONTALLY;
-  const tileHeight = canvas.height / NB_OF_TILES_VERTICALLY;
+  const { width: tileWidth, height: tileHeight } = getTileDimensions();
 
   // Draw sky
   ctx.fillStyle = level.backgroundColor;
