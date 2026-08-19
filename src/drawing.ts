@@ -9,9 +9,11 @@ const getRandomColor = (columnIndex: number, rowIndex: number) => {
   // get color based on column and row index to create a gradient effect
   const red = Math.floor((columnIndex / NB_OF_TILES_HORIZONTALLY) * 255);
   const green = Math.floor((rowIndex / levels[0].map.length) * 255);
-  const blue = Math.floor(((columnIndex + rowIndex) / (NB_OF_TILES_HORIZONTALLY + levels[0].map.length)) * 255);
+  const blue = Math.floor(
+    ((columnIndex + rowIndex) / (NB_OF_TILES_HORIZONTALLY + levels[0].map.length)) * 255
+  );
   return `rgb(${red}, ${green}, ${blue})`;
-}
+};
 
 /**
  * Draw the current level and unicorn.
