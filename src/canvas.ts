@@ -1,4 +1,6 @@
 // Canvas setup and management
+import { GAME_HEIGHT, GAME_WIDTH } from './constants';
+
 export let canvas: HTMLCanvasElement;
 
 export function initializeCanvas(): void {
@@ -8,6 +10,6 @@ export function initializeCanvas(): void {
 }
 
 function resizeCanvas(): void {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  canvas.width = GAME_WIDTH;
+  canvas.height = GAME_HEIGHT;
 }

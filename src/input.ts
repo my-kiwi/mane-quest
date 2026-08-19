@@ -40,8 +40,8 @@ export function initializeInput(): void {
   // Click to move / jump
   canvas.addEventListener('click', (e) => {
     const rect = canvas.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const clickY = e.clientY - rect.top;
+    const clickX = ((e.clientX - rect.left) / rect.width) * canvas.width;
+    const clickY = ((e.clientY - rect.top) / rect.height) * canvas.height;
 
     handleCanvasInteraction(clickX, clickY);
   });
@@ -50,8 +50,8 @@ export function initializeInput(): void {
   canvas.addEventListener('touchstart', (e) => {
     const rect = canvas.getBoundingClientRect();
     const touch = e.touches[0];
-    const touchX = touch.clientX - rect.left;
-    const touchY = touch.clientY - rect.top;
+    const touchX = ((touch.clientX - rect.left) / rect.width) * canvas.width;
+    const touchY = ((touch.clientY - rect.top) / rect.height) * canvas.height;
 
     handleCanvasInteraction(touchX, touchY);
   });
