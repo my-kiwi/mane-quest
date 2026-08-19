@@ -7,8 +7,9 @@ export const TileType = {
   ENEMY: 'E',
   EXIT: 'X',
 };
-export const NB_OF_TILES_HORIZONTALLY = 40;
-export const NB_OF_TILES_VERTICALLY = 20;
+const tilesMultiplier = 2;
+export const NB_OF_TILES_HORIZONTALLY = 16 * tilesMultiplier;
+export const NB_OF_TILES_VERTICALLY = 9 * tilesMultiplier;
 
 export const levels = [
   {
@@ -16,18 +17,24 @@ export const levels = [
     backgroundColor: '#87CEEB', // Sky blue
     groundColor: '#228B22', // Forest green
     map: [
-      '',
-      '■                              ■',
-      '■                              ■',
-      '■                              ■',
-      '■                              ■',
-      '■                              ■',
-      '■                              ■',
-      '■                              ■',
-      '■                              ■',
-      '■                              ■',
-      '■                              ■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
     ],
   },
 ];

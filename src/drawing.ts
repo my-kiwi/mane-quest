@@ -1,18 +1,25 @@
 import { unicorn } from './unicorn';
-import { NB_OF_TILES_HORIZONTALLY, levels, TileType } from './levels';
+import { NB_OF_TILES_HORIZONTALLY, levels, TileType, NB_OF_TILES_VERTICALLY } from './levels';
 
 // Get canvas and context from the DOM
 const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d')!;
+
+const getRandomColor = (columnIndex: number, rowIndex: number) => {
+  // get color based on column and row index to create a gradient effect
+  const red = Math.floor((columnIndex / NB_OF_TILES_HORIZONTALLY) * 255);
+  const green = Math.floor((rowIndex / levels[0].map.length) * 255);
+  const blue = Math.floor(((columnIndex + rowIndex) / (NB_OF_TILES_HORIZONTALLY + levels[0].map.length)) * 255);
+  return `rgb(${red}, ${green}, ${blue})`;
+}
 
 /**
  * Draw the current level and unicorn.
  */
 export function draw() {
   const level = levels[0];
-  const levelHeight = canvas.height * (2 / 3);
   const tileWidth = canvas.width / NB_OF_TILES_HORIZONTALLY;
-  const tileHeight = levelHeight / level.map.length;
+  const tileHeight = canvas.height / NB_OF_TILES_VERTICALLY;
 
   // Draw sky
   ctx.fillStyle = level.backgroundColor;
@@ -27,6 +34,7 @@ export function draw() {
         tileWidth,
         tileHeight,
         level.groundColor
+        //getRandomColor(columnIndex, rowIndex)
       );
     });
   });
