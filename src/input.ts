@@ -21,7 +21,7 @@ export function getGroundY(): number {
 function handleCanvasInteraction(x: number, y: number): void {
   setTargetPosition(clamp(x, unicorn.width / 2, canvas.width - unicorn.width / 2), getGroundY());
 
-  if (y < unicorn.y - 50) {
+  if (y < unicorn.y - unicorn.height / 1.5) {
     triggerJump();
   }
 }

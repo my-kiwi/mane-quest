@@ -20,7 +20,7 @@ export const unicorn: Unicorn = {
   isJumping: false,
   velocityY: 0,
   get jumpStrength() {
-    return getHeight() * 0.02;
+    return getHeight() * 0.015;
   },
   gravity: 0.7,
   rotation: 0,
