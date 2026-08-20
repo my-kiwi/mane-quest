@@ -103,7 +103,7 @@ function drawUnicorn() {
     ctx.save();
     ctx.translate(unicorn.x, unicorn.y);
     ctx.rotate(unicorn.rotation * (unicorn.direction === 1 ? 1 : -1));
-    if (unicorn.direction === 1) {
+    if (unicorn.direction === -1) {
       ctx.scale(-1, 1);
     }
     ctx.drawImage(

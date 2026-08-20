@@ -79,5 +79,3 @@ export const hero = createSvg({
   rightFootColor: '#8B4513', // Saddle Brown
   maneColor: '#FF69B4', // Dodger Blue
 });
-
-console.log('Unicorn SVG created:', hero);
