@@ -20,9 +20,10 @@ export function startGameLoop(): void {
   let previousTime: number | undefined;
 
   function gameLoop(currentTime: number) {
-    const frameScale = previousTime === undefined
-      ? 1
-      : Math.min((currentTime - previousTime) / FRAME_DURATION, MAX_FRAME_SCALE);
+    const frameScale =
+      previousTime === undefined
+        ? 1
+        : Math.min((currentTime - previousTime) / FRAME_DURATION, MAX_FRAME_SCALE);
     previousTime = currentTime;
 
     update(currentTime, frameScale);

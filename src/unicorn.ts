@@ -18,7 +18,7 @@ export const unicorn: Unicorn = {
     return canvas.height * 0.15 * UNICORN_SIZE_MULTIPLIER; // 10% of canvas height
   },
   get speed() {
-    return getWidth() * 0.0025;
+    return getWidth() * 0.0045;
   },
   direction: -1, // -1 for left, 1 for right
   isJumping: false,
