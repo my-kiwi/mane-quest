@@ -5,6 +5,9 @@ import { clamp } from './utils';
 import { levels, NB_OF_TILES_HORIZONTALLY, NB_OF_TILES_VERTICALLY } from './levels';
 import { getTileDimensions, isSolid } from './levelGeometry';
 
+const BALANCE_ROTATION = 0.12;
+const BALANCE_STEP = 0.35;
+
 function moveHorizontally(nextX: number): void {
   const { width: tileWidth, height: tileHeight } = getTileDimensions();
   const collisionTolerance = tileHeight * 1e-6;
@@ -76,5 +79,10 @@ export function updateMovement(): void {
       moveHorizontally(unicorn.x + (dx / distance) * moveSpeed);
       unicorn.direction = dx > 0 ? 1 : -1;
     }
+  }
+
+  if (!unicorn.isJumping && (isKeyboardInput || Math.abs(targetX - unicorn.x) > 5)) {
+    unicorn.balancePhase += BALANCE_STEP;
+    unicorn.rotation = Math.sin(unicorn.balancePhase) * BALANCE_ROTATION;
   }
 }

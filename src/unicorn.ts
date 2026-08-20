@@ -24,6 +24,7 @@ export const unicorn: Unicorn = {
   },
   gravity: 0.7,
   rotation: 0,
+  balancePhase: 0,
 };
 
 export function initializeUnicorn(): void {

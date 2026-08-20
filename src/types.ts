@@ -12,4 +12,5 @@ export interface Unicorn {
   jumpStrength: number;
   gravity: number;
   rotation: number;
+  balancePhase: number;
 }
