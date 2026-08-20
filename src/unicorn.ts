@@ -2,16 +2,20 @@ import { Unicorn } from './types';
 import { canvas } from './canvas';
 import { getMinHeightWidth, getWidth, getHeight } from './utils';
 
+const BLINK_INTERVAL = 3000;
+const BLINK_DURATION = 140;
+const UNICORN_SIZE_MULTIPLIER = 1.3;
+
 // Unicorn properties and state
 export const unicorn: Unicorn = {
   image: new Image(),
   x: 0, // Will be set to center in initialize
   y: 0,
   get width() {
-    return canvas.width * 0.1; // 10% of canvas width
+    return canvas.width * 0.1 * UNICORN_SIZE_MULTIPLIER; // 10% of canvas width
   },
   get height() {
-    return canvas.height * 0.15; // 10% of canvas height
+    return canvas.height * 0.15 * UNICORN_SIZE_MULTIPLIER; // 10% of canvas height
   },
   get speed() {
     return getWidth() * 0.0025;
@@ -25,12 +29,44 @@ export const unicorn: Unicorn = {
   gravity: 0.7,
   rotation: 0,
   balancePhase: 0,
+  isBlinking: false,
+  blinkEndsAt: 0,
+  nextBlinkAt: 0,
 };
 
 export function initializeUnicorn(): void {
-  unicorn.image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(hero)}`;
+  setUnicornImage();
   unicorn.x = canvas.width / 2;
   unicorn.y = 0;
+  unicorn.isBlinking = false;
+  unicorn.blinkEndsAt = 0;
+  unicorn.nextBlinkAt = performance.now() + BLINK_INTERVAL;
+}
+
+export function updateUnicornBlink(currentTime: number): void {
+  if (!unicorn.isBlinking && currentTime >= unicorn.nextBlinkAt) {
+    unicorn.isBlinking = true;
+    unicorn.blinkEndsAt = currentTime + BLINK_DURATION;
+    setUnicornImage();
+  } else if (unicorn.isBlinking && currentTime >= unicorn.blinkEndsAt) {
+    unicorn.isBlinking = false;
+    unicorn.nextBlinkAt = currentTime + BLINK_INTERVAL;
+    setUnicornImage();
+  }
+}
+
+function setUnicornImage(): void {
+  unicorn.image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+    createSvg({
+      hornColor: '#FFD700',
+      tailColor: '#FF69B4',
+      bodyColor: '#FFFFFF',
+      leftFootColor: '#8B4513',
+      rightFootColor: '#8B4513',
+      maneColor: '#FF69B4',
+      isBlinking: unicorn.isBlinking,
+    })
+  )}`;
 }
 
 type SvgProps = {
@@ -42,6 +78,7 @@ type SvgProps = {
   eyeExtColor?: string;
   eyeIntColor?: string;
   maneColor?: string;
+  isBlinking?: boolean;
 };
 
 export function createSvg({
@@ -53,7 +90,13 @@ export function createSvg({
   eyeExtColor,
   eyeIntColor,
   maneColor,
+  isBlinking = false,
 }: SvgProps = {}): string {
+  const eye = isBlinking
+    ? '<path id="closed_eye" stroke="#000" fill="none" d="m627,121c4,4 10,4 14,0" />'
+    : `<ellipse class="eye_ext" stroke="#000" fill="${eyeExtColor || '#fff'}" ry="7" rx="7" id="svg_12" cy="121" cx="634" />
+  <ellipse class="eye_int" stroke="#fff" fill="${eyeIntColor || '#000'}" ry="4.57143" rx="4.28572" id="svg_14" cy="124.00009" cx="636.28599" />`;
+
   return `
 <svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
  <g stroke-width="3" stroke-linejoin="round" stroke-linecap="round" shape-rendering="geometricPrecision">
@@ -62,8 +105,7 @@ export function createSvg({
   <path id="body" stroke="#000" fill="${bodyColor || '#FFF'}" d="m205,205.28571c29,-10 59,-16 92,-7c33,9 61,26 93,15c32,-11 192,-120 201,-130c9,-10 17,-24 19,-22c2,2 -1,30 3,30c4,0 22,-1 22,-1c0,0 63,49 63,49c0,0 15,24 9,31c-6,7 -17,17 -34,8c-17,-9 -20,-25 -39,-20c-19,5 -56,59 -74,108c-18,49 -33,67 -41,93c-8,26 -31,138 -32,166c-1,28 -30,19 -30,19c0,0 1,-187 1,-187c0,0 -36,30 -98,10c-62,-20 -79,-32 -79,-32c0,0 -45,53 -50,68c-5,15 8,74 9,100c1,26 -31,43 -30,36c1,-7 -24,-102 -23,-123c1,-21 7,-67 -2,-85c-9,-18 -17,-91 -3,-108c14,-17 -6,-8 23,-18z" />
   <rect id="left_foot" stroke="#000" fill="${leftFootColor || '#fff'}"   height="37" width="34" y="519" x="206" />
   <rect id="right_foot" stroke="#000" fill="${rightFootColor || '#fff'}" height="33" width="35" y="522" x="455" />
-  <ellipse class="eye_ext" stroke="#000" fill="${eyeExtColor || '#fff'}" ry="7" rx="7" id="svg_12" cy="121" cx="634" />
-  <ellipse class="eye_int" stroke="#fff" fill="${eyeIntColor || '#000'}" ry="4.57143" rx="4.28572" id="svg_14" cy="124.00009" cx="636.28599" />
+  ${eye}
   <path id="mouth" stroke="#000000" fill="none" d="m680.00028,158.28582c9.71429,10.28572 14.28572,22.85715 14.28561,22.85709" />
   <path id="eyebrow" stroke="#000000" fill="none" d="m630.28598,100.57152c1.71429,1.14286 12.57143,2.85714 16,13.71429"  />
   <path id="mane" stroke="#000" fill="${maneColor || '#fff'}" d="m589.85756,84.42865c1.71429,5.71429 7.42857,62.28573 -5.14286,81.71431c-12.57143,19.42858 -19.42858,-10.85715 -19.42869,-10.85721c0.00011,0.00006 -5.14275,28.00007 -13.14275,32.5715c-8,4.57143 -25.14286,-8.57143 -30.28572,-1.71429c-5.14286,6.85714 -25.71429,33.71429 -28.57144,17.71429c-2.85714,-16 -8.57143,-42.28573 -5.71429,-50.85716c2.85714,-8.57143 100.57145,-74.28573 102.28574,-68.57145z" />

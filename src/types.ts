@@ -13,4 +13,7 @@ export interface Unicorn {
   gravity: number;
   rotation: number;
   balancePhase: number;
+  isBlinking: boolean;
+  blinkEndsAt: number;
+  nextBlinkAt: number;
 }
