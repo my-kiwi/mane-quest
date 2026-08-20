@@ -8,10 +8,10 @@ export const unicorn: Unicorn = {
   x: 0, // Will be set to center in initialize
   y: 0,
   get width() {
-    return getMinHeightWidth() * 0.1; // 10% of the smaller dimension
+    return canvas.width * 0.1; // 10% of canvas width
   },
   get height() {
-    return getMinHeightWidth() * 0.1; // 10% of the smaller dimension
+    return canvas.height * 0.15; // 10% of canvas height
   },
   get speed() {
     return getWidth() * 0.0025;
