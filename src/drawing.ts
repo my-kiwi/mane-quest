@@ -1,4 +1,4 @@
-import { unicorn } from './unicorn';
+import { createSvg, unicorn } from './unicorn';
 import { levels, NB_OF_TILES_HORIZONTALLY, TileType } from './levels';
 import { getTileDimensions } from './levelGeometry';
 
@@ -7,6 +7,18 @@ const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d')!;
 ctx.imageSmoothingEnabled = true;
 ctx.imageSmoothingQuality = 'high';
+
+const wiseUnicornImage = new Image();
+wiseUnicornImage.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+  createSvg({
+    hornColor: '#B68B3C',
+    tailColor: '#A7AFB7',
+    bodyColor: '#F1E8D8',
+    leftFootColor: '#6B4F3A',
+    rightFootColor: '#6B4F3A',
+    maneColor: '#A7AFB7',
+  })
+)}`;
 
 const getRandomColor = (columnIndex: number, rowIndex: number) => {
   // get color based on column and row index to create a gradient effect
@@ -92,9 +104,27 @@ function drawTile(
     ctx.fillRect(-width * 0.3, -height * 0.4, width * 0.6, height * 0.8);
     ctx.fillStyle = '#2f80ed';
     ctx.fillRect(width * 0.05, -height * 0.1, width * 0.12, height * 0.12);
+  } else if (tile === TileType.PNJ) {
+    ctx.save();
+    
+    drawWiseUnicorn();
+    ctx.restore();
   }
 
   ctx.restore();
+}
+
+function drawWiseUnicorn(): void {
+  if (wiseUnicornImage.complete && wiseUnicornImage.naturalWidth > 0) {
+    ctx.translate(0, -unicorn.height / 4);
+    ctx.drawImage(
+      wiseUnicornImage,
+      -unicorn.width / 2,
+      -unicorn.height / 2,
+      unicorn.width,
+      unicorn.height
+    );
+  }
 }
 
 /**

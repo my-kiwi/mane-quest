@@ -6,6 +6,7 @@ export const TileType = {
   COIN: '●',
   ENEMY: 'E',
   EXIT: 'X',
+  PNJ: 'P',
 };
 const tilesMultiplier = 2;
 export const NB_OF_TILES_HORIZONTALLY = 16 * tilesMultiplier;
@@ -29,7 +30,7 @@ export const levels = [
       '                                ',
       '                                ',
       '                                ',
-      '                                ',
+      ' P                              ',
       '■■■■■■■■■■■■■■■■■■■■   ■■■■■■■■■',
       '■■■■■■■■■■■■■■■■■■■■   ■■■■■■■■■',
       '■■■■■■■■■■■■■■■■■■■■   ■■■■■■■■■',
