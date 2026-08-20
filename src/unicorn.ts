@@ -58,28 +58,23 @@ export function updateUnicornBlink(currentTime: number): void {
 function setUnicornImage(): void {
   unicorn.image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
     createSvg({
-      hornColor: '#FFD700',
-      tailColor: '#FF69B4',
-      bodyColor: '#FFFFFF',
-      leftFootColor: '#8B4513',
-      rightFootColor: '#8B4513',
-      maneColor: '#FF69B4',
+      ...heroProps,
       isBlinking: unicorn.isBlinking,
     })
   )}`;
 }
 
-type SvgProps = {
-  hornColor?: string;
-  tailColor?: string;
-  bodyColor?: string;
-  leftFootColor?: string;
-  rightFootColor?: string;
-  eyeExtColor?: string;
-  eyeIntColor?: string;
-  maneColor?: string;
-  isBlinking?: boolean;
+const heroProps = {
+  hornColor: '#FFD700', // Gold
+  tailColor: '#FF69B4', // Hot Pink
+  bodyColor: '#FFFFFF', // White
+  leftFootColor: '#8B4513', // Saddle Brown
+  rightFootColor: '#8B4513', // Saddle Brown
+  maneColor: '#FF69B4', // Dodger Blue
+  isBlinking: false,
 };
+
+type UnicornProps = Partial<typeof heroProps>;
 
 export function createSvg({
   hornColor,
@@ -87,15 +82,13 @@ export function createSvg({
   bodyColor,
   leftFootColor,
   rightFootColor,
-  eyeExtColor,
-  eyeIntColor,
   maneColor,
   isBlinking = false,
-}: SvgProps = {}): string {
+}: UnicornProps = {}): string {
   const eye = isBlinking
     ? '<path id="closed_eye" stroke="#000" fill="none" d="m627,121c4,4 10,4 14,0" />'
-    : `<ellipse class="eye_ext" stroke="#000" fill="${eyeExtColor || '#fff'}" ry="7" rx="7" id="svg_12" cy="121" cx="634" />
-  <ellipse class="eye_int" stroke="#fff" fill="${eyeIntColor || '#000'}" ry="4.57143" rx="4.28572" id="svg_14" cy="124.00009" cx="636.28599" />`;
+    : `<ellipse class="eye_ext" stroke="#000" fill="#fff" ry="7" rx="7" id="svg_12" cy="121" cx="634" />
+  <ellipse class="eye_int" stroke="#fff" fill="#000" ry="4.57143" rx="4.28572" id="svg_14" cy="124.00009" cx="636.28599" />`;
 
   return `
 <svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
@@ -114,12 +107,4 @@ export function createSvg({
   `;
 }
 
-export const hero = createSvg({
-  hornColor: '#FFD700', // Gold
-  tailColor: '#FF69B4', // Hot Pink
-  bodyColor: '#FFFFFF', // White
-  leftFootColor: '#8B4513', // Saddle Brown
-  rightFootColor: '#8B4513', // Saddle Brown
-  maneColor: '#FF69B4', // Dodger Blue
-});
-
+export const hero = createSvg(heroProps);
