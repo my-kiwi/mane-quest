@@ -99,7 +99,7 @@ function drawTile(
  * Draw the unicorn sprite with rotation and direction
  */
 function drawUnicorn() {
-  if (unicorn.image.complete) {
+  if (unicorn.image.complete && unicorn.image.naturalWidth > 0) {
     ctx.save();
     ctx.translate(unicorn.x, unicorn.y);
     ctx.rotate(unicorn.rotation * (unicorn.direction === 1 ? 1 : -1));
