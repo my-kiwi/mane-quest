@@ -12,7 +12,7 @@ export function triggerJump(): void {
   unicorn.rotation = -0.65;
 }
 
-export function updatePhysics(): void {
+export function updatePhysics(frameScale = 1): void {
   const { width: tileWidth, height: tileHeight } = getTileDimensions();
   const column = Math.floor(unicorn.x / tileWidth);
   const feetY = unicorn.y + unicorn.height / 2;
@@ -26,8 +26,8 @@ export function updatePhysics(): void {
     return;
   }
 
-  unicorn.velocityY += unicorn.gravity;
-  const nextY = unicorn.y + unicorn.velocityY;
+  unicorn.velocityY += unicorn.gravity * frameScale;
+  const nextY = unicorn.y + unicorn.velocityY * frameScale;
   const nextRow = Math.floor((nextY + unicorn.height / 2) / tileHeight);
   const willLand = unicorn.velocityY >= 0 && isSolid(getTile(nextRow, column));
 

@@ -51,17 +51,17 @@ function moveHorizontally(nextX: number): void {
   unicorn.x = clamp(resolvedX, halfWidth, canvas.width - halfWidth);
 }
 
-export function updateMovement(): void {
+export function updateMovement(frameScale = 1): void {
   // Check if keyboard is being used
   const isKeyboardInput =
     keys['ArrowLeft'] || keys['a'] || keys['A'] || keys['ArrowRight'] || keys['d'] || keys['D'];
 
   if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
-    moveHorizontally(unicorn.x - unicorn.speed);
+    moveHorizontally(unicorn.x - unicorn.speed * frameScale);
     unicorn.direction = -1;
   }
   if (keys['ArrowRight'] || keys['d'] || keys['D']) {
-    moveHorizontally(unicorn.x + unicorn.speed);
+    moveHorizontally(unicorn.x + unicorn.speed * frameScale);
     unicorn.direction = 1;
   }
 
@@ -75,14 +75,14 @@ export function updateMovement(): void {
     const distance = Math.abs(dx);
 
     if (distance > 5) {
-      const moveSpeed = Math.min(unicorn.speed, distance);
+      const moveSpeed = Math.min(unicorn.speed * frameScale, distance);
       moveHorizontally(unicorn.x + (dx / distance) * moveSpeed);
       unicorn.direction = dx > 0 ? 1 : -1;
     }
   }
 
   if (!unicorn.isJumping && (isKeyboardInput || Math.abs(targetX - unicorn.x) > 5)) {
-    unicorn.balancePhase += BALANCE_STEP;
+    unicorn.balancePhase += BALANCE_STEP * frameScale;
     unicorn.rotation = Math.sin(unicorn.balancePhase) * BALANCE_ROTATION;
   }
 }
