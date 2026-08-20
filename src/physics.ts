@@ -9,7 +9,7 @@ export function triggerJump(): void {
 
   unicorn.isJumping = true;
   unicorn.velocityY = -unicorn.jumpStrength;
-  unicorn.rotation = -0.65;
+  unicorn.rotation = -0.75;
 }
 
 export function updatePhysics(frameScale = 1): void {
@@ -40,5 +40,5 @@ export function updatePhysics(frameScale = 1): void {
   }
 
   unicorn.y = nextY;
-  unicorn.rotation = clamp(unicorn.velocityY * 0.08, -1.5, 1.5);
+  unicorn.rotation = clamp(unicorn.velocityY * 0.02, -1.5, 1.5);
 }
