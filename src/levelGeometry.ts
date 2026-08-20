@@ -9,7 +9,7 @@ export function getTileDimensions(): { width: number; height: number } {
 }
 
 export function isSolid(tile: string | undefined): boolean {
-  return tile === TileType.GROUND || tile === TileType.PLATFORM;
+  return tile === TileType.GROUND || tile === TileType.PLATFORM || tile === TileType.PNJ;
 }
 
 export function getTile(row: number, column: number): string | undefined {

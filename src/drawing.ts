@@ -106,7 +106,7 @@ function drawTile(
     ctx.fillRect(width * 0.05, -height * 0.1, width * 0.12, height * 0.12);
   } else if (tile === TileType.PNJ) {
     ctx.save();
-    
+
     drawWiseUnicorn();
     ctx.restore();
   }
