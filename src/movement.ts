@@ -2,7 +2,7 @@ import { unicorn } from './unicorn';
 import { keys, targetX, setTargetPosition } from './input';
 import { canvas } from './canvas';
 import { clamp } from './utils';
-import { levels, NB_OF_TILES_HORIZONTALLY, NB_OF_TILES_VERTICALLY } from './levels';
+import { levels, NB_OF_TILES_HORIZONTALLY, NB_OF_TILES_VERTICALLY, TileType } from './levels';
 import { getTileDimensions, isSolid } from './levelGeometry';
 
 const BALANCE_ROTATION = 0.12;
@@ -11,7 +11,7 @@ const BALANCE_STEP = 0.35;
 function moveHorizontally(nextX: number): void {
   const { width: tileWidth, height: tileHeight } = getTileDimensions();
   const collisionTolerance = tileHeight * 1e-6;
-  const halfWidth = unicorn.width / 2;
+  const halfWidth = unicorn.width / 4;
   const currentLeft = unicorn.x - halfWidth;
   const currentRight = unicorn.x + halfWidth;
   const top = unicorn.y - unicorn.height / 2;
@@ -34,7 +34,8 @@ function moveHorizontally(nextX: number): void {
   let resolvedX = nextX;
   for (let row = firstRow; row <= lastRow; row += 1) {
     for (let column = firstColumn; column <= lastColumn; column += 1) {
-      if (!isSolid(levels[0].map[row]?.[column])) {
+      const tileType = levels[0].map[row]?.[column]
+      if (!isSolid(tileType)) {
         continue;
       }
 
