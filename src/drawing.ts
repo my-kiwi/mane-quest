@@ -5,6 +5,8 @@ import { getTileDimensions } from './levelGeometry';
 // Get canvas and context from the DOM
 const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d')!;
+ctx.imageSmoothingEnabled = true;
+ctx.imageSmoothingQuality = 'high';
 
 const getRandomColor = (columnIndex: number, rowIndex: number) => {
   // get color based on column and row index to create a gradient effect
