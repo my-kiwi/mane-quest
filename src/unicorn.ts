@@ -14,7 +14,7 @@ export const unicorn: Unicorn = {
     return getMinHeightWidth() * 0.1; // 10% of the smaller dimension
   },
   get speed() {
-    return getWidth() * 0.005;
+    return getWidth() * 0.0025;
   },
   direction: -1, // -1 for left, 1 for right
   isJumping: false,
