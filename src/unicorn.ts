@@ -27,11 +27,10 @@ export const unicorn: Unicorn = {
 };
 
 export function initializeUnicorn(): void {
-  unicorn.image.src = './uni-red.png';
+  unicorn.image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(hero)}`;
   unicorn.x = canvas.width / 2;
   unicorn.y = 0;
 }
-
 
 type SvgProps = {
   hornColor?: string;
@@ -46,8 +45,8 @@ type SvgProps = {
   maneColor?: string;
 };
 
-export function createSvg(props: SvgProps = {}) {
-  `
+export function createSvg(props: SvgProps = {}): string {
+  return `
 <svg width="800" height="600.0000000000001" xmlns="http://www.w3.org/2000/svg">
  <g>
   <path id="horn" stroke="#000" fill="${props.hornColor || '#fff'}" d="m610.28598,85.14294l64.57133,-52.5715c0.00011,0.00006 6.85726,-3.42851 8.57154,-1.1428c1.71429,2.28571 -1.71429,6.28572 -1.7144,6.28565c0.00011,0.00006 -48.57133,52.5715 -48.57144,52.57144c0.00011,0.00006 48.57155,140.0001 -22.85704,-5.1428z"  />
@@ -62,5 +61,14 @@ export function createSvg(props: SvgProps = {}) {
   <path id="mane" stroke="#000" fill="${props.maneColor || '#fff'}" d="m589.85756,84.42865c1.71429,5.71429 7.42857,62.28573 -5.14286,81.71431c-12.57143,19.42858 -19.42858,-10.85715 -19.42869,-10.85721c0.00011,0.00006 -5.14275,28.00007 -13.14275,32.5715c-8,4.57143 -25.14286,-8.57143 -30.28572,-1.71429c-5.14286,6.85714 -25.71429,33.71429 -28.57144,17.71429c-2.85714,-16 -8.57143,-42.28573 -5.71429,-50.85716c2.85714,-8.57143 100.57145,-74.28573 102.28574,-68.57１４５z" />
  </g>
 </svg>
-  `
+  `;
 }
+
+export const hero = createSvg({
+  hornColor: '#FFD700', // Gold
+  tailColor: '#FF69B4', // Hot Pink
+  bodyColor: '#FFFFFF', // White
+  leftFootColor: '#8B4513', // Saddle Brown
+  rightFootColor: '#8B4513', // Saddle Brown
+  maneColor: '#FF69B4', // Dodger Blue
+});
