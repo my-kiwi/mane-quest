@@ -2,7 +2,14 @@ import { unicorn } from './unicorn';
 import { keys, targetX, setTargetPosition } from './input';
 import { canvas } from './canvas';
 import { clamp } from './utils';
-import { levels, NB_OF_TILES_HORIZONTALLY, NB_OF_TILES_VERTICALLY, TileType } from './levels';
+import {
+  getCurrentLevel,
+  moveToNextLevel,
+  moveToPreviousLevel,
+  NB_OF_TILES_HORIZONTALLY,
+  NB_OF_TILES_VERTICALLY,
+  TileType,
+} from './levels';
 import { getTileDimensions, isSolid } from './levelGeometry';
 
 const BALANCE_ROTATION = 0.12;
@@ -41,7 +48,7 @@ function moveHorizontally(nextX: number): void {
   // frame. This prevents a nearby solid tile from pulling it backward.
   for (let row = firstRow; row <= lastRow; row += 1) {
     for (let column = firstColumn; column <= lastColumn; column += 1) {
-      const tileType = levels[0].map[row]?.[column];
+      const tileType = getCurrentLevel().map[row]?.[column];
       if (!isSolid(tileType)) {
         continue;
       }
@@ -56,6 +63,20 @@ function moveHorizontally(nextX: number): void {
         resolvedX = Math.max(resolvedX, tileRight + hitboxWidth);
       }
     }
+  }
+
+  // Move to the next map when the unicorn walks through the right edge.
+  if (movingRight && resolvedX >= canvas.width - hitboxWidth && moveToNextLevel()) {
+    unicorn.x = hitboxWidth;
+    setTargetPosition(unicorn.x, unicorn.y);
+    return;
+  }
+
+  // Move to the previous map when the unicorn walks through the left edge.
+  if (movingLeft && resolvedX <= hitboxWidth && moveToPreviousLevel()) {
+    unicorn.x = canvas.width - hitboxWidth;
+    setTargetPosition(unicorn.x, unicorn.y);
+    return;
   }
 
   // Keep the unicorn inside the visible canvas even when no tile blocks it.

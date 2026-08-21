@@ -1,5 +1,10 @@
 import { canvas } from './canvas';
-import { levels, NB_OF_TILES_HORIZONTALLY, NB_OF_TILES_VERTICALLY, TileType } from './levels';
+import {
+  getCurrentLevel,
+  NB_OF_TILES_HORIZONTALLY,
+  NB_OF_TILES_VERTICALLY,
+  TileType,
+} from './levels';
 
 export function getTileDimensions(): { width: number; height: number } {
   return {
@@ -13,5 +18,5 @@ export function isSolid(tile: string | undefined): boolean {
 }
 
 export function getTile(row: number, column: number): string | undefined {
-  return levels[0].map[row]?.[column];
+  return getCurrentLevel().map[row]?.[column];
 }

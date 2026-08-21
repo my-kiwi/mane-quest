@@ -1,5 +1,5 @@
 import { createSvg, unicorn } from './unicorn';
-import { levels, NB_OF_TILES_HORIZONTALLY, TileType } from './levels';
+import { getCurrentLevel, NB_OF_TILES_HORIZONTALLY, TileType } from './levels';
 import { getTileDimensions } from './levelGeometry';
 
 // Get canvas and context from the DOM
@@ -23,9 +23,9 @@ wiseUnicornImage.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
 const getRandomColor = (columnIndex: number, rowIndex: number) => {
   // get color based on column and row index to create a gradient effect
   const red = Math.floor((columnIndex / NB_OF_TILES_HORIZONTALLY) * 255);
-  const green = Math.floor((rowIndex / levels[0].map.length) * 255);
+  const green = Math.floor((rowIndex / getCurrentLevel().map.length) * 255);
   const blue = Math.floor(
-    ((columnIndex + rowIndex) / (NB_OF_TILES_HORIZONTALLY + levels[0].map.length)) * 255
+    ((columnIndex + rowIndex) / (NB_OF_TILES_HORIZONTALLY + getCurrentLevel().map.length)) * 255
   );
   return `rgb(${red}, ${green}, ${blue})`;
 };
@@ -34,7 +34,7 @@ const getRandomColor = (columnIndex: number, rowIndex: number) => {
  * Draw the current level and unicorn.
  */
 export function draw() {
-  const level = levels[0];
+  const level = getCurrentLevel();
   const { width: tileWidth, height: tileHeight } = getTileDimensions();
 
   // Draw sky

@@ -63,8 +63,31 @@ export const levels = [
       '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
     ],
   },
-  
 ];
+
+let currentLevelIndex = 0;
+
+export function getCurrentLevel() {
+  return levels[currentLevelIndex];
+}
+
+export function moveToNextLevel(): boolean {
+  if (currentLevelIndex >= levels.length - 1) {
+    return false;
+  }
+
+  currentLevelIndex += 1;
+  return true;
+}
+
+export function moveToPreviousLevel(): boolean {
+  if (currentLevelIndex <= 0) {
+    return false;
+  }
+
+  currentLevelIndex -= 1;
+  return true;
+}
 
 levels.forEach((level) => {
   // Ensure the map has the correct number of rows
