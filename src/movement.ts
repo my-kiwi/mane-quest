@@ -16,15 +16,15 @@ function moveHorizontally(nextX: number): void {
 
   // The unicorn's x/y coordinates are its center. Use its horizontal hitbox
   // and vertical bounds to find the tiles that could block this move.
-  const halfWidth = unicorn.width / 4;
-  const currentLeft = unicorn.x - halfWidth;
-  const currentRight = unicorn.x + halfWidth;
+  const hitboxWidth = unicorn.width / 4;
+  const currentLeft = unicorn.x - hitboxWidth;
+  const currentRight = unicorn.x + hitboxWidth;
   const top = unicorn.y - unicorn.height / 2;
   const bottom = unicorn.y + unicorn.height / 2;
   const movingRight = nextX > unicorn.x;
   const movingLeft = nextX < unicorn.x;
-  const nextLeft = nextX - halfWidth;
-  const nextRight = nextX + halfWidth;
+  const nextLeft = nextX - hitboxWidth;
+  const nextRight = nextX + hitboxWidth;
   const firstRow = Math.max(0, Math.floor(top / tileHeight));
   const lastRow = Math.min(
     NB_OF_TILES_VERTICALLY - 1,
@@ -50,16 +50,16 @@ function moveHorizontally(nextX: number): void {
       const tileRight = tileLeft + tileWidth;
       if (movingRight && currentRight <= tileLeft && nextRight > tileLeft) {
         // The unicorn is moving right and will collide with the left edge of a solid tile.
-        resolvedX = Math.min(resolvedX, tileLeft - halfWidth);
+        resolvedX = Math.min(resolvedX, tileLeft - hitboxWidth);
       } else if (movingLeft && currentLeft >= tileRight && nextLeft < tileRight) {
         // The unicorn is moving left and will collide with the right edge of a solid tile.
-        resolvedX = Math.max(resolvedX, tileRight + halfWidth);
+        resolvedX = Math.max(resolvedX, tileRight + (hitboxWidth * 4));
       }
     }
   }
 
   // Keep the unicorn inside the visible canvas even when no tile blocks it.
-  unicorn.x = clamp(resolvedX, halfWidth, canvas.width - halfWidth);
+  unicorn.x = clamp(resolvedX, hitboxWidth, canvas.width - hitboxWidth);
 }
 
 export function updateMovement(frameScale = 1): void {
