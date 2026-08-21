@@ -107,6 +107,7 @@ function drawTile(
   } else if (tile === TileType.PNJ) {
     ctx.save();
 
+    ctx.translate(0, height / 2 - unicorn.height / 2);
     drawWiseUnicorn();
     ctx.restore();
   }
@@ -116,7 +117,6 @@ function drawTile(
 
 function drawWiseUnicorn(): void {
   if (wiseUnicornImage.complete && wiseUnicornImage.naturalWidth > 0) {
-    ctx.translate(0, -unicorn.height / 4);
     ctx.drawImage(
       wiseUnicornImage,
       -unicorn.width / 2,
