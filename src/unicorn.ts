@@ -1,4 +1,3 @@
-import { Unicorn } from './types';
 import { canvas } from './canvas';
 import { getMinHeightWidth, getWidth, getHeight } from './utils';
 
@@ -7,7 +6,7 @@ const BLINK_DURATION = 140;
 const UNICORN_SIZE_MULTIPLIER = 1.3;
 
 // Unicorn properties and state
-export const unicorn: Unicorn = {
+export const unicorn = {
   image: new Image(),
   x: 0, // Will be set to center in initialize
   y: 0,
@@ -33,6 +32,8 @@ export const unicorn: Unicorn = {
   blinkEndsAt: 0,
   nextBlinkAt: 0,
 };
+
+export type Unicorn = typeof unicorn;
 
 export function initializeUnicorn(): void {
   setUnicornImage();
