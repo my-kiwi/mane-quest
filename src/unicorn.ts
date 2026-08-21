@@ -91,7 +91,7 @@ export function createSvg({
   <ellipse class="eye_int" stroke="#fff" fill="#000" ry="4.57143" rx="4.28572" id="svg_14" cy="124.00009" cx="636.28599" />`;
 
   return `
-<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+<svg width="auto" height="auto" viewBox="0 0 750 560" xmlns="http://www.w3.org/2000/svg">
  <g stroke-width="3" stroke-linejoin="round" stroke-linecap="round" shape-rendering="geometricPrecision">
   <path id="horn" stroke="#000" fill="${hornColor || '#fff'}" d="m610.28598,85.14294l64.57133,-52.5715c0.00011,0.00006 6.85726,-3.42851 8.57154,-1.1428c1.71429,2.28571 -1.71429,6.28572 -1.7144,6.28565c0.00011,0.00006 -48.57133,52.5715 -48.57144,52.57144c0.00011,0.00006 48.57155,140.0001 -22.85704,-5.1428z"  />
   <path id="tail" stroke="#000" fill="${tailColor || '#fff'}" d="m22.77862,350.05392c37.48284,-69.81227 53.82151,-112.63046 86.49886,-129.3854c32.67735,-16.75494 37.48284,-26.06325 84.57666,-8.37747c47.09382,17.68577 -15.37757,17.68577 -15.37757,17.68577c0,0 -23.06636,-8.37747 -35.56064,3.72332c-12.49428,12.10079 -52.86041,91.22136 -59.5881,96.80634c-6.72769,5.58498 -98.03204,89.3597 -60.5492,19.54744z" />
@@ -108,3 +108,5 @@ export function createSvg({
 }
 
 export const hero = createSvg(heroProps);
+
+//console.log('Hero SVG:', hero);

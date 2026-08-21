@@ -34,7 +34,7 @@ function moveHorizontally(nextX: number): void {
   let resolvedX = nextX;
   for (let row = firstRow; row <= lastRow; row += 1) {
     for (let column = firstColumn; column <= lastColumn; column += 1) {
-      const tileType = levels[0].map[row]?.[column]
+      const tileType = levels[0].map[row]?.[column];
       if (!isSolid(tileType)) {
         continue;
       }

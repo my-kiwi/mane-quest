@@ -20,7 +20,7 @@ export function getGroundY(): number {
   const groundTop =
     (groundRow >= 0 ? groundRow : levels[0].map.length) * getTileDimensions().height;
 
-  return groundTop - unicorn.height /2;
+  return groundTop - unicorn.height / 2;
 }
 
 function handleCanvasInteraction(x: number, y: number): void {
