@@ -1,3 +1,5 @@
+import { sagePnj } from './PNJ';
+
 export const TileType = {
   EMPTY: ' ',
   GROUND: '■',
@@ -37,6 +39,7 @@ export const levels = [
       '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
       '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
     ],
+    pnj: sagePnj,
   },
   {
     name: 'Level 1,0',
@@ -92,6 +95,7 @@ export const levels = [
 
 let currentLevelIndex = 0;
 
+export type Level = ReturnType<typeof getCurrentLevel>;
 export function getCurrentLevel() {
   return levels[currentLevelIndex];
 }

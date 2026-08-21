@@ -1,24 +1,13 @@
 import { createSvg, unicorn } from './unicorn';
-import { getCurrentLevel, NB_OF_TILES_HORIZONTALLY, TileType } from './levels';
+import { getCurrentLevel, NB_OF_TILES_HORIZONTALLY, TileType, Level } from './levels';
 import { getTileDimensions } from './levelGeometry';
+import { PNJ } from './PNJ';
 
 // Get canvas and context from the DOM
 const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d')!;
 ctx.imageSmoothingEnabled = true;
 ctx.imageSmoothingQuality = 'high';
-
-const wiseUnicornImage = new Image();
-wiseUnicornImage.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-  createSvg({
-    hornColor: '#B68B3C',
-    tailColor: '#A7AFB7',
-    bodyColor: '#F1E8D8',
-    leftFootColor: '#6B4F3A',
-    rightFootColor: '#6B4F3A',
-    maneColor: '#A7AFB7',
-  })
-)}`;
 
 const getRandomColor = (columnIndex: number, rowIndex: number) => {
   // get color based on column and row index to create a gradient effect
@@ -43,15 +32,7 @@ export function draw() {
 
   level.map.forEach((row, rowIndex) => {
     [...row].forEach((tile, columnIndex) => {
-      drawTile(
-        tile,
-        columnIndex * tileWidth,
-        rowIndex * tileHeight,
-        tileWidth,
-        tileHeight,
-        level.groundColor
-        //getRandomColor(columnIndex, rowIndex)
-      );
+      drawTile(tile, columnIndex * tileWidth, rowIndex * tileHeight, tileWidth, tileHeight, level);
     });
   });
 
@@ -65,14 +46,14 @@ function drawTile(
   y: number,
   width: number,
   height: number,
-  groundColor: string
+  level: Level
 ): void {
   if (tile === TileType.EMPTY) {
     return;
   }
 
   if (tile === TileType.GROUND) {
-    ctx.fillStyle = groundColor;
+    ctx.fillStyle = level.groundColor;
     ctx.fillRect(x, y, width, height);
     return;
   }
@@ -104,25 +85,25 @@ function drawTile(
     ctx.fillRect(-width * 0.3, -height * 0.4, width * 0.6, height * 0.8);
     ctx.fillStyle = '#2f80ed';
     ctx.fillRect(width * 0.05, -height * 0.1, width * 0.12, height * 0.12);
-  } else if (tile === TileType.PNJ) {
+  } else if (tile === TileType.PNJ && level.pnj) {
     ctx.save();
 
     ctx.translate(0, height / 2 - unicorn.height / 2);
-    drawWiseUnicorn();
+    drawPNJ(level.pnj);
     ctx.restore();
   }
 
   ctx.restore();
 }
 
-function drawWiseUnicorn(): void {
-  if (wiseUnicornImage.complete && wiseUnicornImage.naturalWidth > 0) {
+function drawPNJ(pnj: PNJ): void {
+  if (pnj.image.complete && pnj.image.naturalWidth > 0) {
     ctx.drawImage(
-      wiseUnicornImage,
-      -unicorn.width / 2,
-      -unicorn.height / 2,
-      unicorn.width,
-      unicorn.height
+      pnj.image,
+      -pnj.image.width / 2,
+      -pnj.image.height / 2,
+      pnj.image.width,
+      pnj.image.height
     );
   }
 }
