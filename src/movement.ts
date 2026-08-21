@@ -9,8 +9,13 @@ const BALANCE_ROTATION = 0.12;
 const BALANCE_STEP = 0.35;
 
 function moveHorizontally(nextX: number): void {
+  // Collision checks use the current level's tile size so they stay correct
+  // when the canvas or level layout is resized.
   const { width: tileWidth, height: tileHeight } = getTileDimensions();
   const collisionTolerance = tileHeight * 1e-6;
+
+  // The unicorn's x/y coordinates are its center. Use its horizontal hitbox
+  // and vertical bounds to find the tiles that could block this move.
   const halfWidth = unicorn.width / 4;
   const currentLeft = unicorn.x - halfWidth;
   const currentRight = unicorn.x + halfWidth;
@@ -32,6 +37,8 @@ function moveHorizontally(nextX: number): void {
   );
 
   let resolvedX = nextX;
+  // Only resolve a collision when the unicorn crosses a tile edge during this
+  // frame. This prevents a nearby solid tile from pulling it backward.
   for (let row = firstRow; row <= lastRow; row += 1) {
     for (let column = firstColumn; column <= lastColumn; column += 1) {
       const tileType = levels[0].map[row]?.[column];
@@ -42,18 +49,21 @@ function moveHorizontally(nextX: number): void {
       const tileLeft = column * tileWidth;
       const tileRight = tileLeft + tileWidth;
       if (movingRight && currentRight <= tileLeft && nextRight > tileLeft) {
+        // The unicorn is moving right and will collide with the left edge of a solid tile.
         resolvedX = Math.min(resolvedX, tileLeft - halfWidth);
       } else if (movingLeft && currentLeft >= tileRight && nextLeft < tileRight) {
+        // The unicorn is moving left and will collide with the right edge of a solid tile.
         resolvedX = Math.max(resolvedX, tileRight + halfWidth);
       }
     }
   }
 
+  // Keep the unicorn inside the visible canvas even when no tile blocks it.
   unicorn.x = clamp(resolvedX, halfWidth, canvas.width - halfWidth);
 }
 
 export function updateMovement(frameScale = 1): void {
-  // Check if keyboard is being used
+  // Keyboard input takes priority over the click-to-move target.
   const isKeyboardInput =
     keys['ArrowLeft'] || keys['a'] || keys['A'] || keys['ArrowRight'] || keys['d'] || keys['D'];
 
@@ -67,10 +77,12 @@ export function updateMovement(frameScale = 1): void {
   }
 
   if (isKeyboardInput) {
+    // Stop any previous click-to-move request where the unicorn currently is.
     setTargetPosition(unicorn.x, unicorn.y);
   }
 
-  // Smooth movement towards click target when the keyboard is idle
+  // When the keyboard is idle, move toward the last clicked position at a
+  // capped speed so the unicorn stops exactly on the target.
   if (!isKeyboardInput) {
     const dx = targetX - unicorn.x;
     const distance = Math.abs(dx);
@@ -82,6 +94,8 @@ export function updateMovement(frameScale = 1): void {
     }
   }
 
+  // Apply a small side-to-side rotation while moving to make the motion feel
+  // less rigid. Jumping uses its own animation, so it is excluded here.
   if (!unicorn.isJumping && (isKeyboardInput || Math.abs(targetX - unicorn.x) > 5)) {
     unicorn.balancePhase += BALANCE_STEP * frameScale;
     unicorn.rotation = Math.sin(unicorn.balancePhase) * BALANCE_ROTATION;
