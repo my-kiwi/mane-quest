@@ -53,7 +53,7 @@ function moveHorizontally(nextX: number): void {
         resolvedX = Math.min(resolvedX, tileLeft - hitboxWidth);
       } else if (movingLeft && currentLeft >= tileRight && nextLeft < tileRight) {
         // The unicorn is moving left and will collide with the right edge of a solid tile.
-        resolvedX = Math.max(resolvedX, tileRight + (hitboxWidth * 4));
+        resolvedX = Math.max(resolvedX, tileRight + hitboxWidth * 4);
       }
     }
   }
