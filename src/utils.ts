@@ -1,13 +1,15 @@
+import { canvas } from './canvas';
+
 // Utility functions
 export const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
 
 export const getHeight = () => {
-  return window.innerHeight;
+  return canvas.height;
 };
 
 export const getWidth = () => {
-  return window.innerWidth;
+  return canvas.width;
 };
 
 export const getMinHeightWidth = () => {
