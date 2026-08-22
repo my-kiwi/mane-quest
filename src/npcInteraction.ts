@@ -92,13 +92,10 @@ export function interactWithPnj(): boolean {
   return true;
 }
 
-export function getActiveDialogue(): { pnj: PNJ; line: string } | undefined {
+export function getActiveDialogue(): { name: string; line: string } | undefined {
   if (!activePnj) {
     return undefined;
   }
 
-  return {
-    pnj: activePnj,
-    line: activePnj.dialogue[activeDialogueLine],
-  };
+  return activePnj.dialogue[activeDialogueLine];
 }

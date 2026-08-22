@@ -69,7 +69,7 @@ function updatePnjInteractionUi(): void {
   const dialogue = getActiveDialogue();
   if (dialogue) {
     prompt.classList.remove('is-visible');
-    dialogueName.textContent = dialogue.pnj.name;
+    dialogueName.textContent = dialogue.name;
     dialogueLine.textContent = dialogue.line;
     dialogueBubble.classList.add('is-visible');
     return;

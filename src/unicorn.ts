@@ -7,6 +7,7 @@ const UNICORN_SIZE_MULTIPLIER = 1.3;
 
 // Unicorn properties and state
 export const unicorn = {
+  name: 'Mike the Unicorn',
   image: new Image(),
   x: 0, // Will be set to center in initialize
   y: 0,
@@ -75,7 +76,7 @@ const heroProps = {
   isBlinking: false,
 };
 
-type UnicornProps = Partial<typeof heroProps>;
+export type UnicornSvgProps = Partial<typeof heroProps>;
 
 export function createUnicornSvg({
   hornColor,
@@ -85,7 +86,7 @@ export function createUnicornSvg({
   rightFootColor,
   maneColor,
   isBlinking = false,
-}: UnicornProps = {}): string {
+}: UnicornSvgProps = {}): string {
   const eye = isBlinking
     ? '<path id="closed_eye" stroke="#000" fill="none" d="m627,121c4,4 10,4 14,0" />'
     : `<ellipse class="eye_ext" stroke="#000" fill="#fff" ry="7" rx="7" id="svg_12" cy="121" cx="634" />
