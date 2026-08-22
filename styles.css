@@ -47,9 +47,17 @@ main canvas {
 .npc-prompt,
 .npc-dialogue {
   display: none;
-  pointer-events: none;
   position: absolute;
   z-index: 1;
+}
+
+.npc-prompt {
+  pointer-events: none;
+}
+
+.npc-dialogue {
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .npc-prompt.is-visible {

@@ -37,6 +37,8 @@ function handleCanvasInteraction(x: number, y: number): void {
 }
 
 export function initializeInput(): void {
+  const dialogueBubble = document.getElementById('npc-dialogue');
+
   // Keyboard input
   document.addEventListener('keydown', (e) => {
     const key = e.key.toLowerCase();
@@ -53,6 +55,10 @@ export function initializeInput(): void {
 
   document.addEventListener('keyup', (e) => {
     keys[e.key] = false;
+  });
+
+  dialogueBubble?.addEventListener('pointerdown', () => {
+    interactWithPnj();
   });
 
   // click + touch input
