@@ -4,6 +4,7 @@ import { triggerJump } from './physics';
 import { clamp } from './utils';
 import { getCurrentLevel, TileType } from './levels';
 import { getTileDimensions } from './levelGeometry';
+import { interactWithPnj, isPointOnDialogueBubble, isPointOnPnj } from './npcInteraction';
 
 // Input state
 export const keys: { [key: string]: boolean } = {};
@@ -24,6 +25,10 @@ export function getGroundY(): number {
 }
 
 function handleCanvasInteraction(x: number, y: number): void {
+  if ((isPointOnPnj(x, y) || isPointOnDialogueBubble(x, y)) && interactWithPnj()) {
+    return;
+  }
+
   setTargetPosition(x, getGroundY());
 
   if (y < unicorn.y - unicorn.height / 1.5) {
@@ -36,6 +41,10 @@ export function initializeInput(): void {
   document.addEventListener('keydown', (e) => {
     const key = e.key.toLowerCase();
     keys[e.key] = true;
+
+    if (e.key === 'Enter' && !e.repeat) {
+      interactWithPnj();
+    }
 
     if ((e.key === 'ArrowUp' || key === 'w') && !e.repeat) {
       triggerJump();

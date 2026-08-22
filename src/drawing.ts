@@ -2,6 +2,7 @@ import { createUnicornSvg, unicorn } from './unicorn';
 import { getCurrentLevel, NB_OF_TILES_HORIZONTALLY, TileType, Level } from './levels';
 import { getTileDimensions } from './levelGeometry';
 import { PNJ } from './PNJ';
+import { getActiveDialogue, getPnjPosition, isPnjInRange } from './npcInteraction';
 
 // Get canvas and context from the DOM
 const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
@@ -36,8 +37,63 @@ export function draw() {
     });
   });
 
+  drawPnjInteraction();
+
   // Draw unicorn
   drawUnicorn();
+}
+
+function drawPnjInteraction(): void {
+  if (!isPnjInRange()) {
+    return;
+  }
+
+  const pnjPosition = getPnjPosition();
+  if (!pnjPosition) {
+    return;
+  }
+
+  const dialogue = getActiveDialogue();
+  if (dialogue) {
+    drawDialogueBubble(pnjPosition.x, pnjPosition.y, dialogue.pnj.name, dialogue.line);
+    return;
+  }
+
+  const bounce = Math.sin(performance.now() / 180) * unicorn.height * 0.08;
+  ctx.save();
+  ctx.font = `bold ${Math.max(16, unicorn.height * 0.42)}px sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#fff';
+  ctx.strokeStyle = '#202020';
+  ctx.lineWidth = Math.max(2, unicorn.width * 0.025);
+  ctx.strokeText('?', pnjPosition.x, pnjPosition.y - unicorn.height * 0.9 + bounce);
+  ctx.fillText('?', pnjPosition.x, pnjPosition.y - unicorn.height * 0.9 + bounce);
+  ctx.restore();
+}
+
+function drawDialogueBubble(x: number, y: number, name: string, line: string): void {
+  const bubbleWidth = Math.min(canvas.width - 16, Math.max(180, unicorn.width * 3.2));
+  const bubbleHeight = unicorn.height * 1.05;
+  const bubbleX = Math.max(8, Math.min(canvas.width - bubbleWidth - 8, x - bubbleWidth / 2));
+  const bubbleY = Math.max(8, y - unicorn.height * 2.15);
+
+  ctx.save();
+  ctx.fillStyle = '#fffdf5';
+  ctx.strokeStyle = '#202020';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.roundRect(bubbleX, bubbleY, bubbleWidth, bubbleHeight, 8);
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = '#202020';
+  ctx.font = `bold ${Math.max(11, unicorn.height * 0.2)}px sans-serif`;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  ctx.fillText(name, bubbleX + 10, bubbleY + 8);
+  ctx.font = `${Math.max(11, unicorn.height * 0.18)}px sans-serif`;
+  ctx.fillText(line, bubbleX + 10, bubbleY + bubbleHeight * 0.38, bubbleWidth - 20);
+  ctx.restore();
 }
 
 function drawTile(
