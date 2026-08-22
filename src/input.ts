@@ -55,23 +55,13 @@ export function initializeInput(): void {
     keys[e.key] = false;
   });
 
-  // Click to move / jump
-  canvas.addEventListener('click', (e) => {
+  // click + touch input
+  canvas.addEventListener('pointerdown', (e) => {
     const rect = canvas.getBoundingClientRect();
-    const clickX = ((e.clientX - rect.left) / rect.width) * canvas.width;
-    const clickY = ((e.clientY - rect.top) / rect.height) * canvas.height;
+    const x = ((e.clientX - rect.left) / rect.width) * canvas.width;
+    const y = ((e.clientY - rect.top) / rect.height) * canvas.height;
 
-    handleCanvasInteraction(clickX, clickY);
-  });
-
-  // Touch support
-  canvas.addEventListener('touchstart', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const touch = e.touches[0];
-    const touchX = ((touch.clientX - rect.left) / rect.width) * canvas.width;
-    const touchY = ((touch.clientY - rect.top) / rect.height) * canvas.height;
-
-    handleCanvasInteraction(touchX, touchY);
+    handleCanvasInteraction(x, y);
   });
 
   // Initialize target position
