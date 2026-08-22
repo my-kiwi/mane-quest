@@ -15,7 +15,7 @@ import { getTileDimensions, isSolid } from './levelGeometry';
 const BALANCE_ROTATION = 0.12;
 const BALANCE_STEP = 0.35;
 
-function moveHorizontally(nextX: number): void {
+function moveHorizontally(nextX: number): boolean {
   // Collision checks use the current level's tile size so they stay correct
   // when the canvas or level layout is resized.
   const { width: tileWidth, height: tileHeight } = getTileDimensions();
@@ -23,13 +23,14 @@ function moveHorizontally(nextX: number): void {
 
   // The unicorn's x/y coordinates are its center. Use its horizontal hitbox
   // and vertical bounds to find the tiles that could block this move.
+  const currentX = unicorn.x;
   const hitboxWidth = unicorn.width / 4;
-  const currentLeft = unicorn.x - hitboxWidth;
-  const currentRight = unicorn.x + hitboxWidth;
+  const currentLeft = currentX - hitboxWidth;
+  const currentRight = currentX + hitboxWidth;
   const top = unicorn.y - unicorn.height / 2;
   const bottom = unicorn.y + unicorn.height / 2;
-  const movingRight = nextX > unicorn.x;
-  const movingLeft = nextX < unicorn.x;
+  const movingRight = nextX > currentX;
+  const movingLeft = nextX < currentX;
   const nextLeft = nextX - hitboxWidth;
   const nextRight = nextX + hitboxWidth;
   const firstRow = Math.max(0, Math.floor(top / tileHeight));
@@ -69,18 +70,19 @@ function moveHorizontally(nextX: number): void {
   if (movingRight && resolvedX >= canvas.width - hitboxWidth && moveToNextLevel()) {
     unicorn.x = hitboxWidth;
     setTargetPosition(unicorn.x, unicorn.y);
-    return;
+    return true;
   }
 
   // Move to the previous map when the unicorn walks through the left edge.
   if (movingLeft && resolvedX <= hitboxWidth && moveToPreviousLevel()) {
     unicorn.x = canvas.width - hitboxWidth;
     setTargetPosition(unicorn.x, unicorn.y);
-    return;
+    return true;
   }
 
   // Keep the unicorn inside the visible canvas even when no tile blocks it.
   unicorn.x = clamp(resolvedX, hitboxWidth, canvas.width - hitboxWidth);
+  return unicorn.x !== currentX;
 }
 
 export function updateMovement(frameScale = 1): void {
@@ -110,7 +112,10 @@ export function updateMovement(frameScale = 1): void {
 
     if (distance > 5) {
       const moveSpeed = Math.min(unicorn.speed * frameScale, distance);
-      moveHorizontally(unicorn.x + (dx / distance) * moveSpeed);
+      const moved = moveHorizontally(unicorn.x + (dx / distance) * moveSpeed);
+      if (!moved) {
+        setTargetPosition(unicorn.x, unicorn.y);
+      }
       unicorn.direction = dx > 0 ? 1 : -1;
     }
   }
