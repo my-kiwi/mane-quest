@@ -37,63 +37,46 @@ export function draw() {
     });
   });
 
-  drawPnjInteraction();
+  updatePnjInteractionUi();
 
   // Draw unicorn
   drawUnicorn();
 }
 
-function drawPnjInteraction(): void {
-  if (!isPnjInRange()) {
+function updatePnjInteractionUi(): void {
+  const prompt = document.getElementById('npc-prompt');
+  const dialogueBubble = document.getElementById('npc-dialogue');
+  const dialogueName = document.getElementById('npc-dialogue-name');
+  const dialogueLine = document.getElementById('npc-dialogue-line');
+  const pnjPosition = getPnjPosition();
+  if (
+    !prompt ||
+    !dialogueBubble ||
+    !dialogueName ||
+    !dialogueLine ||
+    !pnjPosition ||
+    !isPnjInRange()
+  ) {
+    prompt?.classList.remove('is-visible');
+    dialogueBubble?.classList.remove('is-visible');
     return;
   }
 
-  const pnjPosition = getPnjPosition();
-  if (!pnjPosition) {
-    return;
-  }
+  const positionLeft = `${(pnjPosition.x / canvas.width) * 100}%`;
+  prompt.style.left = positionLeft;
+  prompt.style.top = `${((pnjPosition.y - unicorn.height * 0.9) / canvas.height) * 100}%`;
 
   const dialogue = getActiveDialogue();
   if (dialogue) {
-    drawDialogueBubble(pnjPosition.x, pnjPosition.y, dialogue.pnj.name, dialogue.line);
+    prompt.classList.remove('is-visible');
+    dialogueName.textContent = dialogue.pnj.name;
+    dialogueLine.textContent = dialogue.line;
+    dialogueBubble.classList.add('is-visible');
     return;
   }
 
-  const bounce = Math.sin(performance.now() / 180) * unicorn.height * 0.08;
-  ctx.save();
-  ctx.font = `bold ${Math.max(16, unicorn.height * 0.42)}px sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#fff';
-  ctx.strokeStyle = '#202020';
-  ctx.lineWidth = Math.max(2, unicorn.width * 0.025);
-  ctx.strokeText('?', pnjPosition.x, pnjPosition.y - unicorn.height * 0.9 + bounce);
-  ctx.fillText('?', pnjPosition.x, pnjPosition.y - unicorn.height * 0.9 + bounce);
-  ctx.restore();
-}
-
-function drawDialogueBubble(x: number, y: number, name: string, line: string): void {
-  const bubbleWidth = Math.min(canvas.width - 16, Math.max(180, unicorn.width * 3.2));
-  const bubbleHeight = unicorn.height * 1.05;
-  const bubbleX = Math.max(8, Math.min(canvas.width - bubbleWidth - 8, x - bubbleWidth / 2));
-  const bubbleY = Math.max(8, y - unicorn.height * 2.15);
-
-  ctx.save();
-  ctx.fillStyle = '#fffdf5';
-  ctx.strokeStyle = '#202020';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.roundRect(bubbleX, bubbleY, bubbleWidth, bubbleHeight, 8);
-  ctx.fill();
-  ctx.stroke();
-  ctx.fillStyle = '#202020';
-  ctx.font = `bold ${Math.max(11, unicorn.height * 0.2)}px sans-serif`;
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'top';
-  ctx.fillText(name, bubbleX + 10, bubbleY + 8);
-  ctx.font = `${Math.max(11, unicorn.height * 0.18)}px sans-serif`;
-  ctx.fillText(line, bubbleX + 10, bubbleY + bubbleHeight * 0.38, bubbleWidth - 20);
-  ctx.restore();
+  dialogueBubble.classList.remove('is-visible');
+  prompt.classList.add('is-visible');
 }
 
 function drawTile(

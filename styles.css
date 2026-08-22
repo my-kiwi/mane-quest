@@ -33,6 +33,7 @@ html, body {
 }
 
 main {
+  position: relative;
   width: min(100vw, calc(100vh * 16 / 9));
 }
 
@@ -41,4 +42,55 @@ main canvas {
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
+}
+
+.npc-prompt,
+.npc-dialogue {
+  display: none;
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+}
+
+.npc-prompt.is-visible {
+  display: block;
+  color: #fff;
+  font: 700 clamp(1.25rem, 4vw, 2.25rem) / 1 sans-serif;
+  text-shadow: 1px 1px 0 #202020, -1px -1px 0 #202020, 1px -1px 0 #202020,
+    -1px 1px 0 #202020;
+  transform: translate(-50%, -50%);
+  animation: npc-prompt-bounce 360ms ease-in-out infinite alternate;
+}
+
+.npc-dialogue.is-visible {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 95%;
+  position: absolute;
+  left: 50%;
+  right: 50%;
+  top: 100px;
+  min-height: 75px;
+  box-sizing: border-box;
+  padding: 0.65rem 0.8rem;
+  border: 2px solid #202020;
+  border-radius: 8px;
+  background: #fffdf5;
+  color: #202020;
+  font: 1rem / 1.25 sans-serif;
+  transform: translate(-50%, -100%);
+}
+
+.npc-dialogue strong {
+  font-size: 0.95rem;
+}
+
+@keyframes npc-prompt-bounce {
+  from {
+    margin-top: 0;
+  }
+  to {
+    margin-top: -0.35rem;
+  }
 }
