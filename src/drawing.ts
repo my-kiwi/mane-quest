@@ -1,4 +1,4 @@
-import { createSvg, unicorn } from './unicorn';
+import { createUnicornSvg, unicorn } from './unicorn';
 import { getCurrentLevel, NB_OF_TILES_HORIZONTALLY, TileType, Level } from './levels';
 import { getTileDimensions } from './levelGeometry';
 import { PNJ } from './PNJ';

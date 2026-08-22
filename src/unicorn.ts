@@ -58,7 +58,7 @@ export function updateUnicornBlink(currentTime: number): void {
 
 function setUnicornImage(): void {
   unicorn.image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-    createSvg({
+    createUnicornSvg({
       ...heroProps,
       isBlinking: unicorn.isBlinking,
     })
@@ -77,7 +77,7 @@ const heroProps = {
 
 type UnicornProps = Partial<typeof heroProps>;
 
-export function createSvg({
+export function createUnicornSvg({
   hornColor,
   tailColor,
   bodyColor,
@@ -108,6 +108,6 @@ export function createSvg({
   `;
 }
 
-export const hero = createSvg(heroProps);
+export const hero = createUnicornSvg(heroProps);
 
 //console.log('Hero SVG:', hero);

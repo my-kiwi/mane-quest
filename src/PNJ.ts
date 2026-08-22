@@ -1,4 +1,4 @@
-import { createSvg } from './unicorn';
+import { createUnicornSvg } from './unicorn';
 
 export type PNJ = typeof sagePnj;
 
@@ -15,7 +15,7 @@ export const sagePnj = {
   ],
 };
 sagePnj.image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-  createSvg({
+  createUnicornSvg({
     hornColor: '#B68B3C',
     tailColor: '#A7AFB7',
     bodyColor: '#F1E8D8',
