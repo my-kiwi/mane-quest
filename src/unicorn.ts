@@ -32,6 +32,15 @@ export const unicorn = {
   isBlinking: false,
   blinkEndsAt: 0,
   nextBlinkAt: 0,
+  colors: {
+    hornColor: '#FFD700', // Gold
+    tailColor: '#FF69B4', // Hot Pink
+    bodyColor: '#FFFFFF', // White
+    leftFootColor: '#8B4513', // Saddle Brown
+    rightFootColor: '#8B4513', // Saddle Brown
+    maneColor: '#FF69B4', // Dodger Blue
+    isBlinking: false,
+  },
 };
 
 export type Unicorn = typeof unicorn;
@@ -60,23 +69,13 @@ export function updateUnicornBlink(currentTime: number): void {
 function setUnicornImage(): void {
   unicorn.image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
     createUnicornSvg({
-      ...heroProps,
+      ...unicorn.colors,
       isBlinking: unicorn.isBlinking,
     })
   )}`;
 }
 
-const heroProps = {
-  hornColor: '#FFD700', // Gold
-  tailColor: '#FF69B4', // Hot Pink
-  bodyColor: '#FFFFFF', // White
-  leftFootColor: '#8B4513', // Saddle Brown
-  rightFootColor: '#8B4513', // Saddle Brown
-  maneColor: '#FF69B4', // Dodger Blue
-  isBlinking: false,
-};
-
-export type UnicornSvgProps = Partial<typeof heroProps>;
+export type UnicornSvgProps = Partial<typeof unicorn.colors> & { isBlinking?: boolean };
 
 export function createUnicornSvg({
   hornColor,
@@ -109,6 +108,6 @@ export function createUnicornSvg({
   `;
 }
 
-export const hero = createUnicornSvg(heroProps);
+export const hero = createUnicornSvg(unicorn.colors);
 
 //console.log('Hero SVG:', hero);

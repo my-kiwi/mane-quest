@@ -92,10 +92,12 @@ export function interactWithPnj(): boolean {
   return true;
 }
 
-export function getActiveDialogue(): { name: string; line: string } | undefined {
+export function getActiveDialogue() {
   if (!activePnj) {
     return undefined;
   }
+  const { line, ...props } = activePnj.dialogue[activeDialogueLine];
+  const who = props.who ?? activePnj;
 
-  return activePnj.dialogue[activeDialogueLine];
+  return { name: who.name, color: who.colors.maneColor, line: line };
 }

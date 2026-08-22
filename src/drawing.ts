@@ -71,6 +71,7 @@ function updatePnjInteractionUi(): void {
     prompt.classList.remove('is-visible');
     dialogueName.textContent = dialogue.name;
     dialogueLine.textContent = dialogue.line;
+    dialogueName.style.color = dialogue.color;
     dialogueBubble.classList.add('is-visible');
     return;
   }
