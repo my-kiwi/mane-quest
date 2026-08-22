@@ -98,12 +98,13 @@ function drawTile(
 
 function drawPNJ(pnj: PNJ): void {
   if (pnj.image.complete && pnj.image.naturalWidth > 0) {
+    ctx.scale(pnj.scale, pnj.scale);
     ctx.drawImage(
       pnj.image,
-      -pnj.image.width / 2,
-      -pnj.image.height / 2,
-      pnj.image.width,
-      pnj.image.height
+      -unicorn.width / 2,
+      -unicorn.height / 2,
+      unicorn.width,
+      unicorn.height
     );
   }
 }
@@ -112,6 +113,7 @@ function drawPNJ(pnj: PNJ): void {
  * Draw the unicorn sprite with rotation and direction
  */
 function drawUnicorn() {
+  // TODO extend for re-use with pnj and enemies
   if (unicorn.image.complete && unicorn.image.naturalWidth > 0) {
     ctx.save();
     ctx.translate(unicorn.x, unicorn.y);
