@@ -30,11 +30,16 @@ export function getPnjPosition(): { x: number; y: number } | undefined {
 
 export function isPnjInRange(): boolean {
   const pnjPosition = getPnjPosition();
-  return (
+  const inRange =
     pnjPosition !== undefined &&
     Math.hypot(unicorn.x - pnjPosition.x, unicorn.y - pnjPosition.y) <=
-      unicorn.width * INTERACTION_RANGE_MULTIPLIER
-  );
+      unicorn.width * INTERACTION_RANGE_MULTIPLIER;
+
+  if (!inRange) {
+    activePnj = undefined;
+  }
+
+  return inRange;
 }
 
 export function isPointOnPnj(x: number, y: number): boolean {
