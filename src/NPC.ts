@@ -14,16 +14,18 @@ export const sageNpc = {
     rightFootColor: '#6B4F3A',
     maneColor: '#A7AFB7',
   },
-  dialogue: [
-    { line: 'Welcome, dear unicorn.' },
-    { line: 'I am the wise sage of this land.' },
-    { line: '...' },
-    { who: unicorn, line: '...' },
-    { line: '...' },
-    { who: unicorn, line: '...' },
-    { line: "Look, I don't actually have any wisdom. I just stand here." },
-    { line: 'What do you want, a goodbye kiss?' },
-  ],
+  get dialogue() {
+    return [
+      { line: 'Welcome, dear unicorn.' },
+      { line: 'I am the wise sage of this land.' },
+      { line: '...' },
+      { who: unicorn, line: '...' },
+      { line: '...' },
+      { who: unicorn, line: '...' },
+      { line: "Look, I don't actually have any wisdom. I just stand here." },
+      { line: 'What do you want, a goodbye kiss?' },
+    ];
+  }
 };
 sageNpc.image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
   createUnicornSvg(sageNpc.colors)
