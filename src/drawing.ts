@@ -41,6 +41,22 @@ export function draw() {
 
   // Draw unicorn
   drawUnicorn();
+
+  if (unicorn.isDead) {
+    drawDeathMessage();
+  }
+}
+
+function drawDeathMessage(): void {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.62)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.font = `700 ${Math.max(32, canvas.width * 0.1)}px Georgia, serif`;
+  ctx.fillStyle = '#b31217';
+  ctx.fillText('U DIED', canvas.width / 2, canvas.height / 2);
+  ctx.textAlign = 'start';
+  ctx.textBaseline = 'alphabetic';
 }
 
 function updateNpcInteractionUi(): void {

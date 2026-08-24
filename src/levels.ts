@@ -100,6 +100,10 @@ export function getCurrentLevel() {
   return levels[currentLevelIndex];
 }
 
+export function resetToFirstLevel(): void {
+  currentLevelIndex = 0;
+}
+
 export function moveToNextLevel(): boolean {
   if (currentLevelIndex >= levels.length - 1) {
     return false;

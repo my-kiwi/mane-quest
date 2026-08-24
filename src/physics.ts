@@ -1,5 +1,7 @@
 import { unicorn } from './unicorn';
+import { killUnicorn } from './unicorn';
 import { clamp } from './utils';
+import { canvas } from './canvas';
 import { getTile, getTileDimensions, isSolid } from './levelGeometry';
 
 export function triggerJump(): void {
@@ -13,6 +15,10 @@ export function triggerJump(): void {
 }
 
 export function updatePhysics(frameScale = 1): void {
+  if (unicorn.isDead) {
+    return;
+  }
+
   const { width: tileWidth, height: tileHeight } = getTileDimensions();
   const column = Math.floor(unicorn.x / tileWidth);
   const feetY = unicorn.y + unicorn.height / 2;
@@ -41,4 +47,8 @@ export function updatePhysics(frameScale = 1): void {
 
   unicorn.y = nextY;
   unicorn.rotation = clamp(unicorn.velocityY * 0.02, -1.5, 1.5);
+
+  if (unicorn.y - unicorn.height / 2 > canvas.height) {
+    killUnicorn(performance.now());
+  }
 }

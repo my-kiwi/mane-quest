@@ -23,6 +23,9 @@ export const unicorn = {
   direction: -1, // -1 for left, 1 for right
   isJumping: false,
   velocityY: 0,
+  deaths: 0,
+  isDead: false,
+  diedAt: 0,
   get jumpStrength() {
     return getHeight() * 0.02;
   },
@@ -47,11 +50,30 @@ export type Unicorn = typeof unicorn;
 
 export function initializeUnicorn(): void {
   setUnicornImage();
-  unicorn.x = canvas.width / 2;
-  unicorn.y = 0;
+  resetUnicornPosition();
   unicorn.isBlinking = false;
   unicorn.blinkEndsAt = 0;
   unicorn.nextBlinkAt = performance.now() + BLINK_INTERVAL;
+}
+
+export function resetUnicornPosition(): void {
+  unicorn.x = canvas.width / 2;
+  unicorn.y = 0;
+  unicorn.isJumping = false;
+  unicorn.velocityY = 0;
+  unicorn.rotation = 0;
+  unicorn.isDead = false;
+  unicorn.diedAt = 0;
+}
+
+export function killUnicorn(currentTime: number): void {
+  if (unicorn.isDead) {
+    return;
+  }
+
+  unicorn.deaths += 1;
+  unicorn.isDead = true;
+  unicorn.diedAt = currentTime;
 }
 
 export function updateUnicornBlink(currentTime: number): void {

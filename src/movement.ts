@@ -86,6 +86,10 @@ function moveHorizontally(nextX: number): boolean {
 }
 
 export function updateMovement(frameScale = 1): void {
+  if (unicorn.isDead) {
+    return;
+  }
+
   // Keyboard input takes priority over the click-to-move target.
   const isKeyboardInput =
     keys['ArrowLeft'] || keys['a'] || keys['A'] || keys['ArrowRight'] || keys['d'] || keys['D'];
