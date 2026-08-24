@@ -8,13 +8,13 @@ type OscType = OscillatorType; // 'sine' | 'square' | 'sawtooth' | 'triangle'
 type TrackName = 'overworld' | 'platforming' | 'cavern';
 
 interface Track {
-  step: number;              // seconds per step
+  step: number; // seconds per step
   melodyType: OscType;
   melody: (string | null)[]; // note name or null (rest), one per step
-  bassEvery: number;         // bass note plays every N steps
-  bass: string[];            // cycled bass notes
-  ticks: number[];           // step indices where a percussion tick fires
-  detune?: number;           // cents, optional mood wobble
+  bassEvery: number; // bass note plays every N steps
+  bass: string[]; // cycled bass notes
+  ticks: number[]; // step indices where a percussion tick fires
+  detune?: number; // cents, optional mood wobble
 }
 
 const NOTE_FREQS: Record<string, number> = {};
@@ -29,16 +29,43 @@ const NOTE_FREQS: Record<string, number> = {};
 })();
 
 const tracks: Record<TrackName, Track> = {
-
   // 1) Overworld / Sage intro — gentle, naive, major key, waltz-ish
   overworld: {
     step: 0.28,
     melodyType: 'triangle',
     melody: [
-      'E4', null, 'G4', null, 'A4', null, 'G4', null,
-      'E4', null, 'D4', null, 'C4', null, null, null,
-      'C4', null, 'E4', null, 'G4', null, 'E4', null,
-      'D4', null, 'C4', null, null, null, null, null,
+      'E4',
+      null,
+      'G4',
+      null,
+      'A4',
+      null,
+      'G4',
+      null,
+      'E4',
+      null,
+      'D4',
+      null,
+      'C4',
+      null,
+      null,
+      null,
+      'C4',
+      null,
+      'E4',
+      null,
+      'G4',
+      null,
+      'E4',
+      null,
+      'D4',
+      null,
+      'C4',
+      null,
+      null,
+      null,
+      null,
+      null,
     ],
     bassEvery: 4,
     bass: ['C3', 'C3', 'G2', 'G2', 'A2', 'A2', 'G2', 'G2'],
@@ -50,10 +77,38 @@ const tracks: Record<TrackName, Track> = {
     step: 0.18,
     melodyType: 'square',
     melody: [
-      'C4', 'E4', 'G4', 'E4', 'C4', 'E4', 'G4', 'B4',
-      'C5', 'B4', 'G4', 'E4', 'D4', 'F4', 'A4', 'F4',
-      'D4', 'F4', 'A4', 'C5', 'D4', 'F4', 'A4', 'G4',
-      'C4', 'E4', 'G4', 'E4', 'C4', null, null, null,
+      'C4',
+      'E4',
+      'G4',
+      'E4',
+      'C4',
+      'E4',
+      'G4',
+      'B4',
+      'C5',
+      'B4',
+      'G4',
+      'E4',
+      'D4',
+      'F4',
+      'A4',
+      'F4',
+      'D4',
+      'F4',
+      'A4',
+      'C5',
+      'D4',
+      'F4',
+      'A4',
+      'G4',
+      'C4',
+      'E4',
+      'G4',
+      'E4',
+      'C4',
+      null,
+      null,
+      null,
     ],
     bassEvery: 4,
     bass: ['C3', 'C3', 'F2', 'F2', 'G2', 'G2', 'C3', 'C3'],
@@ -65,10 +120,38 @@ const tracks: Record<TrackName, Track> = {
     step: 0.4,
     melodyType: 'sine',
     melody: [
-      'A3', null, null, null, 'C4', null, null, null,
-      'G3', null, null, null, 'E3', null, null, null,
-      'F3', null, null, null, 'A3', null, null, null,
-      'E3', null, null, null, null, null, null, null,
+      'A3',
+      null,
+      null,
+      null,
+      'C4',
+      null,
+      null,
+      null,
+      'G3',
+      null,
+      null,
+      null,
+      'E3',
+      null,
+      null,
+      null,
+      'F3',
+      null,
+      null,
+      null,
+      'A3',
+      null,
+      null,
+      null,
+      'E3',
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
     ],
     bassEvery: 8,
     bass: ['A2', 'F2'],
@@ -155,11 +238,19 @@ class MusicEngine {
         const i = stepIndex % stepsPerLoop;
         const note = t.melody[i];
         if (note) {
-          this.playNote(NOTE_FREQS[note], nextTime, t.step * 0.9, t.melodyType, 0.35, t.detune ?? 0);
+          this.playNote(
+            NOTE_FREQS[note],
+            nextTime,
+            t.step * 0.9,
+            t.melodyType,
+            0.35,
+            t.detune ?? 0
+          );
         }
         if (i % t.bassEvery === 0) {
           const bassNote = t.bass[(i / t.bassEvery) % t.bass.length];
-          if (bassNote) this.playPad(NOTE_FREQS[bassNote], nextTime, t.step * t.bassEvery * 0.95, 0.3);
+          if (bassNote)
+            this.playPad(NOTE_FREQS[bassNote], nextTime, t.step * t.bassEvery * 0.95, 0.3);
         }
         if (t.ticks.includes(i)) {
           this.playTick(nextTime);

@@ -15,9 +15,9 @@ initializeInput();
 // Start the game loop
 startGameLoop();
 
-function startMusic(){
-    window.removeEventListener('pointerdown',startMusic);
-    Music.play('overworld'); 
+function startMusic() {
+  window.removeEventListener('pointerdown', startMusic);
+  Music.play('overworld');
 }
 
 // start music
