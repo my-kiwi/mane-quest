@@ -1,8 +1,8 @@
-import { createUnicornSvg, unicorn, UnicornSvgProps } from './unicorn';
+import { createUnicornSvg, unicorn } from './unicorn';
 
-export type PNJ = typeof sagePnj;
+export type NPC = typeof sageNpc;
 
-export const sagePnj = {
+export const sageNpc = {
   name: 'Sage',
   image: new Image(),
   scale: 1,
@@ -25,6 +25,6 @@ export const sagePnj = {
     { line: 'What do you want, a goodbye kiss?' },
   ],
 };
-sagePnj.image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-  createUnicornSvg(sagePnj.colors)
+sageNpc.image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+  createUnicornSvg(sageNpc.colors)
 )}`;

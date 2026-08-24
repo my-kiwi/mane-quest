@@ -1,4 +1,4 @@
-import { sagePnj } from './PNJ';
+import { sageNpc } from './NPC';
 
 export const TileType = {
   EMPTY: ' ',
@@ -8,7 +8,7 @@ export const TileType = {
   COIN: '●',
   ENEMY: 'E',
   EXIT: 'X',
-  PNJ: 'P',
+  NPC: 'P',
 };
 const tilesMultiplier = 2;
 export const NB_OF_TILES_HORIZONTALLY = 16 * tilesMultiplier;
@@ -39,7 +39,7 @@ export const levels = [
       '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
       '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
     ],
-    pnj: sagePnj,
+    npc: sageNpc,
   },
   {
     name: 'Level 1,0',

@@ -1,8 +1,8 @@
 import { createUnicornSvg, unicorn } from './unicorn';
 import { getCurrentLevel, NB_OF_TILES_HORIZONTALLY, TileType, Level } from './levels';
 import { getTileDimensions } from './levelGeometry';
-import { PNJ } from './PNJ';
-import { getActiveDialogue, getPnjPosition, isPnjInRange } from './npcInteraction';
+import { NPC } from './NPC';
+import { getActiveDialogue, getNpcPosition, isNpcInRange } from './npcInteraction';
 
 // Get canvas and context from the DOM
 const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
@@ -37,34 +37,34 @@ export function draw() {
     });
   });
 
-  updatePnjInteractionUi();
+  updateNpcInteractionUi();
 
   // Draw unicorn
   drawUnicorn();
 }
 
-function updatePnjInteractionUi(): void {
+function updateNpcInteractionUi(): void {
   const prompt = document.getElementById('npc-prompt');
   const dialogueBubble = document.getElementById('npc-dialogue');
   const dialogueName = document.getElementById('npc-dialogue-name');
   const dialogueLine = document.getElementById('npc-dialogue-line');
-  const pnjPosition = getPnjPosition();
+  const npcPosition = getNpcPosition();
   if (
     !prompt ||
     !dialogueBubble ||
     !dialogueName ||
     !dialogueLine ||
-    !pnjPosition ||
-    !isPnjInRange()
+    !npcPosition ||
+    !isNpcInRange()
   ) {
     prompt?.classList.remove('is-visible');
     dialogueBubble?.classList.remove('is-visible');
     return;
   }
 
-  const positionLeft = `${(pnjPosition.x / canvas.width) * 100}%`;
+  const positionLeft = `${(npcPosition.x / canvas.width) * 100}%`;
   prompt.style.left = positionLeft;
-  prompt.style.top = `${((pnjPosition.y - unicorn.height * 0.9) / canvas.height) * 100}%`;
+  prompt.style.top = `${((npcPosition.y - unicorn.height * 0.9) / canvas.height) * 100}%`;
 
   const dialogue = getActiveDialogue();
   if (dialogue) {
@@ -125,22 +125,22 @@ function drawTile(
     ctx.fillRect(-width * 0.3, -height * 0.4, width * 0.6, height * 0.8);
     ctx.fillStyle = '#2f80ed';
     ctx.fillRect(width * 0.05, -height * 0.1, width * 0.12, height * 0.12);
-  } else if (tile === TileType.PNJ && level.pnj) {
+  } else if (tile === TileType.NPC && level.npc) {
     ctx.save();
 
     ctx.translate(0, height / 2 - unicorn.height / 2);
-    drawPNJ(level.pnj);
+    drawNPC(level.npc);
     ctx.restore();
   }
 
   ctx.restore();
 }
 
-function drawPNJ(pnj: PNJ): void {
-  if (pnj.image.complete && pnj.image.naturalWidth > 0) {
-    ctx.scale(pnj.scale, pnj.scale);
+function drawNPC(npc: NPC): void {
+  if (npc.image.complete && npc.image.naturalWidth > 0) {
+    ctx.scale(npc.scale, npc.scale);
     ctx.drawImage(
-      pnj.image,
+      npc.image,
       -unicorn.width / 2,
       -unicorn.height / 2,
       unicorn.width,
@@ -153,7 +153,7 @@ function drawPNJ(pnj: PNJ): void {
  * Draw the unicorn sprite with rotation and direction
  */
 function drawUnicorn() {
-  // TODO extend for re-use with pnj and enemies
+  // TODO extend for re-use with npc and enemies
   if (unicorn.image.complete && unicorn.image.naturalWidth > 0) {
     ctx.save();
     ctx.translate(unicorn.x, unicorn.y);

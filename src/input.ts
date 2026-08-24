@@ -4,7 +4,7 @@ import { triggerJump } from './physics';
 import { clamp } from './utils';
 import { getCurrentLevel, TileType } from './levels';
 import { getTileDimensions } from './levelGeometry';
-import { interactWithPnj, isPointOnDialogueBubble, isPointOnPnj } from './npcInteraction';
+import { interactWithNpc, isPointOnDialogueBubble, isPointOnNpc } from './npcInteraction';
 
 // Input state
 export const keys: { [key: string]: boolean } = {};
@@ -25,7 +25,7 @@ export function getGroundY(): number {
 }
 
 function handleCanvasInteraction(x: number, y: number): void {
-  if ((isPointOnPnj(x, y) || isPointOnDialogueBubble(x, y)) && interactWithPnj()) {
+  if ((isPointOnNpc(x, y) || isPointOnDialogueBubble(x, y)) && interactWithNpc()) {
     return;
   }
 
@@ -45,7 +45,7 @@ export function initializeInput(): void {
     keys[e.key] = true;
 
     if (e.key === 'Enter' && !e.repeat) {
-      interactWithPnj();
+      interactWithNpc();
     }
 
     if ((e.key === 'ArrowUp' || key === 'w') && !e.repeat) {
@@ -58,7 +58,7 @@ export function initializeInput(): void {
   });
 
   dialogueBubble?.addEventListener('pointerdown', () => {
-    interactWithPnj();
+    interactWithNpc();
   });
 
   // click + touch input

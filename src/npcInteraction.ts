@@ -1,103 +1,103 @@
 import { getCurrentLevel, TileType } from './levels';
 import { getTileDimensions } from './levelGeometry';
 import { unicorn } from './unicorn';
-import { PNJ } from './PNJ';
+import { NPC } from './NPC';
 
 let activeDialogueLine = 0;
-let activePnj: PNJ | undefined;
+let activeNpc: NPC | undefined;
 
 const INTERACTION_RANGE_MULTIPLIER = 1.5;
 
-export function getCurrentPnj(): PNJ | undefined {
-  return getCurrentLevel().pnj;
+export function getCurrentNpc(): NPC | undefined {
+  return getCurrentLevel().npc;
 }
 
-export function getPnjPosition(): { x: number; y: number } | undefined {
+export function getNpcPosition(): { x: number; y: number } | undefined {
   const level = getCurrentLevel();
   const { width: tileWidth, height: tileHeight } = getTileDimensions();
-  const rowIndex = level.map.findIndex((row) => row.includes(TileType.PNJ));
+  const rowIndex = level.map.findIndex((row) => row.includes(TileType.NPC));
 
-  if (rowIndex < 0 || !level.pnj) {
+  if (rowIndex < 0 || !level.npc) {
     return undefined;
   }
 
-  const columnIndex = level.map[rowIndex].indexOf(TileType.PNJ);
+  const columnIndex = level.map[rowIndex].indexOf(TileType.NPC);
   return {
     x: columnIndex * tileWidth + tileWidth / 2,
     y: rowIndex * tileHeight + tileHeight - unicorn.height / 2,
   };
 }
 
-export function isPnjInRange(): boolean {
-  const pnjPosition = getPnjPosition();
+export function isNpcInRange(): boolean {
+  const npcPosition = getNpcPosition();
   const inRange =
-    pnjPosition !== undefined &&
-    Math.hypot(unicorn.x - pnjPosition.x, unicorn.y - pnjPosition.y) <=
+    npcPosition !== undefined &&
+    Math.hypot(unicorn.x - npcPosition.x, unicorn.y - npcPosition.y) <=
       unicorn.width * INTERACTION_RANGE_MULTIPLIER;
 
   if (!inRange) {
-    activePnj = undefined;
+    activeNpc = undefined;
   }
 
   return inRange;
 }
 
-export function isPointOnPnj(x: number, y: number): boolean {
-  const pnjPosition = getPnjPosition();
-  if (!pnjPosition) {
+export function isPointOnNpc(x: number, y: number): boolean {
+  const npcPosition = getNpcPosition();
+  if (!npcPosition) {
     return false;
   }
 
   return (
-    x >= pnjPosition.x - unicorn.width / 2 &&
-    x <= pnjPosition.x + unicorn.width / 2 &&
-    y >= pnjPosition.y - unicorn.height / 2 &&
-    y <= pnjPosition.y + unicorn.height / 2
+    x >= npcPosition.x - unicorn.width / 2 &&
+    x <= npcPosition.x + unicorn.width / 2 &&
+    y >= npcPosition.y - unicorn.height / 2 &&
+    y <= npcPosition.y + unicorn.height / 2
   );
 }
 
 export function isPointOnDialogueBubble(x: number, y: number): boolean {
-  const pnjPosition = getPnjPosition();
-  if (!pnjPosition || !isPnjInRange()) {
+  const npcPosition = getNpcPosition();
+  if (!npcPosition || !isNpcInRange()) {
     return false;
   }
 
   return (
-    x >= pnjPosition.x - unicorn.width &&
-    x <= pnjPosition.x + unicorn.width &&
-    y >= pnjPosition.y - unicorn.height * 1.8 &&
-    y <= pnjPosition.y - unicorn.height * 0.65
+    x >= npcPosition.x - unicorn.width &&
+    x <= npcPosition.x + unicorn.width &&
+    y >= npcPosition.y - unicorn.height * 1.8 &&
+    y <= npcPosition.y - unicorn.height * 0.65
   );
 }
 
-export function interactWithPnj(): boolean {
-  if (!isPnjInRange()) {
+export function interactWithNpc(): boolean {
+  if (!isNpcInRange()) {
     return false;
   }
 
-  const pnj = getCurrentPnj();
-  if (!pnj) {
+  const npc = getCurrentNpc();
+  if (!npc) {
     return false;
   }
 
-  if (activePnj !== pnj) {
-    activePnj = pnj;
+  if (activeNpc !== npc) {
+    activeNpc = npc;
     activeDialogueLine = 0;
-  } else if (activeDialogueLine < pnj.dialogue.length - 1) {
+  } else if (activeDialogueLine < npc.dialogue.length - 1) {
     activeDialogueLine += 1;
   } else {
-    activePnj = undefined;
+    activeNpc = undefined;
   }
 
   return true;
 }
 
 export function getActiveDialogue() {
-  if (!activePnj) {
+  if (!activeNpc) {
     return undefined;
   }
-  const { line, ...props } = activePnj.dialogue[activeDialogueLine];
-  const who = props.who ?? activePnj;
+  const { line, ...props } = activeNpc.dialogue[activeDialogueLine];
+  const who = props.who ?? activeNpc;
 
   return { name: who.name, color: who.colors.maneColor, line: line };
 }
