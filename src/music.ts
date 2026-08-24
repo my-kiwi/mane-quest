@@ -167,7 +167,9 @@ class MusicEngine {
 
   private init(): void {
     if (this.ctx) return;
-    const Ctx = window.AudioContext || (window as any).webkitAudioContext;
+    const Ctx =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: AudioContext }).webkitAudioContext;
     this.ctx = new Ctx();
     this.master = this.ctx.createGain();
     this.master.gain.value = 0.25;
