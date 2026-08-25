@@ -1,5 +1,7 @@
 import { canvas } from './canvas';
 import { getMinHeightWidth, getWidth, getHeight } from './utils';
+import { getCurrentLevel, TileType } from './levels';
+import { getTileDimensions } from './levelGeometry';
 
 const BLINK_INTERVAL = 3000;
 const BLINK_DURATION = 140;
@@ -58,8 +60,12 @@ export function initializeUnicorn(): void {
 }
 
 export function resetUnicornPosition(): void {
-  unicorn.x = canvas.width / 2;
-  unicorn.y = 0;
+  const { width: tileWidth, height: tileHeight } = getTileDimensions();
+  const startRow = getCurrentLevel().map.findIndex((row) => row.includes(TileType.START));
+  const startColumn = startRow >= 0 ? getCurrentLevel().map[startRow].indexOf(TileType.START) : -1;
+
+  unicorn.x = startColumn >= 0 ? (startColumn + 0.5) * tileWidth : canvas.width / 2;
+  unicorn.y = startRow >= 0 ? (startRow + 0.5) * tileHeight : 0;
   unicorn.isJumping = false;
   unicorn.remainingAirJumps = 1;
   unicorn.velocityY = 0;

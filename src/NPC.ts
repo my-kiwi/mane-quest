@@ -33,10 +33,10 @@ export const sageNpc = {
         { who: unicorn, line: '...' },
         { line: '...' },
         { who: unicorn, line: '...' },
-        { line: "Wait, you actually did jump off the cliff? Why would you do that for?" },
+        { line: 'Wait, you actually did jump off the cliff? Why would you do that for?' },
         { who: unicorn, line: '...' },
-        { line: 'Oh, you\'re looking for the exit? '},
-        { line: '⬅️ It\'s that way.'},
+        { line: "Oh, you're looking for the exit? " },
+        { line: "⬅️ It's that way." },
       ];
     } else {
       return [

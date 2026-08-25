@@ -1,5 +1,5 @@
 import { draw } from './drawing';
-import { resetToFirstLevel } from './levels';
+import { resetToStartLevel } from './levels';
 import { updateMovement } from './movement';
 import { updatePhysics } from './physics';
 import { resetUnicornPosition, unicorn, updateUnicornBlink } from './unicorn';
@@ -11,7 +11,7 @@ const DEATH_SCREEN_DURATION = 1500;
 export function update(currentTime = performance.now(), frameScale = 1): void {
   if (unicorn.isDead) {
     if (currentTime - unicorn.diedAt >= DEATH_SCREEN_DURATION) {
-      resetToFirstLevel();
+      resetToStartLevel();
       resetUnicornPosition();
     }
     return;

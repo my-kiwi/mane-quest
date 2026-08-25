@@ -9,6 +9,7 @@ export const TileType = {
   ENEMY: 'E',
   EXIT: 'X',
   NPC: 'P',
+  START: 'S',
 };
 const tilesMultiplier = 2;
 export const NB_OF_TILES_HORIZONTALLY = 16 * tilesMultiplier;
@@ -16,11 +17,36 @@ export const NB_OF_TILES_VERTICALLY = 9 * tilesMultiplier;
 
 export const levels = [
   {
-    name: 'Level 0,0',
+    name: 'Level -1,0',
     backgroundColor: '#87CEEB', // Sky blue
     groundColor: '#228B22', // Forest green
     map: [
       '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '.              ■■               ',
+      '.           ■■■■■■■■            ',
+      '.       ■■■■■■■■■■■■■■■■        ',
+      '.   ■■■■■■■■■■■■■■■■■■■■■■■■    ',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+    ],
+  },
+  {
+    name: 'Level 0,0',
+    backgroundColor: '#87CEEB', // Sky blue
+    groundColor: '#228B22', // Forest green
+    map: [
+      '                S               ',
       '                                ',
       '                                ',
       '                                ',
@@ -102,6 +128,14 @@ export function getCurrentLevel() {
 
 export function resetToFirstLevel(): void {
   currentLevelIndex = 0;
+}
+
+export function resetToStartLevel(): void {
+  const startLevelIndex = levels.findIndex((level) =>
+    level.map.some((row) => row.includes(TileType.START))
+  );
+
+  currentLevelIndex = startLevelIndex >= 0 ? startLevelIndex : 0;
 }
 
 export function moveToNextLevel(): boolean {

@@ -3,12 +3,14 @@
 
 import { initializeCanvas } from './canvas';
 import { initializeUnicorn } from './unicorn';
+import { resetToStartLevel } from './levels';
 import { initializeInput } from './input';
 import { startGameLoop } from './gameLoop';
 import Music from './music';
 
 // Initialize all systems
 initializeCanvas();
+resetToStartLevel();
 initializeUnicorn();
 initializeInput();
 
