@@ -30,14 +30,13 @@ export const sageNpc = {
       return [
         { line: 'Welcome, dear unicorn.' },
         { line: 'I am the wise sage of this land.' },
-        { line: 'I see you have met the challenges of this land.' },
-        { line: 'Anyways, why did you jump into the void?' },
-        { line: 'Passage is that way' },
         { who: unicorn, line: '...' },
         { line: '...' },
         { who: unicorn, line: '...' },
-        { line: "Look, I don't actually have any wisdom. I just stand here." },
-        { line: 'What do you want, a goodbye kiss?' },
+        { line: "Wait, you actually did jump off the cliff? Why would you do that for?" },
+        { who: unicorn, line: '...' },
+        { line: 'Oh, you\'re looking for the exit? '},
+        { line: '⬅️ It\'s that way.'},
       ];
     } else {
       return [
