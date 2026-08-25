@@ -48,7 +48,7 @@ export function initializeInput(): void {
       interactWithNpc();
     }
 
-    if ((e.key === 'ArrowUp' || key === 'w') && !e.repeat) {
+    if ((e.key === 'ArrowUp' || e.code === 'Space' || key === 'w') && !e.repeat) {
       triggerJump();
     }
   });
