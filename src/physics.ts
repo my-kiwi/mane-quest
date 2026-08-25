@@ -5,8 +5,14 @@ import { canvas } from './canvas';
 import { getTile, getTileDimensions, isSolid } from './levelGeometry';
 
 export function triggerJump(): void {
-  if (unicorn.isJumping) {
+  if (unicorn.isJumping && unicorn.remainingAirJumps <= 0) {
     return;
+  }
+
+  if (unicorn.isJumping) {
+    unicorn.remainingAirJumps -= 1;
+  } else {
+    unicorn.remainingAirJumps = 1;
   }
 
   unicorn.isJumping = true;
@@ -27,6 +33,7 @@ export function updatePhysics(frameScale = 1): void {
 
   if (!unicorn.isJumping && isSupported) {
     unicorn.y = row * tileHeight - unicorn.height / 2;
+    unicorn.remainingAirJumps = 1;
     unicorn.velocityY = 0;
     unicorn.rotation = 0;
     return;
@@ -40,6 +47,7 @@ export function updatePhysics(frameScale = 1): void {
   if (willLand) {
     unicorn.y = nextRow * tileHeight - unicorn.height / 2;
     unicorn.isJumping = false;
+    unicorn.remainingAirJumps = 1;
     unicorn.velocityY = 0;
     unicorn.rotation = 0;
     return;

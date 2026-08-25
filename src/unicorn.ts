@@ -22,6 +22,7 @@ export const unicorn = {
   },
   direction: -1, // -1 for left, 1 for right
   isJumping: false,
+  remainingAirJumps: 1,
   velocityY: 0,
   deaths: 0,
   isDead: false,
@@ -60,6 +61,7 @@ export function resetUnicornPosition(): void {
   unicorn.x = canvas.width / 2;
   unicorn.y = 0;
   unicorn.isJumping = false;
+  unicorn.remainingAirJumps = 1;
   unicorn.velocityY = 0;
   unicorn.rotation = 0;
   unicorn.isDead = false;
