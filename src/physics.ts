@@ -3,6 +3,7 @@ import { killUnicorn } from './unicorn';
 import { clamp } from './utils';
 import { canvas } from './canvas';
 import { getTile, getTileDimensions, isSolid, revealTile } from './levelGeometry';
+import { moveToNextYLevel } from './levels/levels';
 
 export function triggerJump(): void {
   if (unicorn.isJumping && unicorn.remainingAirJumps <= 0) {
@@ -61,6 +62,12 @@ export function updatePhysics(frameScale = 1): void {
   unicorn.rotation = clamp(unicorn.velocityY * 0.02, -1.5, 1.5);
 
   if (unicorn.y - unicorn.height / 2 > canvas.height) {
+    if (moveToNextYLevel()) {
+      unicorn.y = -unicorn.height / 2;
+      unicorn.isJumping = true;
+      return;
+    }
+
     killUnicorn(performance.now());
   }
 }

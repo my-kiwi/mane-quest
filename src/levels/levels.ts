@@ -12,6 +12,10 @@ const getStartLevel = (): Level => {
 let currentLevel: Level = getStartLevel();
 
 export const getCurrentLevel = (): Level => currentLevel;
+export const setCurrentLevel = (level: Level): void => {
+  console.log(`entering level ${level.position.x},${level.position.y}`);
+  currentLevel = level;
+};
 
 export function resetToStartLevel(): void {
   currentLevel = getStartLevel();
@@ -27,7 +31,21 @@ export function moveToNextXLevel(): boolean {
     return false;
   }
 
-  currentLevel = nextLevel;
+  setCurrentLevel(nextLevel);
+  return true;
+}
+
+export function moveToNextYLevel(): boolean {
+  const currentPos = currentLevel.position;
+  const nextLevel = levels.find(
+    (level) => level.position.x === currentPos.x && level.position.y === currentPos.y + 1
+  );
+
+  if (!nextLevel) {
+    return false;
+  }
+
+  setCurrentLevel(nextLevel);
   return true;
 }
 
@@ -44,7 +62,7 @@ export function moveToPreviousXLevel(): boolean {
     return false;
   }
 
-  currentLevel = previousLevel;
+  setCurrentLevel(previousLevel);
   return true;
 }
 

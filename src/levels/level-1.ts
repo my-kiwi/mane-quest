@@ -10,14 +10,15 @@ export const level_1: Level[] = [
   },
   {
     map: mapGenerator(8), // Generates a map with 8 ground tiles
-    npc: sageNpc,
+    // TODO add enemy if has visited level 3,1
   },
   {
     map: mapGenerator(8), // Generates a map with 8 ground tiles
   },
-  {
-    map: mapGenerator(8), // Generates a map with 8 ground tiles
-  },
+  // no lvl here = unicorn dies
+  // {
+  //   map: mapGenerator(8), // Generates a map with 8 ground tiles
+  // },
 ].map((level, index) => ({
   ...level,
   position: { x: index, y: 1 },
