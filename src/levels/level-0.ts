@@ -125,5 +125,5 @@ export const level_0: Level[] = [
   },
 ].map((level, index) => ({
   ...level,
-  position: { x: index - 2, y: 0 }, // FIXME?
+  position: { x: index, y: 0 },
 }));
