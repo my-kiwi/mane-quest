@@ -1,6 +1,6 @@
 import { canvas } from './canvas';
 import { getMinHeightWidth, getWidth, getHeight } from './utils';
-import { getCurrentLevel, TileType, unlockNegativeLevel } from './levels';
+import { getCurrentLevel, TileType, unlockNegativeLevel } from './levels/levels';
 import { getTileDimensions } from './levelGeometry';
 
 const BLINK_INTERVAL = 3000;

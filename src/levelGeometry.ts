@@ -4,7 +4,7 @@ import {
   NB_OF_TILES_HORIZONTALLY,
   NB_OF_TILES_VERTICALLY,
   TileType,
-} from './levels';
+} from './levels/levels';
 
 export function getTileDimensions(): { width: number; height: number } {
   return {

@@ -1,5 +1,5 @@
 import { draw } from './drawing';
-import { resetToStartLevel } from './levels';
+import { resetToStartLevel } from './levels/levels';
 import { updateMovement } from './movement';
 import { updatePhysics } from './physics';
 import { resetUnicornPosition, unicorn, updateUnicornBlink } from './unicorn';

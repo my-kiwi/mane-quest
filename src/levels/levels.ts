@@ -1,4 +1,4 @@
-import { level0 } from './levels/level-0';
+import { level0 } from './level-0';
 
 export const TileType = {
   EMPTY: ' ',

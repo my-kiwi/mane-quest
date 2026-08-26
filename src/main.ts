@@ -3,7 +3,7 @@
 
 import { initializeCanvas } from './canvas';
 import { initializeUnicorn } from './unicorn';
-import { resetToStartLevel } from './levels';
+import { resetToStartLevel } from './levels/levels';
 import { initializeInput } from './input';
 import { startGameLoop } from './gameLoop';
 import Music from './music';
