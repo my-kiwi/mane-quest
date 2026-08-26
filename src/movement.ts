@@ -4,8 +4,8 @@ import { canvas } from './canvas';
 import { clamp } from './utils';
 import {
   getCurrentLevel,
-  moveToNextLevel,
-  moveToPreviousLevel,
+  moveToNextXLevel,
+  moveToPreviousXLevel,
   NB_OF_TILES_HORIZONTALLY,
   NB_OF_TILES_VERTICALLY,
   TileType,
@@ -67,14 +67,14 @@ function moveHorizontally(nextX: number): boolean {
   }
 
   // Move to the next map when the unicorn walks through the right edge.
-  if (movingRight && resolvedX >= canvas.width - hitboxWidth && moveToNextLevel()) {
+  if (movingRight && resolvedX >= canvas.width - hitboxWidth && moveToNextXLevel()) {
     unicorn.x = hitboxWidth;
     setTargetPosition(unicorn.x, unicorn.y);
     return true;
   }
 
   // Move to the previous map when the unicorn walks through the left edge.
-  if (movingLeft && resolvedX <= hitboxWidth && moveToPreviousLevel()) {
+  if (movingLeft && resolvedX <= hitboxWidth && moveToPreviousXLevel()) {
     unicorn.x = canvas.width - hitboxWidth;
     setTargetPosition(unicorn.x, unicorn.y);
     return true;

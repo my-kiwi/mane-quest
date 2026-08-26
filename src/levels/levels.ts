@@ -1,4 +1,6 @@
-import { level0 } from './level-0';
+import { level_0 } from './level-0';
+import { level_1 } from './level-1';
+import { Level } from './level-type';
 
 export const TileType = {
   EMPTY: ' ',
@@ -15,47 +17,50 @@ const tilesMultiplier = 2;
 export const NB_OF_TILES_HORIZONTALLY = 16 * tilesMultiplier;
 export const NB_OF_TILES_VERTICALLY = 9 * tilesMultiplier;
 
-export const levels = [...level0];
+export const levels = [...level_0, ...level_1];
 
-let currentLevelIndex = 0;
+const getStartLevel = (): Level => {
+  return levels.find((level) => level.map.some((row) => row.includes(TileType.START))) as Level;
+};
+
+let currentLevel: Level = getStartLevel();
 let negativeLevelUnlocked = false;
 
-export type Level = ReturnType<typeof getCurrentLevel>;
-export function getCurrentLevel() {
-  return levels[currentLevelIndex];
-}
-
-export function resetToFirstLevel(): void {
-  currentLevelIndex = 0;
-}
+export const getCurrentLevel = (): Level => currentLevel;
 
 export function resetToStartLevel(): void {
-  const startLevelIndex = levels.findIndex((level) =>
-    level.map.some((row) => row.includes(TileType.START))
-  );
-
-  currentLevelIndex = startLevelIndex >= 0 ? startLevelIndex : 0;
+  currentLevel = getStartLevel();
 }
 
 export function unlockNegativeLevel(): void {
   negativeLevelUnlocked = true;
 }
 
-export function moveToNextLevel(): boolean {
-  if (currentLevelIndex >= levels.length - 1) {
+export function moveToNextXLevel(): boolean {
+  const currentPos = currentLevel.position;
+  const nextLevel = levels.find(
+    (level) => level.position.x === currentPos.x + 1 && level.position.y === currentPos.y
+  );
+
+  if (!nextLevel) {
     return false;
   }
 
-  currentLevelIndex += 1;
+  currentLevel = nextLevel;
   return true;
 }
 
-export function moveToPreviousLevel(): boolean {
-  if (currentLevelIndex <= 0 || (getCurrentLevel().position.x === 0 && !negativeLevelUnlocked)) {
+export function moveToPreviousXLevel(): boolean {
+  const currentPos = currentLevel.position;
+  const previousLevel = levels.find(
+    (level) => level.position.x === currentPos.x - 1 && level.position.y === currentPos.y
+  );
+
+  if (!previousLevel || (previousLevel.position.x < 0 && !negativeLevelUnlocked)) {
     return false;
   }
 
-  currentLevelIndex -= 1;
+  currentLevel = previousLevel;
   return true;
 }
 
@@ -64,7 +69,7 @@ levels.forEach((level) => {
   level.map.forEach((row, rowIndex) => {
     if (row.length !== NB_OF_TILES_HORIZONTALLY) {
       console.warn(
-        `Row ${rowIndex} in level "${level.name}" does only have ${row.length} out of ${NB_OF_TILES_HORIZONTALLY} tiles.`
+        `Row ${rowIndex} in level "${level.position.x},${level.position.y}" does only have ${row.length} out of ${NB_OF_TILES_HORIZONTALLY} tiles.`
       );
     }
   });

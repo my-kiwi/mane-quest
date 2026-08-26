@@ -1,5 +1,6 @@
 import { createUnicornSvg, unicorn } from './unicorn';
-import { getCurrentLevel, NB_OF_TILES_HORIZONTALLY, TileType, Level } from './levels/levels';
+import { NB_OF_TILES_HORIZONTALLY, TileType, getCurrentLevel } from './levels/levels';
+import type { Level } from './levels/level-type';
 import { getTileDimensions } from './levelGeometry';
 import { NPC } from './NPC';
 import { getActiveDialogue, getNpcPosition, isNpcInRange } from './npcInteraction';
