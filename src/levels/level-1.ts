@@ -21,6 +21,6 @@ export const level_1: Level[] = [
 ].map((level, index) => ({
   ...level,
   position: { x: index, y: 1 },
-  backgroundColor: '#87CEEB', // Sky blue
-  groundColor: '#228B22', // Forest green
+  backgroundColor: '#4B0082', // Indigo - deeper/darker to distinguish from -1,0
+  groundColor: '#2F1B4A', // Dark violet ground
 }));
