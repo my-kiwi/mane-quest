@@ -51,7 +51,7 @@ export function moveToNextLevel(): boolean {
 }
 
 export function moveToPreviousLevel(): boolean {
-  if (currentLevelIndex <= 0 || (currentLevelIndex === 2 && !negativeLevelUnlocked)) {
+  if (currentLevelIndex <= 0 || (getCurrentLevel().position.x === 0 && !negativeLevelUnlocked)) {
     return false;
   }
 
