@@ -12,6 +12,7 @@ export const TileType = {
   EMPTY: ' ',
   GROUND: '■',
   PLATFORM: '═',
+  INVISIBLE_PLATFORM: '─',
   SPIKE: '▲',
   COIN: '●',
   ENEMY: 'E',

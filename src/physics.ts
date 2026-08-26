@@ -2,7 +2,7 @@ import { unicorn } from './unicorn';
 import { killUnicorn } from './unicorn';
 import { clamp } from './utils';
 import { canvas } from './canvas';
-import { getTile, getTileDimensions, isSolid } from './levelGeometry';
+import { getTile, getTileDimensions, isSolid, revealTile } from './levelGeometry';
 
 export function triggerJump(): void {
   if (unicorn.isJumping && unicorn.remainingAirJumps <= 0) {
@@ -29,9 +29,11 @@ export function updatePhysics(frameScale = 1): void {
   const column = Math.floor(unicorn.x / tileWidth);
   const feetY = unicorn.y + unicorn.height / 2;
   const row = Math.floor(feetY / tileHeight);
-  const isSupported = isSolid(getTile(row, column));
+  const supportedTile = getTile(row, column);
+  const isSupported = isSolid(supportedTile);
 
   if (!unicorn.isJumping && isSupported) {
+    revealTile(row, column);
     unicorn.y = row * tileHeight - unicorn.height / 2;
     unicorn.remainingAirJumps = 1;
     unicorn.velocityY = 0;
@@ -42,9 +44,11 @@ export function updatePhysics(frameScale = 1): void {
   unicorn.velocityY += unicorn.gravity * frameScale;
   const nextY = unicorn.y + unicorn.velocityY * frameScale;
   const nextRow = Math.floor((nextY + unicorn.height / 2) / tileHeight);
-  const willLand = unicorn.velocityY >= 0 && isSolid(getTile(nextRow, column));
+  const landingTile = getTile(nextRow, column);
+  const willLand = unicorn.velocityY >= 0 && isSolid(landingTile);
 
   if (willLand) {
+    revealTile(nextRow, column);
     unicorn.y = nextRow * tileHeight - unicorn.height / 2;
     unicorn.isJumping = false;
     unicorn.remainingAirJumps = 1;
