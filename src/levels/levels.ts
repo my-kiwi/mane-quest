@@ -1,3 +1,4 @@
+import { unicorn } from '../unicorn';
 import { level_0 } from './level-0';
 import { level_1 } from './level-1';
 import { Level, TileType, NB_OF_TILES_HORIZONTALLY, NB_OF_TILES_VERTICALLY } from './level-type';
@@ -9,16 +10,11 @@ const getStartLevel = (): Level => {
 };
 
 let currentLevel: Level = getStartLevel();
-let negativeLevelUnlocked = false;
 
 export const getCurrentLevel = (): Level => currentLevel;
 
 export function resetToStartLevel(): void {
   currentLevel = getStartLevel();
-}
-
-export function unlockNegativeLevel(): void {
-  negativeLevelUnlocked = true;
 }
 
 export function moveToNextXLevel(): boolean {
@@ -43,7 +39,7 @@ export function moveToPreviousXLevel(): boolean {
 
   if (
     !previousLevel ||
-    (previousLevel.position.x < getStartLevel().position.x && !negativeLevelUnlocked)
+    (previousLevel.position.x < getStartLevel().position.x && unicorn.deaths === 0)
   ) {
     return false;
   }
