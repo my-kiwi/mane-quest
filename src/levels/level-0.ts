@@ -1,5 +1,5 @@
 import { sageNpc } from '../NPC';
-import { Level } from './level-type';
+import { Level, mapGenerator } from './level-type';
 
 export const level_0: Level[] = [
   {
@@ -78,26 +78,7 @@ export const level_0: Level[] = [
   {
     backgroundColor: '#87CEEB', // Sky blue
     groundColor: '#228B22', // Forest green
-    map: [
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-    ],
+    map: mapGenerator(5),
   },
   {
     backgroundColor: '#87CEEB', // Sky blue
