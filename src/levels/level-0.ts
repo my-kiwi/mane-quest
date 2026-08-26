@@ -1,8 +1,8 @@
 import { sageNpc } from '../NPC';
+import { Level } from './level-type';
 
-export const level_0 = [
+export const level_0: Level[] = [
   {
-    position: { x: -2, y: 0 },
     backgroundColor: '#4B0082', // Indigo - deeper/darker to distinguish from -1,0
     groundColor: '#2F1B4A', // Dark violet ground
     map: [
@@ -27,7 +27,6 @@ export const level_0 = [
     ],
   },
   {
-    position: { x: -1, y: 0 },
     backgroundColor: '#87CEEB', // Sky blue
     groundColor: '#228B22', // Forest green
     map: [
@@ -52,7 +51,6 @@ export const level_0 = [
     ],
   },
   {
-    position: { x: 0, y: 0 },
     backgroundColor: '#87CEEB', // Sky blue
     groundColor: '#228B22', // Forest green
     map: [
@@ -78,7 +76,6 @@ export const level_0 = [
     npc: sageNpc,
   },
   {
-    position: { x: 1, y: 0 },
     backgroundColor: '#87CEEB', // Sky blue
     groundColor: '#228B22', // Forest green
     map: [
@@ -103,7 +100,6 @@ export const level_0 = [
     ],
   },
   {
-    position: { x: 2, y: 0 },
     backgroundColor: '#87CEEB', // Sky blue
     groundColor: '#228B22', // Forest green
     map: [
@@ -127,4 +123,7 @@ export const level_0 = [
       '■■■■■■■■■■■■■■■■■■              ',
     ],
   },
-];
+].map((level, index) => ({
+  ...level,
+  position: { x: index - 2, y: 0 }, // FIXME?
+}));

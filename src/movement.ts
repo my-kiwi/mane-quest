@@ -2,14 +2,8 @@ import { unicorn } from './unicorn';
 import { keys, targetX, setTargetPosition } from './input';
 import { canvas } from './canvas';
 import { clamp } from './utils';
-import {
-  getCurrentLevel,
-  moveToNextXLevel,
-  moveToPreviousXLevel,
-  NB_OF_TILES_HORIZONTALLY,
-  NB_OF_TILES_VERTICALLY,
-  TileType,
-} from './levels/levels';
+import { getCurrentLevel, moveToNextXLevel, moveToPreviousXLevel } from './levels/levels';
+import { NB_OF_TILES_HORIZONTALLY, NB_OF_TILES_VERTICALLY } from './levels/level-type';
 import { getTileDimensions, isSolid } from './levelGeometry';
 
 const BALANCE_ROTATION = 0.12;

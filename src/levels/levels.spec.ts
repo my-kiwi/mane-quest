@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { levels, NB_OF_TILES_VERTICALLY, NB_OF_TILES_HORIZONTALLY } from './levels';
+import { levels } from './levels';
+import { mapGenerator, NB_OF_TILES_VERTICALLY, NB_OF_TILES_HORIZONTALLY } from './level-type';
 
 describe('levels', () => {
   it('contains at least one level', () => {
@@ -28,5 +29,34 @@ describe('levels', () => {
       expect(positions.has(posString), `Duplicate level position found: ${posString}`).toBe(false);
       positions.add(posString);
     });
+  });
+  it('should generate a map with the correct dimensions and ground height', () => {
+    const groundHeight = 7;
+    const generatedMap = mapGenerator(groundHeight);
+
+    expect(generatedMap.length).toBe(NB_OF_TILES_VERTICALLY);
+    generatedMap.forEach((row) => {
+      expect(row.length).toBe(NB_OF_TILES_HORIZONTALLY);
+    });
+    expect(generatedMap).toEqual([
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+    ]);
   });
 });

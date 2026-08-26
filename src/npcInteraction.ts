@@ -1,7 +1,8 @@
-import { getCurrentLevel, TileType } from './levels/levels';
+import { getCurrentLevel } from './levels/levels';
 import { getTileDimensions } from './levelGeometry';
 import { unicorn } from './unicorn';
 import { NPC } from './NPC';
+import { TileType } from './levels/level-type';
 
 let activeDialogueLine = 0;
 let activeNpc: NPC | undefined;

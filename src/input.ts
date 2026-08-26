@@ -2,7 +2,8 @@ import { canvas } from './canvas';
 import { unicorn } from './unicorn';
 import { triggerJump } from './physics';
 import { clamp } from './utils';
-import { getCurrentLevel, TileType } from './levels/levels';
+import { getCurrentLevel } from './levels/levels';
+import { TileType } from './levels/level-type';
 import { getTileDimensions } from './levelGeometry';
 import { interactWithNpc, isPointOnDialogueBubble, isPointOnNpc } from './npcInteraction';
 

@@ -1,130 +1,26 @@
 import { sageNpc } from '../NPC';
+import { mapGenerator, Level } from './level-type';
 
-export const level_1 = [
+export const level_1: Level[] = [
   {
-    position: { x: -2, y: -1 },
-    backgroundColor: '#4B0082', // Indigo - deeper/darker to distinguish from -1,0
-    groundColor: '#2F1B4A', // Dark violet ground
-    map: [
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                        ■■      ',
-      '                     ■■■■■■     ',
-      '                  ■■■■■■■■■■    ',
-      '              ■■■■■■■■■■■■■■    ',
-      '.         ■■■■■■■■■■■■■■■■■■    ',
-      '.     ■■■■■■■■■■■■■■■■■■■■■■    ',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-    ],
+    map: mapGenerator(8), // Generates a map with 8 ground tiles
   },
   {
-    position: { x: -1, y: -1 },
-    backgroundColor: '#87CEEB', // Sky blue
-    groundColor: '#228B22', // Forest green
-    map: [
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '.              ■■               ',
-      '.           ■■■■■■■■            ',
-      '.       ■■■■■■■■■■■■■■■■        ',
-      '.   ■■■■■■■■■■■■■■■■■■■■■■■■    ',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-    ],
+    map: mapGenerator(8), // Generates a map with 8 ground tiles
   },
   {
-    position: { x: 0, y: -1 },
-    backgroundColor: '#87CEEB', // Sky blue
-    groundColor: '#228B22', // Forest green
-    map: [
-      '                S               ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      ' P                              ',
-      '■■■■■                           ',
-      '■■■■■■■■■■■■                    ',
-      '■■■■■■■■■■■■           ■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■   ■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■   ■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-    ],
+    map: mapGenerator(8), // Generates a map with 8 ground tiles
     npc: sageNpc,
   },
   {
-    position: { x: 1, y: -1 },
-    backgroundColor: '#87CEEB', // Sky blue
-    groundColor: '#228B22', // Forest green
-    map: [
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-    ],
+    map: mapGenerator(8), // Generates a map with 8 ground tiles
   },
   {
-    position: { x: 2, y: -1 },
-    backgroundColor: '#87CEEB', // Sky blue
-    groundColor: '#228B22', // Forest green
-    map: [
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '■■■■■■■■■■■■■■■■■■              ',
-      '■■■■■■■■■■■■■■■■■■              ',
-      '■■■■■■■■■■■■■■■■■■              ',
-      '■■■■■■■■■■■■■■■■■■              ',
-      '■■■■■■■■■■■■■■■■■■              ',
-    ],
+    map: mapGenerator(8), // Generates a map with 8 ground tiles
   },
-];
+].map((level, index) => ({
+  ...level,
+  position: { x: index, y: 1 },
+  backgroundColor: '#87CEEB', // Sky blue
+  groundColor: '#228B22', // Forest green
+}));

@@ -1,21 +1,6 @@
 import { level_0 } from './level-0';
 import { level_1 } from './level-1';
-import { Level } from './level-type';
-
-export const TileType = {
-  EMPTY: ' ',
-  GROUND: '■',
-  PLATFORM: '═',
-  SPIKE: '▲',
-  COIN: '●',
-  ENEMY: 'E',
-  EXIT: 'X',
-  NPC: 'P',
-  START: 'S',
-};
-const tilesMultiplier = 2;
-export const NB_OF_TILES_HORIZONTALLY = 16 * tilesMultiplier;
-export const NB_OF_TILES_VERTICALLY = 9 * tilesMultiplier;
+import { Level, TileType, NB_OF_TILES_HORIZONTALLY, NB_OF_TILES_VERTICALLY } from './level-type';
 
 export const levels = [...level_0, ...level_1];
 
@@ -66,6 +51,11 @@ export function moveToPreviousXLevel(): boolean {
 
 levels.forEach((level) => {
   // Ensure the map has the correct number of rows
+  if (level.map.length !== NB_OF_TILES_VERTICALLY) {
+    console.warn(
+      `Level "${level.position.x},${level.position.y}" does only have ${level.map.length} out of ${NB_OF_TILES_VERTICALLY} tile rows.`
+    );
+  }
   level.map.forEach((row, rowIndex) => {
     if (row.length !== NB_OF_TILES_HORIZONTALLY) {
       console.warn(

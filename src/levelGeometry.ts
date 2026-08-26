@@ -1,10 +1,6 @@
 import { canvas } from './canvas';
-import {
-  getCurrentLevel,
-  NB_OF_TILES_HORIZONTALLY,
-  NB_OF_TILES_VERTICALLY,
-  TileType,
-} from './levels/levels';
+import { getCurrentLevel } from './levels/levels';
+import { TileType, NB_OF_TILES_HORIZONTALLY, NB_OF_TILES_VERTICALLY } from './levels/level-type';
 
 export function getTileDimensions(): { width: number; height: number } {
   return {
