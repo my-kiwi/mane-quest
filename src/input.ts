@@ -26,7 +26,7 @@ export function getGroundY(): number {
 }
 
 function handleCanvasInteraction(x: number, y: number): void {
-  if ((isPointOnNpc(x, y) || isPointOnDialogueBubble(x, y)) && interactWithNpc()) {
+  if (isPointOnNpc(x, y) && interactWithNpc()) {
     return;
   }
 
@@ -58,7 +58,8 @@ export function initializeInput(): void {
     keys[e.key] = false;
   });
 
-  dialogueBubble?.addEventListener('pointerdown', () => {
+  dialogueBubble?.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
     interactWithNpc();
   });
 

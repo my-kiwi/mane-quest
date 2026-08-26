@@ -4,7 +4,7 @@ import { TileType, NB_OF_TILES_HORIZONTALLY } from './levels/level-type';
 import type { Level } from './levels/level-type';
 import { getTileDimensions } from './levelGeometry';
 import { NPC } from './NPC';
-import { getActiveDialogue, getNpcPosition, isNpcInRange } from './npcInteraction';
+import { getActiveDialogue, isNpcInRange } from './npcInteraction';
 
 // Get canvas and context from the DOM
 const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
@@ -62,31 +62,16 @@ function drawDeathMessage(): void {
 }
 
 function updateNpcInteractionUi(): void {
-  const prompt = document.getElementById('npc-prompt');
   const dialogueBubble = document.getElementById('npc-dialogue');
   const dialogueName = document.getElementById('npc-dialogue-name');
   const dialogueLine = document.getElementById('npc-dialogue-line');
-  const npcPosition = getNpcPosition();
-  if (
-    !prompt ||
-    !dialogueBubble ||
-    !dialogueName ||
-    !dialogueLine ||
-    !npcPosition ||
-    !isNpcInRange()
-  ) {
-    prompt?.classList.remove('is-visible');
+  if (!dialogueBubble || !dialogueName || !dialogueLine || !isNpcInRange()) {
     dialogueBubble?.classList.remove('is-visible');
     return;
   }
 
-  const positionLeft = `${(npcPosition.x / canvas.width) * 100}%`;
-  prompt.style.left = positionLeft;
-  prompt.style.top = `${((npcPosition.y - unicorn.height * 0.9) / canvas.height) * 100}%`;
-
   const dialogue = getActiveDialogue();
   if (dialogue) {
-    prompt.classList.remove('is-visible');
     dialogueName.textContent = dialogue.name;
     dialogueLine.textContent = dialogue.line;
     dialogueName.style.color = dialogue.color;
@@ -95,7 +80,6 @@ function updateNpcInteractionUi(): void {
   }
 
   dialogueBubble.classList.remove('is-visible');
-  prompt.classList.add('is-visible');
 }
 
 function drawTile(
@@ -156,6 +140,11 @@ function drawTile(
 
 function drawNPC(npc: NPC): void {
   if (npc.image.complete && npc.image.naturalWidth > 0) {
+    ctx.save();
+    if (isNpcInRange()) {
+      ctx.shadowColor = npc.colors.bodyColor;
+      ctx.shadowBlur = 12;
+    }
     ctx.scale(npc.scale, npc.scale);
     ctx.drawImage(
       npc.image,
@@ -164,6 +153,7 @@ function drawNPC(npc: NPC): void {
       unicorn.width,
       unicorn.height
     );
+    ctx.restore();
   }
 }
 

@@ -62,7 +62,6 @@ main canvas {
   -webkit-tap-highlight-color: transparent;
 }
 
-.npc-prompt,
 .npc-dialogue {
   display: none;
   position: absolute;
@@ -71,23 +70,9 @@ main canvas {
   z-index: 1;
 }
 
-.npc-prompt {
-  pointer-events: none;
-}
-
 .npc-dialogue {
   pointer-events: auto;
   cursor: pointer;
-}
-
-.npc-prompt.is-visible {
-  display: block;
-  color: #fff;
-  font: 700 clamp(1.25rem, 4vw, 2.25rem) / 1 sans-serif;
-  text-shadow: 1px 1px 0 #202020, -1px -1px 0 #202020, 1px -1px 0 #202020,
-    -1px 1px 0 #202020;
-  transform: translate(-50%, -50%);
-  animation: npc-prompt-bounce 360ms ease-in-out infinite alternate;
 }
 
 .npc-dialogue.is-visible {
@@ -114,11 +99,3 @@ main canvas {
   font-size: 0.95rem;
 }
 
-@keyframes npc-prompt-bounce {
-  from {
-    margin-top: 0;
-  }
-  to {
-    margin-top: -0.35rem;
-  }
-}
