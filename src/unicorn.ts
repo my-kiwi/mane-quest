@@ -1,6 +1,6 @@
 import { canvas } from './canvas';
 import { getMinHeightWidth, getWidth, getHeight } from './utils';
-import { getCurrentLevel, TileType } from './levels';
+import { getCurrentLevel, TileType, unlockNegativeLevel } from './levels';
 import { getTileDimensions } from './levelGeometry';
 
 const BLINK_INTERVAL = 3000;
@@ -80,6 +80,7 @@ export function killUnicorn(currentTime: number): void {
   }
 
   unicorn.deaths += 1;
+  unlockNegativeLevel();
   unicorn.isDead = true;
   unicorn.diedAt = currentTime;
 }

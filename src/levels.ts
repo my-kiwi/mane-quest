@@ -120,6 +120,7 @@ export const levels = [
 ];
 
 let currentLevelIndex = 0;
+let negativeLevelUnlocked = false;
 
 export type Level = ReturnType<typeof getCurrentLevel>;
 export function getCurrentLevel() {
@@ -138,6 +139,10 @@ export function resetToStartLevel(): void {
   currentLevelIndex = startLevelIndex >= 0 ? startLevelIndex : 0;
 }
 
+export function unlockNegativeLevel(): void {
+  negativeLevelUnlocked = true;
+}
+
 export function moveToNextLevel(): boolean {
   if (currentLevelIndex >= levels.length - 1) {
     return false;
@@ -148,7 +153,7 @@ export function moveToNextLevel(): boolean {
 }
 
 export function moveToPreviousLevel(): boolean {
-  if (currentLevelIndex <= 0) {
+  if (currentLevelIndex <= 0 || (currentLevelIndex === 1 && !negativeLevelUnlocked)) {
     return false;
   }
 
