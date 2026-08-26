@@ -1,5 +1,6 @@
 import { sageNpc } from '../NPC';
-import { mapGenerator, Level } from './level-type';
+import { mapGenerator, Level, rowGenerator, TileType } from './level-type';
+import { firstEnemy } from '../enemy';
 
 export const level_1: Level[] = [
   {
@@ -9,8 +10,18 @@ export const level_1: Level[] = [
     map: mapGenerator(8), // Generates a map with 8 ground tiles
   },
   {
-    map: mapGenerator(8), // Generates a map with 8 ground tiles
-    // TODO add enemy if has visited level 3,1
+    visited: false,
+    get map() {
+      if (!this.visited) {
+        return mapGenerator(8);
+      }
+      return mapGenerator(8).map((row, index) => {
+        const indexToReplace = 9;
+        if (index !== indexToReplace) return row;
+        return row.slice(0, indexToReplace) + TileType.ENEMY + row.slice(indexToReplace + 1);
+      });
+    },
+    enemy: firstEnemy,
   },
   {
     map: mapGenerator(8), // Generates a map with 8 ground tiles

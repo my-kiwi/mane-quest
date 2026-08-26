@@ -9,12 +9,18 @@ const getStartLevel = (): Level => {
   return levels.find((level) => level.map.some((row) => row.includes(TileType.START))) as Level;
 };
 
+export const getLevel = (x: number, y: number) => {
+  return levels.find((level) => level.position.x === x && level.position.y === y);
+};
+
 let currentLevel: Level = getStartLevel();
+currentLevel.visited = true;
 
 export const getCurrentLevel = (): Level => currentLevel;
 export const setCurrentLevel = (level: Level): void => {
   console.log(`entering level ${level.position.x},${level.position.y}`);
   currentLevel = level;
+  level.visited = true;
 };
 
 export function resetToStartLevel(): void {

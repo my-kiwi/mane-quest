@@ -1,11 +1,14 @@
 import { NPC } from '../NPC';
+import { Enemy } from '../enemy';
 
 export type Level = {
   position: { x: number; y: number };
   backgroundColor: string;
   groundColor: string;
   map: string[];
-  npc?: NPC; // Replace 'any' with the actual type of your NPC if available
+  visited?: boolean;
+  npc?: NPC;
+  enemy?: Enemy;
 };
 
 export const TileType = {
@@ -19,12 +22,14 @@ export const TileType = {
   EXIT: 'X',
   NPC: 'P',
   START: 'S',
-};
+} as const; // Added "as const" to infer literal string types instead of generic strings
+
+export type TileTypeEntry = (typeof TileType)[keyof typeof TileType];
 const tilesMultiplier = 2;
 export const NB_OF_TILES_HORIZONTALLY = 16 * tilesMultiplier;
 export const NB_OF_TILES_VERTICALLY = 9 * tilesMultiplier;
 
-export const rowGenerator = (tileType: string): string => {
+export const rowGenerator = (tileType: TileTypeEntry): string => {
   return tileType.repeat(NB_OF_TILES_HORIZONTALLY);
 };
 
