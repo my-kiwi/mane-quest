@@ -41,7 +41,10 @@ export function moveToPreviousXLevel(): boolean {
     (level) => level.position.x === currentPos.x - 1 && level.position.y === currentPos.y
   );
 
-  if (!previousLevel || (previousLevel.position.x < getStartLevel().position.x && !negativeLevelUnlocked)) {
+  if (
+    !previousLevel ||
+    (previousLevel.position.x < getStartLevel().position.x && !negativeLevelUnlocked)
+  ) {
     return false;
   }
 
