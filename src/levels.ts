@@ -17,6 +17,31 @@ export const NB_OF_TILES_VERTICALLY = 9 * tilesMultiplier;
 
 export const levels = [
   {
+    name: 'Level -2,0',
+    backgroundColor: '#4B0082', // Indigo - deeper/darker to distinguish from -1,0
+    groundColor: '#2F1B4A', // Dark violet ground
+    map: [
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                        ■■      ',
+      '                     ■■■■■■     ',
+      '                  ■■■■■■■■■■    ',
+      '              ■■■■■■■■■■■■■■    ',
+      '.         ■■■■■■■■■■■■■■■■■■    ',
+      '.     ■■■■■■■■■■■■■■■■■■■■■■    ',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+    ],
+  },
+  {
     name: 'Level -1,0',
     backgroundColor: '#87CEEB', // Sky blue
     groundColor: '#228B22', // Forest green
@@ -153,7 +178,7 @@ export function moveToNextLevel(): boolean {
 }
 
 export function moveToPreviousLevel(): boolean {
-  if (currentLevelIndex <= 0 || (currentLevelIndex === 1 && !negativeLevelUnlocked)) {
+  if (currentLevelIndex <= 0 || (currentLevelIndex === 2 && !negativeLevelUnlocked)) {
     return false;
   }
 
