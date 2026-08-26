@@ -6,7 +6,7 @@ import { resetUnicornPosition, unicorn, updateUnicornBlink } from './unicorn';
 
 const FRAME_DURATION = 1000 / 60;
 const MAX_FRAME_SCALE = 3;
-const DEATH_SCREEN_DURATION = 1500;
+const DEATH_SCREEN_DURATION = 3000;
 
 export function update(currentTime = performance.now(), frameScale = 1): void {
   if (unicorn.isDead) {
