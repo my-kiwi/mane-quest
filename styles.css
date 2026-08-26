@@ -30,11 +30,15 @@ body {
 html, body {
   height: 100%;
   margin: 0;
+  touch-action: none;
+  user-select: none;
 }
 
 main {
   position: relative;
   width: min(100vw, calc(100vh * 16 / 9));
+  touch-action: none;
+  user-select: none;
 }
 
 main canvas {
@@ -42,12 +46,28 @@ main canvas {
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
+  touch-action: none;
+  user-select: none;
+}
+
+* {
+  /* 1. Prevents the "Copy/Paste" menu and standard highlighting */
+  -webkit-user-select: none; /* Required for Safari/iOS Chrome */
+  user-select: none;         /* Standard syntax */
+
+  /* 2. Prevents the long-press context menu on iOS (Save Image, Copy, Share) */
+  -webkit-touch-callout: none;
+
+  /* 3. Removes the quick blue/gray "flash" highlight when tapping links/buttons */
+  -webkit-tap-highlight-color: transparent;
 }
 
 .npc-prompt,
 .npc-dialogue {
   display: none;
   position: absolute;
+  touch-action: none;
+  user-select: none;
   z-index: 1;
 }
 
