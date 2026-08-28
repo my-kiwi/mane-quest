@@ -1,5 +1,5 @@
 import { createUnicornSvg, unicorn } from './unicorn';
-import { getCurrentLevel } from './levels/levels';
+import { getCurrentLevel, hasTile } from './levels/levels';
 import { TileType, NB_OF_TILES_HORIZONTALLY } from './levels/level-type';
 import type { Level } from './levels/level-type';
 import { getTileDimensions } from './levelGeometry';
@@ -41,6 +41,9 @@ export function draw() {
   });
 
   updateNpcInteractionUi();
+
+  // Draw enemies
+  drawEnemies();
 
   // Draw unicorn
   drawUnicorn();
@@ -121,9 +124,7 @@ function drawTile(
     ctx.arc(0, 0, Math.min(width, height) * 0.28, 0, Math.PI * 2);
     ctx.fill();
   } else if (tile === TileType.ENEMY) {
-    if (level.enemy) {
-      drawEnemy(level.enemy);
-    }
+    // Enemy tile marker - enemy is drawn at its dynamic position in drawEnemies()
   } else if (tile === TileType.EXIT) {
     ctx.fillStyle = '#f2f2f2';
     ctx.fillRect(-width * 0.3, -height * 0.4, width * 0.6, height * 0.8);
@@ -140,12 +141,22 @@ function drawTile(
   ctx.restore();
 }
 
-function drawEnemy(enemy: Enemy): void {
-  if (!enemy.image.complete || enemy.image.naturalWidth <= 0) {
-    console.log('cannot draw enemy');
+function drawEnemies(): void {
+  const level = getCurrentLevel();
+  if (!level.enemy || !hasTile(level, TileType.ENEMY)) {
     return;
   }
 
+  const enemy = level.enemy;
+  if (!enemy.image.complete || enemy.image.naturalWidth <= 0) {
+    return;
+  }
+
+  ctx.save();
+  ctx.translate(enemy.x, enemy.y);
+  if (enemy.direction === -1) {
+    ctx.scale(-1, 1);
+  }
   ctx.drawImage(
     enemy.image,
     -enemy.width / 2,
@@ -153,6 +164,7 @@ function drawEnemy(enemy: Enemy): void {
     enemy.width,
     enemy.height
   );
+  ctx.restore();
 }
 
 function drawNPC(npc: NPC): void {

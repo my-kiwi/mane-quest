@@ -1,7 +1,7 @@
 // Application orchestration
 // Initializes all modules and starts the game loop
 
-import { initializeCanvas } from './canvas';
+import { resizeCanvas } from './canvas';
 import { initializeUnicorn } from './unicorn';
 import { resetToStartLevel } from './levels/levels';
 import { initializeInput } from './input';
@@ -9,7 +9,7 @@ import { startGameLoop } from './gameLoop';
 import Music from './music';
 
 // Initialize all systems
-initializeCanvas();
+resizeCanvas();
 resetToStartLevel();
 initializeUnicorn();
 initializeInput();

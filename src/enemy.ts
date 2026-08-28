@@ -3,11 +3,17 @@ import { canvas } from './canvas';
 export type Enemy = typeof firstEnemy;
 
 const ENEMY_SIZE_MULTIPLIER = 2.5;
+const ENEMY_SPEED = 3; // pixels per second
+const ENEMY_DIRECTION = 1; // 1 for right, -1 for left
 
 export const firstEnemy = {
   hp: 1,
   // svg etc
   image: new Image(),
+  x: 0, // will be initialized when level loads
+  y: 0, // will be initialized when level loads
+  speed: ENEMY_SPEED,
+  direction: ENEMY_DIRECTION,
   get width() {
     return canvas.width * 0.1 * ENEMY_SIZE_MULTIPLIER;
   },

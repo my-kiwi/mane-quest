@@ -3,6 +3,8 @@ import { resetToStartLevel } from './levels/levels';
 import { updateMovement } from './movement';
 import { updatePhysics } from './physics';
 import { resetUnicornPosition, unicorn, updateUnicornBlink } from './unicorn';
+import { getCurrentLevel } from './levels/levels';
+import { canvas } from './canvas';
 
 const FRAME_DURATION = 1000 / 60;
 const MAX_FRAME_SCALE = 3;
@@ -24,6 +26,15 @@ export function update(currentTime = performance.now(), frameScale = 1): void {
 
   // Update movement (handle input and target movement)
   updateMovement(frameScale);
+
+  // Update enemy movement
+  const level = getCurrentLevel();
+  if (level.enemy) {
+    level.enemy.x += level.enemy.speed * level.enemy.direction * frameScale;
+    if (level.enemy.x > canvas.width - 10 || level.enemy.x < 0) {
+      level.enemy.direction = -level.enemy.direction;
+    }
+  }
 }
 
 export function startGameLoop(): void {
