@@ -2,9 +2,31 @@ import { draw } from './drawing';
 import { resetToStartLevel } from './levels/levels';
 import { updateMovement } from './movement';
 import { updatePhysics } from './physics';
-import { resetUnicornPosition, unicorn, updateUnicornBlink } from './unicorn';
+import { killUnicorn, resetUnicornPosition, unicorn, updateUnicornBlink } from './unicorn';
 import { getCurrentLevel } from './levels/levels';
 import { canvas } from './canvas';
+
+export function isUnicornTouchingEnemy(
+  unicornSprite: { x: number; y: number; width: number; height: number },
+  enemySprite: { x: number; y: number; width: number; height: number }
+): boolean {
+  const unicornLeft = unicornSprite.x - unicornSprite.width / 2;
+  const unicornRight = unicornSprite.x + unicornSprite.width / 2;
+  const unicornTop = unicornSprite.y - unicornSprite.height / 2;
+  const unicornBottom = unicornSprite.y + unicornSprite.height / 2;
+
+  const enemyLeft = enemySprite.x - enemySprite.width / 2;
+  const enemyRight = enemySprite.x + enemySprite.width / 2;
+  const enemyTop = enemySprite.y - enemySprite.height / 2;
+  const enemyBottom = enemySprite.y + enemySprite.height / 2;
+
+  return (
+    unicornRight >= enemyLeft &&
+    unicornLeft <= enemyRight &&
+    unicornBottom >= enemyTop &&
+    unicornTop <= enemyBottom
+  );
+}
 
 const FRAME_DURATION = 1000 / 60;
 const MAX_FRAME_SCALE = 3;
@@ -33,6 +55,10 @@ export function update(currentTime = performance.now(), frameScale = 1): void {
     level.enemy.x += level.enemy.speed * level.enemy.direction * frameScale;
     if (level.enemy.x > canvas.width - 10 || level.enemy.x < 0) {
       level.enemy.direction = -level.enemy.direction;
+    }
+
+    if (isUnicornTouchingEnemy(unicorn, level.enemy)) {
+      killUnicorn(currentTime);
     }
   }
 }

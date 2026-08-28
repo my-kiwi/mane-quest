@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { isUnicornTouchingEnemy } from '../gameLoop';
 import { levels } from './levels';
 import { mapGenerator, NB_OF_TILES_VERTICALLY, NB_OF_TILES_HORIZONTALLY } from './level-type';
 
@@ -58,5 +59,21 @@ describe('levels', () => {
       '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
       '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
     ]);
+  });
+
+  it('should detect when the unicorn touches an enemy', () => {
+    expect(
+      isUnicornTouchingEnemy(
+        { x: 50, y: 50, width: 60, height: 60 },
+        { x: 90, y: 50, width: 40, height: 40 }
+      )
+    ).toBe(true);
+
+    expect(
+      isUnicornTouchingEnemy(
+        { x: 50, y: 50, width: 60, height: 60 },
+        { x: 200, y: 200, width: 40, height: 40 }
+      )
+    ).toBe(false);
   });
 });
