@@ -1,3 +1,4 @@
+import { firstEnemy } from '../enemy';
 import { sageNpc } from '../NPC';
 import { Level, mapGenerator } from './level-type';
 
@@ -74,6 +75,7 @@ export const level_0: Level[] = [
       '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
     ],
     npc: sageNpc,
+    enemy: firstEnemy
   },
   {
     backgroundColor: '#87CEEB', // Sky blue

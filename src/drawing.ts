@@ -4,6 +4,7 @@ import { TileType, NB_OF_TILES_HORIZONTALLY } from './levels/level-type';
 import type { Level } from './levels/level-type';
 import { getTileDimensions } from './levelGeometry';
 import { NPC } from './NPC';
+import { Enemy } from './enemy';
 import { getActiveDialogue, isNpcInRange } from './npcInteraction';
 
 // Get canvas and context from the DOM
@@ -120,8 +121,9 @@ function drawTile(
     ctx.arc(0, 0, Math.min(width, height) * 0.28, 0, Math.PI * 2);
     ctx.fill();
   } else if (tile === TileType.ENEMY) {
-    ctx.fillStyle = '#7b3f98';
-    ctx.fillRect(-width * 0.3, -height * 0.3, width * 0.6, height * 0.6);
+    if (level.enemy) {
+      drawEnemy(level.enemy);
+    }
   } else if (tile === TileType.EXIT) {
     ctx.fillStyle = '#f2f2f2';
     ctx.fillRect(-width * 0.3, -height * 0.4, width * 0.6, height * 0.8);
@@ -136,6 +138,15 @@ function drawTile(
   }
 
   ctx.restore();
+}
+
+function drawEnemy(enemy: Enemy): void {
+  if (!enemy.image.complete || enemy.image.naturalWidth <= 0) {
+    console.log('cannot draw enemy')
+    return;
+  }
+
+  ctx.drawImage(enemy.image, -enemy.width/2, -enemy.height/2 + enemy.yOffset, enemy.width, enemy.height);
 }
 
 function drawNPC(npc: NPC): void {

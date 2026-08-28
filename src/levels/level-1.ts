@@ -1,6 +1,7 @@
 import { sageNpc } from '../NPC';
 import { mapGenerator, Level, rowGenerator, TileType } from './level-type';
 import { firstEnemy } from '../enemy';
+import { getLevel } from './levels';
 
 export const level_1: Level[] = [
   {
@@ -11,14 +12,14 @@ export const level_1: Level[] = [
   },
   {
     visited: false,
-    get map() {
-      if (!this.visited) {
+    getMap() {
+      if (!getLevel?.(3, 1)?.visited) {
         return mapGenerator(8);
       }
       return mapGenerator(8).map((row, index) => {
         const indexToReplace = 9;
         if (index !== indexToReplace) return row;
-        return row.slice(0, indexToReplace) + TileType.ENEMY + row.slice(indexToReplace + 1);
+        return row.slice(0, indexToReplace) + TileType.ENEMY + row.slice(indexToReplace + 1) as string;
       });
     },
     enemy: firstEnemy,
@@ -32,7 +33,8 @@ export const level_1: Level[] = [
   // },
 ].map((level, index) => ({
   ...level,
+  get map(){return level.map ?? level.getMap()},
   position: { x: index, y: 1 },
-  backgroundColor: '#4B0082', // Indigo - deeper/darker to distinguish from -1,0
+  backgroundColor: '#161317', // Indigo - deeper/darker to distinguish from -1,0
   groundColor: '#2F1B4A', // Dark violet ground
 }));
