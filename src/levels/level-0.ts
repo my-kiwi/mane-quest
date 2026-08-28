@@ -75,7 +75,7 @@ export const level_0: Level[] = [
       '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
     ],
     npc: sageNpc,
-    enemy: firstEnemy
+    enemy: firstEnemy,
   },
   {
     backgroundColor: '#87CEEB', // Sky blue

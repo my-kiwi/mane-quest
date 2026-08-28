@@ -142,11 +142,17 @@ function drawTile(
 
 function drawEnemy(enemy: Enemy): void {
   if (!enemy.image.complete || enemy.image.naturalWidth <= 0) {
-    console.log('cannot draw enemy')
+    console.log('cannot draw enemy');
     return;
   }
 
-  ctx.drawImage(enemy.image, -enemy.width/2, -enemy.height/2 + enemy.yOffset, enemy.width, enemy.height);
+  ctx.drawImage(
+    enemy.image,
+    -enemy.width / 2,
+    -enemy.height / 2 + enemy.yOffset,
+    enemy.width,
+    enemy.height
+  );
 }
 
 function drawNPC(npc: NPC): void {

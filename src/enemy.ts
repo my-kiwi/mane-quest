@@ -1,4 +1,4 @@
-import { canvas } from "./canvas";
+import { canvas } from './canvas';
 
 export type Enemy = typeof firstEnemy;
 
@@ -8,9 +8,15 @@ export const firstEnemy = {
   hp: 1,
   // svg etc
   image: new Image(),
-  get width(){return canvas.width * 0.1 * ENEMY_SIZE_MULTIPLIER},
-  get height(){return canvas.height * 0.2 * ENEMY_SIZE_MULTIPLIER},
-  get yOffset() {return -canvas.height*0.05 * ENEMY_SIZE_MULTIPLIER}
+  get width() {
+    return canvas.width * 0.1 * ENEMY_SIZE_MULTIPLIER;
+  },
+  get height() {
+    return canvas.height * 0.2 * ENEMY_SIZE_MULTIPLIER;
+  },
+  get yOffset() {
+    return -canvas.height * 0.05 * ENEMY_SIZE_MULTIPLIER;
+  },
 };
 
 const enemySvg = `<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -47,6 +53,4 @@ const enemySvg = `<svg width="200" height="200" viewBox="0 0 200 200" xmlns="htt
   </defs>
 </svg>`;
 
-firstEnemy.image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-  enemySvg
-)}`;
+firstEnemy.image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(enemySvg)}`;

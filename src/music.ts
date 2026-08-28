@@ -1,12 +1,4 @@
-// ─────────────────────────────────────────────────────────────
-// Procedural background music for js13k (no audio assets used)
-// Web Audio API oscillator/noise synth + step sequencer + drums.
-// Includes: A/B pattern variation, periodic drum fills, AND now
-// an "arrangement" cycle that adds/drops layers per loop
-// (drums-only breaks, no-bass, no-drums sections) for real
-// structural variety instead of just note changes.
-// Drop in, call Music.play('overworld') etc.
-// ─────────────────────────────────────────────────────────────
+/* eslint-disable */
 
 type OscType = OscillatorType;
 type TrackName = 'overworld' | 'platforming' | 'cavern';
