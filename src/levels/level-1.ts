@@ -3,20 +3,45 @@ import { mapGenerator, Level, rowGenerator, TileType } from './level-type';
 import { firstEnemy } from '../enemy';
 import { getLevel } from './levels';
 
+const GROUND_LVL = 5;
+
+const defaultLvl = mapGenerator(GROUND_LVL).map((row, index) =>
+  index === 0 ? rowGenerator(TileType.GROUND) : row
+);
+
 export const level_1: Level[] = [
   {
-    map: mapGenerator(8), // Generates a map with 8 ground tiles
+    map: [
+      '■        ■■■■■■■■■■■■■■■■■■■■■■■',
+      '■                               ',
+      '■                               ',
+      '■                               ',
+      '■                               ',
+      '■                               ',
+      '■                               ',
+      '■────────                       ',
+      '■                               ',
+      '■                               ',
+      '■                               ',
+      '■                               ',
+      '■                               ',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+    ],
   },
   {
-    map: mapGenerator(8), // Generates a map with 8 ground tiles
+    map: defaultLvl,
   },
   {
     visited: false,
     getMap() {
       if (!getLevel?.(3, 1)?.visited) {
-        return mapGenerator(8);
+        return defaultLvl;
       }
-      return mapGenerator(8).map((row, index) => {
+      return defaultLvl.map((row, index) => {
         const indexToReplace = 9;
         if (index !== indexToReplace) return row;
         return (row.slice(0, indexToReplace) +
@@ -27,9 +52,9 @@ export const level_1: Level[] = [
     enemy: firstEnemy,
   },
   {
-    map: mapGenerator(8), // Generates a map with 8 ground tiles
+    map: defaultLvl.map((row) => row.slice(0, -1) + TileType.GROUND),
   },
-  // no lvl here = unicorn dies
+  // no lvl here = unicorn dies when jumping from 3, 0
   // {
   //   map: mapGenerator(8), // Generates a map with 8 ground tiles
   // },
@@ -39,6 +64,6 @@ export const level_1: Level[] = [
     return level.map ?? level.getMap();
   },
   position: { x: index, y: 1 },
-  backgroundColor: '#161317', // Indigo - deeper/darker to distinguish from -1,0
+  backgroundColor: '#4B0082', // Indigo - deeper/darker to distinguish from -1,0
   groundColor: '#2F1B4A', // Dark violet ground
 }));

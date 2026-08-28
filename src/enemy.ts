@@ -15,7 +15,7 @@ export const firstEnemy = {
     return canvas.height * 0.2 * ENEMY_SIZE_MULTIPLIER;
   },
   get yOffset() {
-    return -canvas.height * 0.05 * ENEMY_SIZE_MULTIPLIER;
+    return -canvas.height * 0.015 * ENEMY_SIZE_MULTIPLIER;
   },
 };
 
