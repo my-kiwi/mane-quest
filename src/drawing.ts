@@ -6,9 +6,8 @@ import { getTileDimensions } from './levels/levelGeometry';
 import { NPC } from './NPC';
 import { Enemy } from './enemy';
 import { getActiveDialogue, isNpcInRange } from './npcInteraction';
+import { canvas } from './canvas';
 
-// Get canvas and context from the DOM
-const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d')!;
 ctx.imageSmoothingEnabled = true;
 ctx.imageSmoothingQuality = 'high';
@@ -211,25 +210,4 @@ function drawUnicorn() {
     );
     ctx.restore();
   }
-}
-
-/**
- * Clear the canvas (useful for clean frame rendering)
- */
-export function clearCanvas() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
-
-/**
- * Get the canvas context for advanced drawing operations
- */
-export function getContext() {
-  return ctx;
-}
-
-/**
- * Get the canvas element
- */
-export function getCanvas() {
-  return canvas;
 }
