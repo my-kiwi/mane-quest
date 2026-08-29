@@ -13,7 +13,7 @@ const FRAME_DURATION = 1000 / 60;
 
 export function update(currentTime = performance.now(), frameScale = 1): void {
   if (unicorn.isDead) {
-    if (currentTime - unicorn.diedAt >= DEATH_SCREEN_DURATION) {
+    if (currentTime - unicorn.diedAt >= DEATH_SCREEN_DURATION + 1000) {
       resetToStartLevel();
       resetUnicornPosition();
       return;

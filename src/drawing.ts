@@ -171,7 +171,7 @@ function drawNPC(npc: NPC): void {
   if (npc.image.complete && npc.image.naturalWidth > 0) {
     ctx.save();
     if (isNpcInRange()) {
-      ctx.shadowColor = npc.colors.bodyColor;
+      ctx.shadowColor = 'yellow';
       ctx.shadowBlur = 12;
     }
     ctx.scale(npc.scale, npc.scale);

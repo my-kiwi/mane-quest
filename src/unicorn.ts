@@ -77,6 +77,7 @@ export function resetUnicornPosition(): void {
 }
 
 export function killUnicorn(currentTime: number): void {
+  console.warn('kill unicorn', unicorn.deaths);
   if (unicorn.isDead) {
     return;
   }

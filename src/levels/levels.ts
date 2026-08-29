@@ -10,7 +10,7 @@ import {
 } from './level-type';
 import { getTileDimensions } from '../levelGeometry';
 
-export const levels = [...level_0, ...level_1];
+export const levels: Level[] = [...level_0, ...level_1] as const;
 
 const getStartLevel = (): Level => {
   return levels.find((level) => level.map.some((row) => row.includes(TileType.START))) as Level;
@@ -18,6 +18,10 @@ const getStartLevel = (): Level => {
 
 export const getLevel = (x: number, y: number) => {
   return levels.find((level) => level.position.x === x && level.position.y === y);
+};
+
+export const hasVisited = (x: number, y: number) => {
+  return getLevel(x, y)?.visited;
 };
 
 let currentLevel: Level = getStartLevel();

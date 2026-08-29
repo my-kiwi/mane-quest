@@ -1,3 +1,4 @@
+import { hasVisited } from './levels/levels';
 import { createUnicornSvg, unicorn } from './unicorn';
 
 export type NPC = typeof sageNpc;
@@ -26,7 +27,8 @@ export const sageNpc = {
         { line: "Look, I don't actually have any wisdom. I just stand here." },
         { line: 'What do you want, a goodbye kiss?' },
       ];
-    } else if (unicorn.deaths === 1) {
+    } else if (!hasVisited(0, 1)) {
+      // has died in cliff
       return [
         { line: 'Welcome, dear unicorn.' },
         { line: 'I am the wise sage of this land.' },
@@ -38,17 +40,16 @@ export const sageNpc = {
         { line: "Oh, you're looking for the exit? " },
         { line: "⬅️ It's that way." },
       ];
-    } else {
+    } else if (hasVisited(1, 3)) {
+      // has been killed by enemy
       return [
         { line: 'Ah, you have returned once again.' },
-        { line: 'I see you have faced many trials and tribulations.' },
-        { line: '...' },
-        { who: unicorn, line: '...' },
-        { line: '...' },
-        { who: unicorn, line: '...' },
-        { line: "Look, I don't actually have any wisdom. I just stand here." },
-        { line: 'What do you want, a goodbye kiss?' },
+        { line: 'This fiend? Yes I can help with that.' },
+        { line: 'You see, you need a weapon' },
       ];
+    } else {
+      // has killed enemy
+      return [{ line: 'todo: implement rest of game :D' }];
     }
   },
 };

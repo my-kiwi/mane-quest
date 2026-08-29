@@ -4,16 +4,8 @@
   --black: #121212;
 
   /* Light theme variables (default) */
-  --bg-color: var(--white);
-  --text-color: var(--black);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Dark theme variables */
-    --bg-color: var(--black);
-    --text-color: var(--white);
-  }
+  --bg-color: var(--black);
+  --text-color: var(--white);
 }
 
 body {
@@ -91,11 +83,11 @@ main canvas {
   border-radius: 8px;
   background: #fffdf5;
   color: #202020;
-  font: 1rem / 1.25 sans-serif;
+  font: 1.3rem / 1.5 sans-serif;
   transform: translate(-50%, -100%);
 }
 
 .npc-dialogue strong {
-  font-size: 0.95rem;
+  font-size: 1.3rem;
 }
 
