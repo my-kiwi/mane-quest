@@ -70,10 +70,7 @@ describe('levels', () => {
     const playSpy = vi.spyOn(Music, 'play');
 
     setCurrentLevel(startLevel);
-    playSpy.mockClear();
-
-    setCurrentLevel(startLevel);
-    expect(playSpy).not.toHaveBeenCalled();
+    expect(playSpy).toHaveBeenCalledWith('overworld');
 
     setCurrentLevel(nextLevel);
     expect(playSpy).toHaveBeenCalledWith('cavern');

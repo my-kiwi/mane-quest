@@ -42,14 +42,14 @@ export const level_1: Level[] = [
         return defaultLvl;
       }
       return defaultLvl
-      .map(row => row.slice(0, -1) + TileType.GROUND)
-      .map((row, index) => {
-        const indexToReplace = 9;
-        if (index !== indexToReplace) return row;
-        return (row.slice(0, indexToReplace) +
-          TileType.ENEMY +
-          row.slice(indexToReplace + 1)) as string;
-      });
+        .map((row) => row.slice(0, -1) + TileType.GROUND)
+        .map((row, index) => {
+          const indexToReplace = 9;
+          if (index !== indexToReplace) return row;
+          return (row.slice(0, indexToReplace) +
+            TileType.ENEMY +
+            row.slice(indexToReplace + 1)) as string;
+        });
     },
     getMusic() {
       if (getLevel?.(3, 1)?.visited) {
