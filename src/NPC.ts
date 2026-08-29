@@ -45,7 +45,11 @@ export const sageNpc = {
       return [
         { line: 'Ah, you have returned once again.' },
         { line: 'This fiend? Yes I can help with that.' },
-        { line: 'You see, you need a weapon' },
+        { line: 'You see, you need a weapon to get rid of him.' },
+        {
+          line: `Choose between 3 weapons, but chose wisely because as soon as you have chosen, the other ones will vanish in thin air for some reason`,
+        },
+        { line: 'Choose wisely:', weapons: ['Bow', 'Sword', 'Buckler'] },
       ];
     } else {
       // has killed enemy
