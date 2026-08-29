@@ -2,7 +2,7 @@ import { canvas } from './canvas';
 import { getMinHeightWidth, getWidth, getHeight } from './utils';
 import { getCurrentLevel } from './levels/levels';
 import { TileType } from './levels/level-type';
-import { getTileDimensions } from './levelGeometry';
+import { getTileDimensions } from './levels/levelGeometry';
 
 const BLINK_INTERVAL = 3000;
 const BLINK_DURATION = 140;

@@ -8,7 +8,7 @@ import {
   NB_OF_TILES_VERTICALLY,
   TileTypeEntry,
 } from './level-type';
-import { getTileDimensions } from '../levelGeometry';
+import { getTileDimensions } from './levelGeometry';
 
 export const levels: Level[] = [...level_0, ...level_1] as const;
 

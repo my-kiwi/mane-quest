@@ -1,5 +1,5 @@
 import { getCurrentLevel } from './levels/levels';
-import { getTileDimensions } from './levelGeometry';
+import { getTileDimensions } from './levels/levelGeometry';
 import { unicorn } from './unicorn';
 import { NPC } from './NPC';
 import { TileType } from './levels/level-type';

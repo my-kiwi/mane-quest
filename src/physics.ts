@@ -2,7 +2,7 @@ import { unicorn } from './unicorn';
 import { killUnicorn } from './unicorn';
 import { clamp } from './utils';
 import { canvas } from './canvas';
-import { getTile, getTileDimensions, isSolid, revealTile } from './levelGeometry';
+import { getTile, getTileDimensions, isSolid, revealTile } from './levels/levelGeometry';
 import { moveToNextYLevel } from './levels/levels';
 
 export function triggerJump(): void {

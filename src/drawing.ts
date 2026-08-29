@@ -2,7 +2,7 @@ import { createUnicornSvg, unicorn } from './unicorn';
 import { getCurrentLevel, hasTile } from './levels/levels';
 import { TileType, NB_OF_TILES_HORIZONTALLY } from './levels/level-type';
 import type { Level } from './levels/level-type';
-import { getTileDimensions } from './levelGeometry';
+import { getTileDimensions } from './levels/levelGeometry';
 import { NPC } from './NPC';
 import { Enemy } from './enemy';
 import { getActiveDialogue, isNpcInRange } from './npcInteraction';

@@ -4,7 +4,7 @@ import { canvas } from './canvas';
 import { clamp } from './utils';
 import { getCurrentLevel, moveToNextXLevel, moveToPreviousXLevel } from './levels/levels';
 import { NB_OF_TILES_HORIZONTALLY, NB_OF_TILES_VERTICALLY } from './levels/level-type';
-import { getTileDimensions, isSolid } from './levelGeometry';
+import { getTileDimensions, isSolid } from './levels/levelGeometry';
 
 const BALANCE_ROTATION = 0.12;
 const BALANCE_STEP = 0.35;

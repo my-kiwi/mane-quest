@@ -4,7 +4,7 @@ import { triggerJump } from './physics';
 import { clamp } from './utils';
 import { getCurrentLevel } from './levels/levels';
 import { TileType } from './levels/level-type';
-import { getTileDimensions } from './levelGeometry';
+import { getTileDimensions } from './levels/levelGeometry';
 import { interactWithNpc, isPointOnDialogueBubble, isPointOnNpc } from './npcInteraction';
 
 // Input state
