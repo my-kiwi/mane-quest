@@ -19,6 +19,12 @@ export const sageNpc = {
     if (unicorn.deaths === 0) {
       return [
         { line: 'Welcome, dear unicorn.' },
+        { line: 'Choose wisely:', weapons: ['Bow', 'Sword', 'Buckler'] },
+        {
+          get line() {
+            return 'You have chosen: ' + unicorn.weapon;
+          },
+        },
         { line: 'I am the wise sage of this land.' },
         { line: '...' },
         { who: unicorn, line: '...' },

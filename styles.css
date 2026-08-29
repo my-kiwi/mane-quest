@@ -71,11 +71,11 @@ main canvas {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  width: 95%;
   position: absolute;
-  left: 50%;
-  right: 50%;
-  top: 100px;
+  width: 96%;
+  left: 1rem;
+  right: 1rem;
+  top: 1rem;
   min-height: 75px;
   box-sizing: border-box;
   padding: 0.65rem 0.8rem;
@@ -84,10 +84,58 @@ main canvas {
   background: #fffdf5;
   color: #202020;
   font: 1.3rem / 1.5 sans-serif;
-  transform: translate(-50%, -100%);
 }
 
 .npc-dialogue strong {
   font-size: 1.3rem;
+}
+
+.npc-dialogue-choices {
+  display: none;
+  flex-direction: row;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+}
+
+.npc-dialogue-choices.is-visible {
+  display: flex;
+}
+
+.npc-dialogue-choice {
+  font-size: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: fit-content;
+  min-width: 180px;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid #b9b9b9;
+  border-radius: 6px;
+  background: #f3f0e8;
+  color: #1b1b1b;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.npc-dialogue-choice.is-selected {
+  background: #dfeef6;
+  border-color: #5d8fb9;
+  box-shadow: inset 0 0 0 1px #5d8fb9;
+}
+
+.npc-dialogue-choice-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  flex-shrink: 0;
+}
+
+.npc-dialogue-choice-icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+  display: block;
 }
 

@@ -5,7 +5,14 @@ import { clamp } from './utils';
 import { getCurrentLevel } from './levels/levels';
 import { TileType } from './levels/level-type';
 import { getTileDimensions } from './levels/levelGeometry';
-import { interactWithNpc, isPointOnDialogueBubble, isPointOnNpc } from './npcInteraction';
+import {
+  confirmCurrentWeaponChoice,
+  getWeaponChoices,
+  interactWithNpc,
+  isPointOnDialogueBubble,
+  isPointOnNpc,
+  moveWeaponSelection,
+} from './npcInteraction';
 
 // Input state
 export const keys: { [key: string]: boolean } = {};
@@ -47,6 +54,30 @@ export function initializeInput(): void {
   // Keyboard input
   document.addEventListener('keydown', (e) => {
     const key = e.key.toLowerCase();
+
+    if (getWeaponChoices().length > 0) {
+      if ((e.key === 'ArrowDown' || e.key === 'ArrowRight') && !e.repeat) {
+        e.preventDefault();
+        moveWeaponSelection(1);
+        return;
+      }
+
+      if ((e.key === 'ArrowUp' || e.key === 'ArrowLeft') && !e.repeat) {
+        e.preventDefault();
+        moveWeaponSelection(-1);
+        return;
+      }
+
+      if (e.key === 'Enter' && !e.repeat) {
+        e.preventDefault();
+        confirmCurrentWeaponChoice();
+        interactWithNpc();
+        return;
+      }
+
+      return;
+    }
+
     keys[e.key] = true;
 
     if (e.key === 'Enter' && !e.repeat) {

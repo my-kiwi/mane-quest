@@ -31,6 +31,7 @@ export const unicorn = {
   deaths: 0,
   isDead: false,
   diedAt: 0,
+  weapon: undefined as string | undefined,
   get jumpStrength() {
     return getHeight() * 0.02;
   },

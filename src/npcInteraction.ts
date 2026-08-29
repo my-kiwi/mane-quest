@@ -3,11 +3,23 @@ import { getTileDimensions } from './levels/levelGeometry';
 import { unicorn } from './unicorn';
 import { NPC } from './NPC';
 import { TileType } from './levels/level-type';
+import { bowSvg, buckerSvg, swordSvg } from './weapons';
+
+export type WeaponChoice = {
+  name: string;
+  svg: string;
+};
 
 let activeDialogueLine = 0;
 let activeNpc: NPC | undefined;
+let selectedWeaponIndex = 0;
 
 const INTERACTION_RANGE_MULTIPLIER = 1.5;
+const weaponSvgLookup: Record<string, string> = {
+  Bow: bowSvg,
+  Sword: swordSvg,
+  Buckler: buckerSvg,
+};
 
 export function getCurrentNpc(): NPC | undefined {
   return getCurrentLevel().npc;
@@ -38,6 +50,7 @@ export function isNpcInRange(): boolean {
 
   if (!inRange) {
     activeNpc = undefined;
+    selectedWeaponIndex = 0;
   }
 
   return inRange;
@@ -71,6 +84,72 @@ export function isPointOnDialogueBubble(x: number, y: number): boolean {
   );
 }
 
+export function getWeaponChoices(): WeaponChoice[] {
+  if (!activeNpc) {
+    return [];
+  }
+
+  const dialogue = activeNpc.dialogue[activeDialogueLine];
+  const weapons = (dialogue as { weapons?: string[] } | undefined)?.weapons;
+
+  if (!weapons || weapons.length === 0) {
+    return [];
+  }
+
+  return weapons.map((name) => ({
+    name,
+    svg: weaponSvgLookup[name] ?? '',
+  }));
+}
+
+export function getSelectedWeapon(): WeaponChoice | undefined {
+  const choices = getWeaponChoices();
+  if (choices.length === 0) {
+    return undefined;
+  }
+
+  if (selectedWeaponIndex < 0 || selectedWeaponIndex >= choices.length) {
+    selectedWeaponIndex = 0;
+  }
+
+  return choices[selectedWeaponIndex];
+}
+
+export function setWeaponSelection(index: number): boolean {
+  const choices = getWeaponChoices();
+  if (choices.length === 0) {
+    return false;
+  }
+
+  selectedWeaponIndex = ((index % choices.length) + choices.length) % choices.length;
+  const selectedWeapon = getSelectedWeapon();
+  if (selectedWeapon) {
+    document
+      .querySelectorAll('.npc-dialogue-choice')
+      .forEach((el) => el.classList.remove('is-selected'));
+    document
+      .querySelector('.npc-dialogue-choice.' + selectedWeapon.name)
+      ?.classList.add('is-selected');
+  }
+  return true;
+}
+
+export function moveWeaponSelection(delta: number): boolean {
+  return setWeaponSelection(selectedWeaponIndex + delta);
+}
+
+export function confirmCurrentWeaponChoice(): boolean {
+  const selectedWeapon = getSelectedWeapon();
+  if (!selectedWeapon) {
+    return false;
+  }
+
+  console.warn('selected ', selectedWeapon.name);
+  unicorn.weapon = selectedWeapon.name;
+  selectedWeaponIndex = 0;
+  return true;
+}
+
 export function interactWithNpc(): boolean {
   if (!isNpcInRange()) {
     return false;
@@ -84,6 +163,7 @@ export function interactWithNpc(): boolean {
   if (activeNpc !== npc) {
     activeNpc = npc;
     activeDialogueLine = 0;
+    selectedWeaponIndex = 0;
   } else if (activeDialogueLine < npc.dialogue.length - 1) {
     activeDialogueLine += 1;
   } else {
@@ -97,8 +177,14 @@ export function getActiveDialogue() {
   if (!activeNpc) {
     return undefined;
   }
-  const { line, ...props } = activeNpc.dialogue[activeDialogueLine];
+
+  const dialogue = activeNpc.dialogue[activeDialogueLine] as {
+    line?: string;
+    weapons?: string[];
+    who?: { name: string; colors: { maneColor: string } };
+  };
+  const { line = '', weapons, ...props } = dialogue;
   const who = props.who ?? activeNpc;
 
-  return { name: who.name, color: who.colors.maneColor, line: line };
+  return { name: who.name, color: who.colors.maneColor, line, weapons };
 }
