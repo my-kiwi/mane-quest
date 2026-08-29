@@ -76,4 +76,13 @@ describe('levels', () => {
       )
     ).toBe(false);
   });
+
+  it('should ignore the enemy decorative edges when calculating the collision box', () => {
+    expect(
+      isUnicornTouchingEnemy(
+        { x: 142, y: 100, width: 30, height: 30 },
+        { x: 100, y: 100, width: 80, height: 80 }
+      )
+    ).toBe(false);
+  });
 });
