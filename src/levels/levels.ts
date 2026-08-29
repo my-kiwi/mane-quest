@@ -32,7 +32,7 @@ export const setCurrentLevel = (level: Level): void => {
 
   const previousTrack = currentLevel?.music;
   if (previousTrack !== level.music) {
-    console.log('playing ', level.music, '(was ',previousTrack);
+    console.log('playing ', level.music, '(was ', previousTrack);
     Music.play(level.music);
   }
   currentLevel = level;
@@ -66,8 +66,6 @@ function initializeEnemyPosition(level: Level): void {
 export function hasTile(level: Level, tileType: TileTypeEntry) {
   return level.map.join('').includes(tileType);
 }
-
-
 
 export function resetToStartLevel(): void {
   setCurrentLevel(getStartLevel());
