@@ -288,34 +288,57 @@ class MusicEngine {
     noise.start(startTime);
   }
 
-  // Muted, slightly-detuned horn tone used for the "sad trombone" death sting.
-  // `bendCents` is the pitch drop applied over the back half of the note
-  // (negative = downward "wah" glide).
-  private playWomp(freq: number, startTime: number, dur: number, bendCents = 0): void {
+  // Dark tolling bell for the death sting: a handful of sine partials at
+  // inharmonic ratios (not clean integer multiples) so it reads as metal,
+  // not a pure tone. Higher partials decay faster than the fundamental,
+  // which is what gives real bells their "shimmer then hollow out" character.
+  private playBell(freq: number, startTime: number, dur: number, vol = 0.5): void {
     const ctx = this.ctx!;
-    const osc = ctx.createOscillator();
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(freq, startTime);
-    if (bendCents) {
-      osc.detune.setValueAtTime(0, startTime + dur * 0.35);
-      osc.detune.linearRampToValueAtTime(bendCents, startTime + dur);
-    }
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.value = 900;
+    const partials = [1, 2.01, 2.74, 3.98, 5.43];
+    const partialGains = [1, 0.55, 0.32, 0.18, 0.1];
+    partials.forEach((ratio, idx) => {
+      const osc = ctx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = freq * ratio;
+      const gain = ctx.createGain();
+      const partialVol = vol * partialGains[idx];
+      const decay = Math.max(0.3, dur * (1 - idx * 0.15));
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(partialVol, startTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + decay);
+      osc.connect(gain);
+      gain.connect(this.master!);
+      osc.start(startTime);
+      osc.stop(startTime + decay + 0.1);
+    });
+  }
 
-    const gain = ctx.createGain();
-    const attack = 0.03;
-    gain.gain.setValueAtTime(0, startTime);
-    gain.gain.linearRampToValueAtTime(0.5, startTime + attack);
-    gain.gain.setValueAtTime(0.5, startTime + dur - 0.12);
-    gain.gain.linearRampToValueAtTime(0, startTime + dur);
-
-    osc.connect(filter);
-    filter.connect(gain);
-    gain.connect(this.master!);
-    osc.start(startTime);
-    osc.stop(startTime + dur + 0.05);
+  // Low dissonant drone: two detuned sawtooths through a lowpass filter,
+  // slow attack/release. Stack two of these a minor 2nd apart for that
+  // uneasy "something is wrong" Souls-death-screen quality.
+  private playDrone(freq: number, startTime: number, dur: number, vol = 0.3): void {
+    const ctx = this.ctx!;
+    [-4, 4].forEach((detune) => {
+      const osc = ctx.createOscillator();
+      osc.type = 'sawtooth';
+      osc.frequency.value = freq;
+      osc.detune.value = detune;
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 400;
+      const gain = ctx.createGain();
+      const attack = 0.6;
+      const release = dur * 0.4;
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(vol, startTime + attack);
+      gain.gain.setValueAtTime(vol, startTime + dur - release);
+      gain.gain.linearRampToValueAtTime(0, startTime + dur);
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.master!);
+      osc.start(startTime);
+      osc.stop(startTime + dur + 0.1);
+    });
   }
 
   private scheduleLoop(name: TrackName): void {
@@ -423,15 +446,18 @@ class MusicEngine {
     }
   }
 
-  // Short one-shot "sad trombone" stinger for the death screen.
-  // Fades out whatever's currently playing, plays the jingle (~2s),
-  // then goes silent — call Music.play(...) again for the next level/retry.
+  // Dark Souls / Elden Ring style "YOU DIED" sting: a low dissonant drone
+  // (root + minor 2nd, for dread) under a metallic tolling bell, with a
+  // fainter second toll near the end for closure. All synthesized, no
+  // samples. Fades out whatever's currently playing, plays the sting
+  // (~3.5s, fits inside a ~4s death screen), then goes silent — call
+  // Music.play(...) again for the next level/retry.
   playDeathJingle(): void {
     this.init();
     if (!this.ctx) return;
     if (this.ctx.state === 'suspended') this.ctx.resume();
 
-    const fadeDur = 0.5;
+    const fadeDur = 0;
 
     const startJingle = (): void => {
       this.currentTrack = null;
@@ -439,11 +465,13 @@ class MusicEngine {
       const ctx = this.ctx!;
       const t0 = ctx.currentTime + fadeDur + 0.05;
 
-      this.playKick(t0, 0.8);
-      this.playWomp(NOTE_FREQS['G4'], t0 + 0.05, 0.32, -20);
-      this.playWomp(NOTE_FREQS['F4'], t0 + 0.38, 0.32, -20);
-      this.playWomp(NOTE_FREQS['E4'], t0 + 0.71, 0.32, -20);
-      this.playWomp(NOTE_FREQS['C4'], t0 + 1.04, 0.9, -180); // final long "waaah"
+      // Low dissonant drone (root + minor 2nd) under everything
+      this.playDrone(NOTE_FREQS['A1'], t0, 3.3, 0.28);
+      this.playDrone(NOTE_FREQS['A#1'], t0, 3.3, 0.14);
+
+      // Main toll, then a fainter second toll for closure near the end
+      this.playBell(NOTE_FREQS['A2'], t0 + 0.1, 2.6, 1.5);
+      this.playBell(NOTE_FREQS['E2'], t0 + 1.0, 1.5, 1.28);
     };
 
     if (this.currentTrack !== null || this.currentLoopId > 0) {
@@ -479,7 +507,7 @@ const Music = new MusicEngine();
 // Music.play('overworld');       // call on user's first input/click (autoplay policy)
 // Music.play('platforming');     // crossfades automatically from whatever's playing
 // Music.play('cavern');
-// Music.playDeathJingle();       // ~2s sad-trombone sting for the death screen
+// Music.playDeathJingle();       // ~3.5s dark bell + drone sting for the death screen
 // Music.stop();
 // Music.setVolume(0.2);
 
