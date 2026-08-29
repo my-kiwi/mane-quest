@@ -38,7 +38,7 @@ export const level_1: Level[] = [
   {
     visited: false,
     getMap() {
-      if (!getLevel?.(3, 1)?.visited) {
+      if (!getLevel?.(3, 1)?.visited /** or ennemy is dead */) {
         return defaultLvl;
       }
       return defaultLvl
