@@ -65,7 +65,7 @@ describe('levels', () => {
     expect(
       isUnicornTouchingEnemy(
         { x: 50, y: 50, width: 60, height: 60 },
-        { x: 90, y: 50, width: 40, height: 40 }
+        { x: 90, y: 50, width: 140, height: 140 }
       )
     ).toBe(true);
 

@@ -3,19 +3,28 @@ import { resetToStartLevel } from './levels/levels';
 import { updateMovement } from './movement';
 import { updatePhysics } from './physics';
 import { killUnicorn, resetUnicornPosition, unicorn, updateUnicornBlink } from './unicorn';
+import { DEATH_SCREEN_DURATION } from './constants';
 import { getCurrentLevel } from './levels/levels';
 import { canvas } from './canvas';
 import { isUnicornTouchingEnemy } from './collisions';
 
 const FRAME_DURATION = 1000 / 60;
 const MAX_FRAME_SCALE = 3;
-const DEATH_SCREEN_DURATION = 3000;
 
 export function update(currentTime = performance.now(), frameScale = 1): void {
   if (unicorn.isDead) {
     if (currentTime - unicorn.diedAt >= DEATH_SCREEN_DURATION) {
       resetToStartLevel();
       resetUnicornPosition();
+      return;
+    }
+
+    const level = getCurrentLevel();
+    if (level.enemy) {
+      level.enemy.x += level.enemy.speed * level.enemy.direction * frameScale;
+      if (level.enemy.x > canvas.width - 10 || level.enemy.x < 0) {
+        level.enemy.direction = -level.enemy.direction;
+      }
     }
     return;
   }

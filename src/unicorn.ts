@@ -73,6 +73,7 @@ export function resetUnicornPosition(): void {
   unicorn.rotation = 0;
   unicorn.isDead = false;
   unicorn.diedAt = 0;
+  setUnicornImage();
 }
 
 export function killUnicorn(currentTime: number): void {
@@ -83,6 +84,7 @@ export function killUnicorn(currentTime: number): void {
   unicorn.deaths += 1;
   unicorn.isDead = true;
   unicorn.diedAt = currentTime;
+  setUnicornImage();
 }
 
 export function updateUnicornBlink(currentTime: number): void {
@@ -98,9 +100,12 @@ export function updateUnicornBlink(currentTime: number): void {
 }
 
 function setUnicornImage(): void {
+  const bodyColor = unicorn.isDead ? `rgb(139, 0, 0)` : unicorn.colors.bodyColor;
+
   unicorn.image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
     createUnicornSvg({
       ...unicorn.colors,
+      bodyColor,
       isBlinking: unicorn.isBlinking,
     })
   )}`;

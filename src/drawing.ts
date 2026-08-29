@@ -198,6 +198,10 @@ function drawUnicorn() {
     if (unicorn.direction === -1) {
       ctx.scale(-1, 1);
     }
+    if (unicorn.isDead) {
+      ctx.translate(0, unicorn.height / 2);
+      ctx.scale(1, 0.2);
+    }
     ctx.drawImage(
       unicorn.image,
       -unicorn.width / 2,
