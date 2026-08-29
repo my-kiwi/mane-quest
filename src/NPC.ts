@@ -40,7 +40,7 @@ export const sageNpc = {
         { line: "Oh, you're looking for the exit? " },
         { line: "⬅️ It's that way." },
       ];
-    } else if (hasVisited(1, 3)) {
+    } else if (hasVisited(3, 1)) {
       // has been killed by enemy
       return [
         { line: 'Ah, you have returned once again.' },
