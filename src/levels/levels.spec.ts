@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isUnicornTouchingEnemy } from '../gameLoop';
+import { isUnicornTouchingEnemy } from '../collisions';
 import { levels } from './levels';
 import { mapGenerator, NB_OF_TILES_VERTICALLY, NB_OF_TILES_HORIZONTALLY } from './level-type';
 
