@@ -3,13 +3,13 @@ import { resetToStartLevel } from './levels/levels';
 import { updateMovement } from './movement';
 import { updatePhysics } from './physics';
 import { killUnicorn, resetUnicornPosition, unicorn, updateUnicornBlink } from './unicorn';
-import { DEATH_SCREEN_DURATION } from './constants';
+import { DEATH_SCREEN_DURATION, MAX_FRAME_SCALE } from './constants';
 import { getCurrentLevel } from './levels/levels';
 import { canvas } from './canvas';
 import { isUnicornTouchingEnemy } from './collisions';
+import { updateEnemyMovement } from './enemy';
 
 const FRAME_DURATION = 1000 / 60;
-const MAX_FRAME_SCALE = 3;
 
 export function update(currentTime = performance.now(), frameScale = 1): void {
   if (unicorn.isDead) {
@@ -19,13 +19,7 @@ export function update(currentTime = performance.now(), frameScale = 1): void {
       return;
     }
 
-    const level = getCurrentLevel();
-    if (level.enemy) {
-      level.enemy.x += level.enemy.speed * level.enemy.direction * frameScale;
-      if (level.enemy.x > canvas.width - 10 || level.enemy.x < 0) {
-        level.enemy.direction = -level.enemy.direction;
-      }
-    }
+    updateEnemyMovement(frameScale);
     return;
   }
 
@@ -40,11 +34,7 @@ export function update(currentTime = performance.now(), frameScale = 1): void {
   // Update enemy movement
   const level = getCurrentLevel();
   if (level.enemy) {
-    level.enemy.x += level.enemy.speed * level.enemy.direction * frameScale;
-    if (level.enemy.x > canvas.width - 10 || level.enemy.x < 0) {
-      level.enemy.direction = -level.enemy.direction;
-    }
-
+    updateEnemyMovement(frameScale);
     if (isUnicornTouchingEnemy(unicorn, level.enemy)) {
       killUnicorn(currentTime);
     }

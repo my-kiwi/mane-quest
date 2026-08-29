@@ -1,10 +1,21 @@
 import { canvas } from './canvas';
+import { getCurrentLevel } from './levels/levels';
 
 export type Enemy = typeof firstEnemy;
 
 const ENEMY_SIZE_MULTIPLIER = 2.5;
 const ENEMY_SPEED = 3; // pixels per second
 const ENEMY_DIRECTION = 1; // 1 for right, -1 for left
+
+export function updateEnemyMovement(frameScale: number) {
+  const level = getCurrentLevel();
+  if (level.enemy) {
+    level.enemy.x += level.enemy.speed * level.enemy.direction * frameScale;
+    if (level.enemy.x > canvas.width - 10 || level.enemy.x < 0) {
+      level.enemy.direction = -level.enemy.direction;
+    }
+  }
+}
 
 export const firstEnemy = {
   hp: 1,
