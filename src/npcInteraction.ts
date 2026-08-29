@@ -3,11 +3,9 @@ import { getTileDimensions } from './levels/levelGeometry';
 import { unicorn } from './unicorn';
 import { NPC } from './NPC';
 import { TileType } from './levels/level-type';
-import { bowSvg, buckerSvg, swordSvg } from './weapons';
 
 export type WeaponChoice = {
   name: string;
-  svg: string;
 };
 
 let activeDialogueLine = 0;
@@ -15,11 +13,6 @@ let activeNpc: NPC | undefined;
 let selectedWeaponIndex = 0;
 
 const INTERACTION_RANGE_MULTIPLIER = 1.5;
-const weaponSvgLookup: Record<string, string> = {
-  Bow: bowSvg,
-  Sword: swordSvg,
-  Buckler: buckerSvg,
-};
 
 export function getCurrentNpc(): NPC | undefined {
   return getCurrentLevel().npc;
@@ -98,7 +91,6 @@ export function getWeaponChoices(): WeaponChoice[] {
 
   return weapons.map((name) => ({
     name,
-    svg: weaponSvgLookup[name] ?? '',
   }));
 }
 

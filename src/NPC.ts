@@ -19,12 +19,6 @@ export const sageNpc = {
     if (unicorn.deaths === 0) {
       return [
         { line: 'Welcome, dear unicorn.' },
-        { line: 'Choose wisely:', weapons: ['Bow', 'Sword', 'Buckler'] },
-        {
-          get line() {
-            return 'You have chosen: ' + unicorn.weapon;
-          },
-        },
         { line: 'I am the wise sage of this land.' },
         { line: '...' },
         { who: unicorn, line: '...' },
@@ -46,7 +40,7 @@ export const sageNpc = {
         { line: "Oh, you're looking for the exit? " },
         { line: "⬅️ It's that way." },
       ];
-    } else if (hasVisited(3, 1)) {
+    } else if (hasVisited(3, 1) && !unicorn.weapon) {
       // has been killed by enemy
       return [
         { line: 'Ah, you have returned once again.' },

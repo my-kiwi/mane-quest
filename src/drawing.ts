@@ -103,8 +103,7 @@ function updateNpcInteractionUi(): void {
         option.className = 'npc-dialogue-choice ' + choice.name;
 
         const icon = document.createElement('span');
-        icon.className = 'npc-dialogue-choice-icon';
-        icon.innerHTML = choice.svg;
+        icon.className = 'npc-dialogue-choice-icon ' + choice.name;
 
         const label = document.createElement('span');
         label.textContent = choice.name;
