@@ -72,7 +72,6 @@ const tracks: Record<TrackName, Track> = {
     hihat: [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30],
     swing: 0.12,
     fillEvery: 4,
-    // 8-loop cycle: mostly full, one drum-only break, one no-bass breather, one no-drums melodic moment
     arrangement: ['full', 'full', 'noBass', 'full', 'drumsOnly', 'full', 'noDrums', 'full'],
   },
 
@@ -114,7 +113,6 @@ const tracks: Record<TrackName, Track> = {
     hihat: [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30],
     swing: 0.08,
     fillEvery: 4,
-    // busier arrangement to match higher energy: quick drum breakdown, a no-drums melodic breather, then back
     arrangement: ['full', 'full', 'drumsOnly', 'full', 'full', 'noDrums', 'full', 'noBass'],
   },
 
@@ -156,7 +154,6 @@ const tracks: Record<TrackName, Track> = {
     hihat: [0, 4, 8, 12, 16, 20, 24, 28],
     detune: -8,
     fillEvery: 4,
-    // sparser overall, so lean into eerie no-drums stretches and one drums-only "heartbeat" moment
     arrangement: ['full', 'noDrums', 'full', 'noBass', 'drumsOnly', 'full', 'noDrums', 'full'],
   },
 };
@@ -166,6 +163,7 @@ class MusicEngine {
   private master: GainNode | null = null;
   private currentLoopId = 0;
   private currentTrack: TrackName | null = null;
+  private volume = 0.28; // target volume, used as the fade-in destination
 
   private init(): void {
     if (this.ctx) return;
@@ -179,8 +177,17 @@ class MusicEngine {
 
     this.ctx = new Ctx();
     this.master = this.ctx.createGain();
-    this.master.gain.value = 0.28;
+    this.master.gain.value = this.volume;
     this.master.connect(this.ctx.destination);
+  }
+
+  // Smoothly ramps the master gain to `target` over `duration` seconds.
+  private fadeTo(target: number, duration: number): void {
+    if (!this.master || !this.ctx) return;
+    const now = this.ctx.currentTime;
+    this.master.gain.cancelScheduledValues(now);
+    this.master.gain.setValueAtTime(this.master.gain.value, now);
+    this.master.gain.linearRampToValueAtTime(target, now + duration);
   }
 
   private playNote(
@@ -281,6 +288,36 @@ class MusicEngine {
     noise.start(startTime);
   }
 
+  // Muted, slightly-detuned horn tone used for the "sad trombone" death sting.
+  // `bendCents` is the pitch drop applied over the back half of the note
+  // (negative = downward "wah" glide).
+  private playWomp(freq: number, startTime: number, dur: number, bendCents = 0): void {
+    const ctx = this.ctx!;
+    const osc = ctx.createOscillator();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(freq, startTime);
+    if (bendCents) {
+      osc.detune.setValueAtTime(0, startTime + dur * 0.35);
+      osc.detune.linearRampToValueAtTime(bendCents, startTime + dur);
+    }
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 900;
+
+    const gain = ctx.createGain();
+    const attack = 0.03;
+    gain.gain.setValueAtTime(0, startTime);
+    gain.gain.linearRampToValueAtTime(0.5, startTime + attack);
+    gain.gain.setValueAtTime(0.5, startTime + dur - 0.12);
+    gain.gain.linearRampToValueAtTime(0, startTime + dur);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.master!);
+    osc.start(startTime);
+    osc.stop(startTime + dur + 0.05);
+  }
+
   private scheduleLoop(name: TrackName): void {
     const ctx = this.ctx!;
     const t = tracks[name];
@@ -359,33 +396,90 @@ class MusicEngine {
       return;
     }
 
-    if(this.currentTrack === name) {
-      console.log('already playing ', name);
+    if (this.currentTrack === name) {
       return;
     }
 
-    if (this.currentLoopId > 0) {
-      this.stop();
+    const fadeDur = 0.3;
+
+    console.log('playing ', name, '(was ', this.currentTrack);
+
+    const start = (): void => {
+      this.currentTrack = name;
+      this.scheduleLoop(name);
+      this.fadeTo(this.volume, fadeDur);
+    };
+
+    if (this.currentTrack !== null || this.currentLoopId > 0) {
+      // Fade the old track out first, then swap and fade the new one in.
+      this.fadeTo(0, fadeDur);
+      setTimeout(() => {
+        this.stop();
+        start();
+      }, fadeDur * 1000);
+    } else {
+      this.master!.gain.value = 0;
+      start();
     }
-    this.currentTrack = name;
-    this.scheduleLoop(name);
+  }
+
+  // Short one-shot "sad trombone" stinger for the death screen.
+  // Fades out whatever's currently playing, plays the jingle (~2s),
+  // then goes silent — call Music.play(...) again for the next level/retry.
+  playDeathJingle(): void {
+    this.init();
+    if (!this.ctx) return;
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+
+    const fadeDur = 0.5;
+
+    const startJingle = (): void => {
+      this.currentTrack = null;
+      this.fadeTo(this.volume, fadeDur);
+      const ctx = this.ctx!;
+      const t0 = ctx.currentTime + fadeDur + 0.05;
+
+      this.playKick(t0, 0.8);
+      this.playWomp(NOTE_FREQS['G4'], t0 + 0.05, 0.32, -20);
+      this.playWomp(NOTE_FREQS['F4'], t0 + 0.38, 0.32, -20);
+      this.playWomp(NOTE_FREQS['E4'], t0 + 0.71, 0.32, -20);
+      this.playWomp(NOTE_FREQS['C4'], t0 + 1.04, 0.9, -180); // final long "waaah"
+    };
+
+    if (this.currentTrack !== null || this.currentLoopId > 0) {
+      this.fadeTo(0, fadeDur);
+      setTimeout(() => {
+        this.stop();
+        startJingle();
+      }, fadeDur * 1000);
+    } else {
+      this.master!.gain.value = 0;
+      startJingle();
+    }
   }
 
   stop(): void {
     this.currentLoopId++;
+    this.currentTrack = null;
   }
 
   setVolume(v: number): void {
+    this.volume = v;
     if (this.master) this.master.gain.value = v;
+  }
+
+  getCurrentTrack() {
+    return this.currentTrack;
   }
 }
 
 const Music = new MusicEngine();
 
 // ── Usage ────────────────────────────────────────────────────
-// Music.play('overworld');     // call on user's first input/click (autoplay policy)
-// Music.play('platforming');
+// Music.play('overworld');       // call on user's first input/click (autoplay policy)
+// Music.play('platforming');     // crossfades automatically from whatever's playing
 // Music.play('cavern');
+// Music.playDeathJingle();       // ~2s sad-trombone sting for the death screen
 // Music.stop();
 // Music.setVolume(0.2);
 

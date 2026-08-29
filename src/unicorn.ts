@@ -3,6 +3,7 @@ import { getMinHeightWidth, getWidth, getHeight } from './utils';
 import { getCurrentLevel } from './levels/levels';
 import { TileType } from './levels/level-type';
 import { getTileDimensions } from './levels/levelGeometry';
+import Music from './music';
 
 const BLINK_INTERVAL = 3000;
 const BLINK_DURATION = 140;
@@ -86,6 +87,7 @@ export function killUnicorn(currentTime: number): void {
   unicorn.isDead = true;
   unicorn.diedAt = currentTime;
   setUnicornImage();
+  Music.playDeathJingle();
 }
 
 export function updateUnicornBlink(currentTime: number): void {

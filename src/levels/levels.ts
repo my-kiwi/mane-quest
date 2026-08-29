@@ -29,12 +29,7 @@ export const setCurrentLevel = (level: Level): void => {
   console.log(`entering level ${level.position.x},${level.position.y}`);
   level.visited = true;
   initializeEnemyPosition(level);
-
-  const previousTrack = currentLevel?.music;
-  if (previousTrack !== level.music) {
-    console.log('playing ', level.music, '(was ', previousTrack);
-    Music.play(level.music);
-  }
+  Music.play(level.music);
   currentLevel = level;
 };
 
