@@ -1,6 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { isUnicornTouchingEnemy } from '../collisions';
-import { levels } from './levels';
+import Music from '../music';
+import { getCurrentLevel, levels, setCurrentLevel } from './levels';
 import { mapGenerator, NB_OF_TILES_VERTICALLY, NB_OF_TILES_HORIZONTALLY } from './level-type';
 
 describe('levels', () => {
@@ -59,6 +60,25 @@ describe('levels', () => {
       '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
       '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
     ]);
+  });
+
+  it('changes music when the level track changes and avoids restarting the same track', () => {
+    const initialLevel = getCurrentLevel();
+    const startLevel = levels.find((level) => level.music === 'overworld') ?? initialLevel;
+    const nextLevel = levels.find((level) => level.music === 'cavern') ?? startLevel;
+
+    const playSpy = vi.spyOn(Music, 'play');
+
+    setCurrentLevel(startLevel);
+    playSpy.mockClear();
+
+    setCurrentLevel(startLevel);
+    expect(playSpy).not.toHaveBeenCalled();
+
+    setCurrentLevel(nextLevel);
+    expect(playSpy).toHaveBeenCalledWith('cavern');
+
+    playSpy.mockRestore();
   });
 
   it('should detect when the unicorn touches an enemy', () => {

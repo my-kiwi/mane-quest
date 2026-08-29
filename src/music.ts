@@ -165,10 +165,18 @@ class MusicEngine {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
   private currentLoopId = 0;
+  private currentTrack: TrackName | null = null;
 
   private init(): void {
     if (this.ctx) return;
-    const Ctx = window.AudioContext || (window as any).webkitAudioContext;
+
+    const hasWindowAudio = typeof window !== 'undefined';
+    const Ctx = hasWindowAudio ? window.AudioContext || (window as any).webkitAudioContext : undefined;
+
+    if (!Ctx) {
+      return;
+    }
+
     this.ctx = new Ctx();
     this.master = this.ctx.createGain();
     this.master.gain.value = 0.28;
@@ -341,11 +349,25 @@ class MusicEngine {
 
   play(name: TrackName): void {
     this.init();
-    if (this.ctx!.state === 'suspended') this.ctx!.resume();
+    if (!this.ctx) {
+      return;
+    }
+
+    if (this.ctx.state === 'suspended') this.ctx.resume();
     if (!tracks[name]) {
       console.warn('Unknown track:', name);
       return;
     }
+
+    if(this.currentTrack === name) {
+      console.log('already playing ', name);
+      return;
+    }
+
+    if (this.currentLoopId > 0) {
+      this.stop();
+    }
+    this.currentTrack = name;
     this.scheduleLoop(name);
   }
 

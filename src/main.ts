@@ -19,8 +19,10 @@ startGameLoop();
 
 function startMusic() {
   window.removeEventListener('pointerdown', startMusic);
+  window.removeEventListener('keydown', startMusic);
   Music.play('overworld');
 }
 
 // start music
 window.addEventListener('pointerdown', startMusic);
+window.addEventListener('keydown', startMusic);

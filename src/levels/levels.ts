@@ -1,3 +1,4 @@
+import Music from '../music';
 import { unicorn } from '../unicorn';
 import { level_0 } from './level-0';
 import { level_1 } from './level-1';
@@ -24,8 +25,22 @@ export const hasVisited = (x: number, y: number) => {
   return getLevel(x, y)?.visited;
 };
 
-let currentLevel: Level = getStartLevel();
-currentLevel.visited = true;
+export const setCurrentLevel = (level: Level): void => {
+  console.log(`entering level ${level.position.x},${level.position.y}`);
+  level.visited = true;
+  initializeEnemyPosition(level);
+
+  const previousTrack = currentLevel?.music;
+  if (previousTrack !== level.music) {
+    console.log('playing ', level.music, '(was ',previousTrack);
+    Music.play(level.music);
+  }
+  currentLevel = level;
+};
+
+let currentLevel: Level = null as unknown as Level;
+setCurrentLevel(getStartLevel()); // use setter to run side effects
+
 initializeEnemyPosition(currentLevel);
 
 export const getCurrentLevel = (): Level => currentLevel;
@@ -52,15 +67,10 @@ export function hasTile(level: Level, tileType: TileTypeEntry) {
   return level.map.join('').includes(tileType);
 }
 
-export const setCurrentLevel = (level: Level): void => {
-  console.log(`entering level ${level.position.x},${level.position.y}`);
-  currentLevel = level;
-  level.visited = true;
-  initializeEnemyPosition(level);
-};
+
 
 export function resetToStartLevel(): void {
-  currentLevel = getStartLevel();
+  setCurrentLevel(getStartLevel());
 }
 
 export function moveToNextXLevel(): boolean {
