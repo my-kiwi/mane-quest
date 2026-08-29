@@ -1,5 +1,5 @@
 import { draw } from './drawing';
-import { resetToStartLevel } from './levels/levels';
+import { hasTile, resetToStartLevel } from './levels/levels';
 import { updateMovement } from './movement';
 import { updatePhysics } from './physics';
 import { killUnicorn, resetUnicornPosition, unicorn, updateUnicornBlink } from './unicorn';
@@ -8,6 +8,7 @@ import { getCurrentLevel } from './levels/levels';
 import { canvas } from './canvas';
 import { isUnicornTouchingEnemy } from './collisions';
 import { updateEnemyMovement } from './enemy';
+import { TileType } from './levels/level-type';
 
 const FRAME_DURATION = 1000 / 60;
 
@@ -33,7 +34,7 @@ export function update(currentTime = performance.now(), frameScale = 1): void {
 
   // Update enemy movement
   const level = getCurrentLevel();
-  if (level.enemy) {
+  if (level.enemy && hasTile(level, TileType.ENEMY)) {
     updateEnemyMovement(frameScale);
     if (isUnicornTouchingEnemy(unicorn, level.enemy)) {
       killUnicorn(currentTime);
