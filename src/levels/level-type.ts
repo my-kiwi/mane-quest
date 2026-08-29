@@ -1,5 +1,6 @@
 import { NPC } from '../NPC';
 import { Enemy } from '../enemy';
+import { TrackName } from '../music';
 
 export type Level = {
   position: { x: number; y: number };
@@ -9,6 +10,7 @@ export type Level = {
   visited?: boolean;
   npc?: NPC;
   enemy?: Enemy;
+  music: TrackName;
 };
 
 export const TileType = {

@@ -49,6 +49,11 @@ export const level_1: Level[] = [
           row.slice(indexToReplace + 1)) as string;
       });
     },
+    getMusic() {
+      if (getLevel?.(3, 1)?.visited) {
+        return 'platforming';
+      }
+    },
     enemy: firstEnemy,
   },
   {
@@ -66,4 +71,7 @@ export const level_1: Level[] = [
   position: { x: index, y: 1 },
   backgroundColor: '#4B0082', // Indigo - deeper/darker to distinguish from -1,0
   groundColor: '#2F1B4A', // Dark violet ground
+  get music() {
+    return level.getMusic?.() ?? 'cavern';
+  },
 }));

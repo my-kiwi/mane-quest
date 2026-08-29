@@ -109,4 +109,5 @@ export const level_0: Level[] = [
 ].map((level, index) => ({
   ...level,
   position: { x: index, y: 0 },
+  music: 'overworld',
 }));
