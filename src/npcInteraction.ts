@@ -205,7 +205,6 @@ export function confirmCurrentWeaponChoice(): boolean {
 }
 
 export function interactWithNpc(): boolean {
-  updateNpcInteractionUi();
   if (!isNpcInRange()) {
     return false;
   }
@@ -224,6 +223,7 @@ export function interactWithNpc(): boolean {
   } else {
     activeNpc = undefined;
   }
+  updateNpcInteractionUi();
 
   return true;
 }
