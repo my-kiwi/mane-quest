@@ -12,6 +12,7 @@ import {
   isPointOnDialogueBubble,
   isPointOnNpc,
   moveWeaponSelection,
+  updateNpcInteractionUi
 } from './npcInteraction';
 
 // Input state
@@ -33,6 +34,7 @@ export function getGroundY(): number {
 }
 
 function handleCanvasInteraction(x: number, y: number): void {
+  updateNpcInteractionUi();
   if (isPointOnNpc(x, y) && interactWithNpc()) {
     return;
   }
@@ -53,6 +55,7 @@ export function initializeInput(): void {
 
   // Keyboard input
   document.addEventListener('keydown', (e) => {
+    updateNpcInteractionUi();
     const key = e.key.toLowerCase();
 
     if (getWeaponChoices().length > 0) {
