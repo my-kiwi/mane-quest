@@ -40,17 +40,30 @@ export const sageNpc = {
         { line: "Oh, you're looking for the exit? " },
         { line: "⬅️ It's that way." },
       ];
-    } else if (hasVisited(3, 1) && !unicorn.weapon) {
+    } else if (hasVisited(3, 1)) {
+      // TODO and has not tried weapon on ennemy yet
       // has been killed by enemy
-      return [
-        { line: 'Ah, you have returned once again.' },
-        { line: 'This fiend? Yes I can help with that.' },
-        { line: 'You see, you need a weapon to get rid of him.' },
-        {
-          line: `Choose between 3 weapons, but chose wisely because as soon as you have chosen, the other ones will vanish in thin air for some reason`,
-        },
-        { line: 'Choose wisely:', weapons: ['Bow', 'Sword', 'Buckler'] },
-      ];
+      if (!unicorn.weapon) {
+        return [
+          { line: 'Ah, you have returned once again.' },
+          { line: 'This fiend? Yes I can help with that.' },
+          { line: 'You see, you need a weapon to get rid of him.' },
+          {
+            line: `Choose between 3 weapons, but choose wisely because as soon as you have chosen, the other ones will vanish in thin air for some reason.`,
+          },
+          { line: 'Choose wisely:', weapons: ['Bow', 'Sword', 'Buckler'] },
+          {
+            get line() {
+              return `A ${unicorn.weapon?.toLowerCase()} uh? Smart choice.`;
+            },
+          },
+          { line: `That'll be $3.50` },
+          { who: unicorn, line: `...` },
+          { line: `You don't have any money? That's ok, you'll pay me back later with interest.` },
+        ];
+      } else {
+        return [{ line: `Use your ${unicorn.weapon.toLowerCase()} wisely.` }];
+      }
     } else {
       // has killed enemy
       return [{ line: 'todo: implement rest of game :D' }];

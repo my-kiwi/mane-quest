@@ -1,18 +1,19 @@
-import { getCurrentLevel } from './levels/levels';
+import { getCurrentLevel, hasTile } from './levels/levels';
 import { getTileDimensions } from './levels/levelGeometry';
 import { unicorn } from './unicorn';
 import { NPC } from './NPC';
-import { TileType } from './levels/level-type';
+import { TileType, type Level } from './levels/level-type';
 
 export type WeaponChoice = {
   name: string;
 };
 
+const INTERACTION_RANGE_MULTIPLIER = 1.5;
+
 let activeDialogueLine = 0;
 let activeNpc: NPC | undefined;
 let selectedWeaponIndex = 0;
-
-const INTERACTION_RANGE_MULTIPLIER = 1.5;
+let previousDialog: ReturnType<typeof getActiveDialogue> | null = null;
 
 export function getCurrentNpc(): NPC | undefined {
   return getCurrentLevel().npc;
@@ -77,6 +78,66 @@ export function isPointOnDialogueBubble(x: number, y: number): boolean {
   );
 }
 
+export function updateNpcInteractionUi(): void {
+  const dialogueBubble = document.getElementById('npc-dialogue');
+  const dialogueName = document.getElementById('npc-dialogue-name');
+  const dialogueLine = document.getElementById('npc-dialogue-line');
+  const dialogueChoices = document.getElementById('npc-dialogue-choices');
+  if (!dialogueBubble || !dialogueName || !dialogueLine || !dialogueChoices || !isNpcInRange()) {
+    dialogueBubble?.classList.remove('is-visible');
+    return;
+  }
+
+  const dialogue = getActiveDialogue();
+  // fixme bug
+  // if (dialogue?.line === previousDialog?.line && dialogue?.name === previousDialog?.name) return;
+  if (dialogue) {
+    console.log('writing dialog', dialogue.line);
+    previousDialog = dialogue;
+    dialogueName.textContent = dialogue.name;
+    dialogueLine.textContent = dialogue.line;
+    dialogueName.style.color = dialogue.color;
+
+    dialogueChoices.innerHTML = '';
+    const choices = getWeaponChoices();
+
+    if (choices.length > 0) {
+      choices.forEach((choice, index) => {
+        const option = document.createElement('button');
+        option.type = 'button';
+        option.className = 'npc-dialogue-choice ' + choice.name;
+
+        const icon = document.createElement('span');
+        icon.className = 'npc-dialogue-choice-icon ' + choice.name;
+
+        const label = document.createElement('span');
+        label.textContent = choice.name;
+
+        option.append(icon, label);
+        option.addEventListener('pointerdown', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          setWeaponSelection(index);
+          confirmCurrentWeaponChoice();
+          interactWithNpc();
+        });
+        dialogueChoices.append(option);
+        option.focus();
+      });
+      dialogueChoices.classList.add('is-visible');
+      dialogueChoices.querySelectorAll('button')[0].classList.add('is-selected'); // default pre-selection
+    } else {
+      dialogueChoices.classList.remove('is-visible');
+    }
+
+    dialogueBubble.classList.add('is-visible');
+    return;
+  }
+
+  dialogueBubble.classList.remove('is-visible');
+  dialogueChoices.classList.remove('is-visible');
+}
+
 export function getWeaponChoices(): WeaponChoice[] {
   if (!activeNpc) {
     return [];
@@ -139,10 +200,12 @@ export function confirmCurrentWeaponChoice(): boolean {
   console.warn('selected ', selectedWeapon.name);
   unicorn.weapon = selectedWeapon.name;
   selectedWeaponIndex = 0;
+  activeNpc = undefined;
   return true;
 }
 
 export function interactWithNpc(): boolean {
+  updateNpcInteractionUi();
   if (!isNpcInRange()) {
     return false;
   }
