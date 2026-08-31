@@ -12,7 +12,7 @@ import {
   isPointOnDialogueBubble,
   isPointOnNpc,
   moveWeaponSelection,
-  updateNpcInteractionUi
+  updateNpcInteractionUi,
 } from './npcInteraction';
 
 // Input state

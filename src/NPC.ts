@@ -52,7 +52,7 @@ export const sageNpc = {
             line: `Choose between 3 weapons, but choose wisely because as soon as you have chosen, the other ones will vanish in thin air for some reason.`,
           },
           { line: 'Choose wisely:', weapons: ['Bow', 'Sword', 'Buckler'] },
-         // nota bene: cannot add extra dialog lines since unicorn.weapon is truthy (jumps to other if branch)
+          // nota bene: cannot add extra dialog lines since unicorn.weapon is truthy (jumps to other if branch)
         ];
       } else {
         return [{ line: `Use your ${unicorn.weapon.toLowerCase()} wisely.` }];

@@ -133,14 +133,47 @@ main canvas {
   flex-shrink: 0;
 }
 
-.npc-dialogue-choice-icon.Bow::before {
+.action::before
+{
+  font-size:2rem;
+  position:absolute;
+  margin-top:-25px;
+  margin-left:-25px;
+}
+
+.npc-dialogue-choice-icon.Bow::before,
+.action.Bow::before {
   content: "🏹";
 }
 
-.npc-dialogue-choice-icon.Sword::before {
+.npc-dialogue-choice-icon.Sword::before, 
+.action.Sword::before {
   content: "🗡️";
 }
 
-.npc-dialogue-choice-icon.Buckler::before {
+.npc-dialogue-choice-icon.Buckler::before, 
+.action.Buckler::before {
   content: "🛡️";
+}
+
+#action-bar {
+  position:absolute;
+  right: 5%;
+  bottom: 5%;
+  /* display:none */
+}
+#action-bar .action {
+  width:50px;
+  height:50px;
+  overflow:hidden;
+  border:1px solid white;
+  border-radius: 10px;
+  background-color: rgba(255,255, 255, 0.5);
+  color:#121212;
+}
+
+#action-bar .action .hint {
+  font-size:1rem;
+  position:absolute;
+  margin-bottom:-1rem;
 }

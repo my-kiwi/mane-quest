@@ -201,6 +201,8 @@ export function confirmCurrentWeaponChoice(): boolean {
   unicorn.weapon = selectedWeapon.name;
   selectedWeaponIndex = 0;
   activeNpc = undefined;
+  document.getElementById('action-bar')!.style.display = 'block';
+  document.querySelectorAll('.action')[0].classList.add(selectedWeapon.name);
   return true;
 }
 
