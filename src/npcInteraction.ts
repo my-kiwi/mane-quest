@@ -1,8 +1,18 @@
-import { getCurrentLevel, hasTile } from './levels/levels';
+import { getCurrentLevel, getLevel, hasTile } from './levels/levels';
 import { getTileDimensions } from './levels/levelGeometry';
 import { unicorn } from './unicorn';
 import { NPC } from './NPC';
 import { TileType, type Level } from './levels/level-type';
+import { showActionbar, triggerWeapon } from './action';
+import {
+  dialogueBubble,
+  showDialog,
+  hideDialog,
+  dialogueChoices,
+  dialogueLine,
+  dialogueName,
+} from './dialog';
+import { canvas } from './canvas';
 
 export type WeaponChoice = {
   name: string;
@@ -79,24 +89,17 @@ export function isPointOnDialogueBubble(x: number, y: number): boolean {
 }
 
 export function updateNpcInteractionUi(): void {
-  const dialogueBubble = document.getElementById('npc-dialogue');
-  const dialogueName = document.getElementById('npc-dialogue-name');
-  const dialogueLine = document.getElementById('npc-dialogue-line');
-  const dialogueChoices = document.getElementById('npc-dialogue-choices');
-  if (!dialogueBubble || !dialogueName || !dialogueLine || !dialogueChoices || !isNpcInRange()) {
-    dialogueBubble?.classList.remove('is-visible');
-    return;
+  if (!dialogueBubble || !dialogueName || !dialogueLine || !dialogueChoices) {
+    throw new Error('no dice');
   }
 
   const dialogue = getActiveDialogue();
-  // fixme bug
-  // if (dialogue?.line === previousDialog?.line && dialogue?.name === previousDialog?.name) return;
   if (dialogue) {
     console.log('writing dialog', dialogue.line);
     previousDialog = dialogue;
     dialogueName.textContent = dialogue.name;
-    dialogueLine.textContent = dialogue.line;
     dialogueName.style.color = dialogue.color;
+    dialogueLine.textContent = dialogue.line;
 
     dialogueChoices.innerHTML = '';
     const choices = getWeaponChoices();
@@ -121,20 +124,21 @@ export function updateNpcInteractionUi(): void {
           confirmCurrentWeaponChoice();
           interactWithNpc();
         });
-        dialogueChoices.append(option);
+        dialogueChoices!.append(option);
         option.focus();
       });
       dialogueChoices.classList.add('is-visible');
+      // fixme why not using :focus?
       dialogueChoices.querySelectorAll('button')[0].classList.add('is-selected'); // default pre-selection
     } else {
       dialogueChoices.classList.remove('is-visible');
     }
 
-    dialogueBubble.classList.add('is-visible');
+    showDialog();
     return;
   }
 
-  dialogueBubble.classList.remove('is-visible');
+  hideDialog();
   dialogueChoices.classList.remove('is-visible');
 }
 
@@ -201,8 +205,9 @@ export function confirmCurrentWeaponChoice(): boolean {
   unicorn.weapon = selectedWeapon.name;
   selectedWeaponIndex = 0;
   activeNpc = undefined;
-  document.getElementById('action-bar')!.style.display = 'block';
-  document.querySelectorAll('.action')[0].classList.add(selectedWeapon.name);
+  showActionbar();
+  // FIXXME lot of duplication for enemy level coordinates 3, 1
+  getLevel(3, 1)!.enemy!.x = canvas.width - canvas.width * 0.2;
   return true;
 }
 

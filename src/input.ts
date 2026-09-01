@@ -9,11 +9,11 @@ import {
   confirmCurrentWeaponChoice,
   getWeaponChoices,
   interactWithNpc,
-  isPointOnDialogueBubble,
   isPointOnNpc,
   moveWeaponSelection,
   updateNpcInteractionUi,
 } from './npcInteraction';
+import { triggerWeapon } from './action';
 
 // Input state
 export const keys: { [key: string]: boolean } = {};
@@ -51,11 +51,8 @@ function handleCanvasInteraction(x: number, y: number): void {
 }
 
 export function initializeInput(): void {
-  const dialogueBubble = document.getElementById('npc-dialogue');
-
   // Keyboard input
   document.addEventListener('keydown', (e) => {
-    updateNpcInteractionUi();
     const key = e.key.toLowerCase();
 
     if (getWeaponChoices().length > 0) {
@@ -84,21 +81,21 @@ export function initializeInput(): void {
     keys[e.key] = true;
 
     if (e.key === 'Enter' && !e.repeat) {
+      updateNpcInteractionUi();
       interactWithNpc();
     }
 
     if ((e.key === 'ArrowUp' || e.code === 'Space' || key === 'w') && !e.repeat) {
       triggerJump();
     }
+
+    if (e.key === 'u' && unicorn.weapon) {
+      triggerWeapon();
+    }
   });
 
   document.addEventListener('keyup', (e) => {
     keys[e.key] = false;
-  });
-
-  dialogueBubble?.addEventListener('pointerdown', (e) => {
-    e.preventDefault();
-    interactWithNpc();
   });
 
   // click + touch input

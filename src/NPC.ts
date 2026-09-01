@@ -19,6 +19,7 @@ export const sageNpc = {
     if (unicorn.deaths === 0) {
       return [
         { line: 'Welcome, dear unicorn.' },
+        //{ line: 'Choose wisely:', weapons: ['Bow', 'Sword', 'Buckler'] },
         { line: 'I am the wise sage of this land.' },
         { line: '...' },
         { who: unicorn, line: '...' },
@@ -48,6 +49,7 @@ export const sageNpc = {
           { line: 'Ah, you have returned once again.' },
           { line: 'This fiend? Yes I can help with that.' },
           { line: 'You see, you need a weapon to get rid of him.' },
+          // TODO ask for money=> greed talsiman=>death,
           {
             line: `Choose between 3 weapons, but choose wisely because as soon as you have chosen, the other ones will vanish in thin air for some reason.`,
           },

@@ -4,8 +4,6 @@ import { getCurrentLevel } from './levels/levels';
 export type Enemy = typeof firstEnemy;
 
 const ENEMY_SIZE_MULTIPLIER = 2.5;
-const ENEMY_SPEED = 3; // pixels per second
-const ENEMY_DIRECTION = 1; // 1 for right, -1 for left
 
 export function updateEnemyMovement(frameScale: number) {
   const level = getCurrentLevel();
@@ -23,8 +21,8 @@ export const firstEnemy = {
   image: new Image(),
   x: 0, // will be initialized when level loads
   y: 0, // will be initialized when level loads
-  speed: ENEMY_SPEED,
-  direction: ENEMY_DIRECTION,
+  speed: canvas.width * 0.001,
+  direction: 1,
   get width() {
     return canvas.width * 0.1 * ENEMY_SIZE_MULTIPLIER;
   },

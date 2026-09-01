@@ -1,0 +1,3 @@
+- walls in enemy room (no escape)
+- should have taken ... weapon
+- close dialog when switching levels

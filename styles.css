@@ -160,7 +160,7 @@ main canvas {
   position:absolute;
   right: 5%;
   bottom: 5%;
-  /* display:none */
+  display:none
 }
 #action-bar .action {
   width:50px;

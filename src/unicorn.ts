@@ -1,5 +1,5 @@
 import { canvas } from './canvas';
-import { getMinHeightWidth, getWidth, getHeight } from './utils';
+import { getWidth, getHeight } from './utils';
 import { getCurrentLevel } from './levels/levels';
 import { TileType } from './levels/level-type';
 import { getTileDimensions } from './levels/levelGeometry';

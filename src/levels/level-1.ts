@@ -38,11 +38,12 @@ export const level_1: Level[] = [
   {
     visited: false,
     getMap() {
-      if (!getLevel?.(3, 1)?.visited /** or ennemy is dead */) {
+      if (!getLevel?.(3, 1)?.visited /** TODO or ennemy is dead */) {
         return defaultLvl;
       }
       return defaultLvl
         .map((row) => row.slice(0, -1) + TileType.GROUND)
+        .map((row) => TileType.GROUND + row.slice(1))
         .map((row, index) => {
           const indexToReplace = 9;
           if (index !== indexToReplace) return row;
@@ -53,7 +54,7 @@ export const level_1: Level[] = [
     },
     getMusic() {
       if (getLevel?.(3, 1)?.visited) {
-        return 'platforming';
+        return 'platforming'; // enemy music
       }
     },
     enemy: firstEnemy,

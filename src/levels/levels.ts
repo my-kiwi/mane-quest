@@ -1,3 +1,4 @@
+import { hideDialog } from '../dialog';
 import Music from '../music';
 import { unicorn } from '../unicorn';
 import { level_0 } from './level-0';
@@ -31,6 +32,7 @@ export const setCurrentLevel = (level: Level): void => {
   initializeEnemyPosition(level);
   Music.play(level.music);
   currentLevel = level;
+  hideDialog();
 };
 
 let currentLevel: Level = null as unknown as Level;
@@ -39,6 +41,7 @@ setCurrentLevel(getStartLevel()); // use setter to run side effects
 initializeEnemyPosition(currentLevel);
 
 export const getCurrentLevel = (): Level => currentLevel;
+
 function initializeEnemyPosition(level: Level): void {
   if (!level.enemy) {
     return;
