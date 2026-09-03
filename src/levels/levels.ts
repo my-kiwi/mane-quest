@@ -26,6 +26,11 @@ export const hasVisited = (x: number, y: number) => {
   return getLevel(x, y)?.visited;
 };
 
+export const isInLevel = (x: number, y: number) => {
+  const position = getCurrentLevel().position;
+  return position.x === x && position.y === y;
+};
+
 export const setCurrentLevel = (level: Level): void => {
   console.log(`entering level ${level.position.x},${level.position.y}`);
   level.visited = true;

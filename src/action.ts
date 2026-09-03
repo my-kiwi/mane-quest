@@ -1,5 +1,5 @@
 import { dialogueBubble, dialogueLine, dialogueName, displayLine, showDialog } from './dialog';
-import { getCurrentLevel } from './levels/levels';
+import { getCurrentLevel, isInLevel } from './levels/levels';
 import { unicorn } from './unicorn';
 
 const actionbar = document.getElementById('action-bar')!;
@@ -12,9 +12,8 @@ export const showActionbar = () => {
 };
 export function triggerWeapon() {
   showDialog();
-  const pos = getCurrentLevel().position;
   const weapon = unicorn.weapon?.toLowerCase();
-  if (pos.x === 3 && pos.y === 1) {
+  if (isInLevel(2, 1)) {
     // enemy TODO add condition for when its dead
     const otherWeapon = weapon !== 'sword' ? 'sword' : 'bow';
     displayLine(
