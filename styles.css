@@ -11,8 +11,6 @@
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
-  margin: 0;
-  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,24 +20,24 @@ body {
 html, body {
   height: 100%;
   margin: 0;
-  touch-action: none;
-  user-select: none;
+  padding: 0;
 }
 
 main {
   position: relative;
   width: min(100vw, calc(100vh * 16 / 9));
-  touch-action: none;
-  user-select: none;
 }
 
-main canvas {
+canvas {
   display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
+
+}
+
+html, body, main, canvas, .npc-dialogue {
   touch-action: none;
-  user-select: none;
 }
 
 * {
@@ -57,8 +55,6 @@ main canvas {
 .npc-dialogue {
   display: none;
   position: absolute;
-  touch-action: none;
-  user-select: none;
   z-index: 1;
 }
 

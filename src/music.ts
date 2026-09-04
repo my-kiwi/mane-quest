@@ -19,18 +19,19 @@ interface Track {
   arrangement?: LayerMode[]; // cycled once per loop; defaults to all 'full'
 }
 
-const NOTE_FREQS: Record<string, number> = {};
-(() => {
-  const names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-  for (let oct = 1; oct <= 7; oct++) {
-    names.forEach((n, i) => {
-      const midi = (oct + 1) * 12 + i;
-      NOTE_FREQS[n + oct] = 440 * Math.pow(2, (midi - 69) / 12);
-    });
-  }
-})();
-
 const R = null;
+
+// Note name -> frequency, computed on demand instead of precomputing an
+// 84-entry table at load time.
+const SEMI: Record<string, number> = {
+  C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11,
+};
+const NOTE_RE = /^([A-G]#?)(\d)$/;
+const freq = (note: string): number => {
+  const m = NOTE_RE.exec(note)!;
+  const midi = (+m[2] + 1) * 12 + SEMI[m[1]];
+  return 440 * 2 ** ((midi - 69) / 12);
+};
 
 const tracks: Record<TrackName, Track> = {
 
@@ -45,12 +46,6 @@ const tracks: Record<TrackName, Track> = {
         'C5', R, 'B4', 'A4', 'G4', R, 'E4', 'D4',
         'E4', 'D4', 'C4', R, 'D4', 'E4', 'D4', R,
       ],
-      // [
-      //   'G4', 'A4', 'C5', R, 'B4', 'A4', 'G4', R,
-      //   'G4', 'A4', 'C5', 'D5', 'C5', R, 'A4', 'G4',
-      //   'E5', R, 'D5', 'C5', 'B4', 'A4', 'G4', R,
-      //   'A4', 'G4', 'E4', R, 'C4', 'D4', 'E4', R,
-      // ],
     ],
     bassType: 'triangle',
     bassVariants: [
@@ -167,14 +162,8 @@ class MusicEngine {
 
   private init(): void {
     if (this.ctx) return;
-
-    const hasWindowAudio = typeof window !== 'undefined';
-    const Ctx = hasWindowAudio ? window.AudioContext || (window as any).webkitAudioContext : undefined;
-
-    if (!Ctx) {
-      return;
-    }
-
+    const Ctx = typeof window !== 'undefined' && (window.AudioContext || (window as any).webkitAudioContext);
+    if (!Ctx) return;
     this.ctx = new Ctx();
     this.master = this.ctx.createGain();
     this.master.gain.value = this.volume;
@@ -190,154 +179,123 @@ class MusicEngine {
     this.master.gain.linearRampToValueAtTime(target, now + duration);
   }
 
-  private playNote(
-    freq: number,
-    startTime: number,
-    dur: number,
-    type: OscType,
-    vol: number,
-    detune = 0
-  ): void {
-    const ctx = this.ctx!;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = type;
-    osc.frequency.value = freq;
-    osc.detune.value = detune;
-
-    const attack = 0.008;
-    const release = Math.min(0.15, dur * 0.5);
-    gain.gain.setValueAtTime(0, startTime);
-    gain.gain.linearRampToValueAtTime(vol, startTime + attack);
-    gain.gain.setValueAtTime(vol, Math.max(startTime + attack, startTime + dur - release));
-    gain.gain.linearRampToValueAtTime(0, startTime + dur);
-
-    osc.connect(gain);
-    gain.connect(this.master!);
-    osc.start(startTime);
-    osc.stop(startTime + dur + 0.05);
+  // ── shared envelope/noise helpers ──────────────────────────
+  // attack -> sustain -> release (used by tonal notes/drones)
+  private sustainEnv(g: GainNode, t0: number, dur: number, vol: number, attack: number, release: number): void {
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(vol, t0 + attack);
+    g.gain.setValueAtTime(vol, Math.max(t0 + attack, t0 + dur - release));
+    g.gain.linearRampToValueAtTime(0, t0 + dur);
   }
 
-  private playKick(startTime: number, vol = 0.9): void {
-    const ctx = this.ctx!;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(150, startTime);
-    osc.frequency.exponentialRampToValueAtTime(40, startTime + 0.1);
-    gain.gain.setValueAtTime(vol, startTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.22);
-    osc.connect(gain);
-    gain.connect(this.master!);
-    osc.start(startTime);
-    osc.stop(startTime + 0.25);
+  // immediate hit -> exponential decay (used by percussion)
+  private expEnv(g: GainNode, t0: number, vol: number, decay: number): void {
+    g.gain.setValueAtTime(vol, t0);
+    g.gain.exponentialRampToValueAtTime(0.001, t0 + decay);
   }
 
-  private playSnare(startTime: number, vol = 0.6): void {
+  // short linear attack -> exponential decay (used by the bell partials)
+  private ad(g: GainNode, t0: number, vol: number, attack: number, decay: number): void {
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(vol, t0 + attack);
+    g.gain.exponentialRampToValueAtTime(0.001, t0 + attack + decay);
+  }
+
+  // white-noise burst; `taper` bakes a linear fade into the buffer itself
+  private noiseBuf(dur: number, taper = false): AudioBufferSourceNode {
     const ctx = this.ctx!;
-    const bufferSize = ctx.sampleRate * 0.15;
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
-    }
-    const noise = ctx.createBufferSource();
-    noise.buffer = buffer;
-    const noiseFilter = ctx.createBiquadFilter();
-    noiseFilter.type = 'highpass';
-    noiseFilter.frequency.value = 1000;
-    const noiseGain = ctx.createGain();
-    noiseGain.gain.setValueAtTime(vol, startTime);
-    noiseGain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.13);
-    noise.connect(noiseFilter);
-    noiseFilter.connect(noiseGain);
-    noiseGain.connect(this.master!);
-    noise.start(startTime);
+    const n = Math.floor(ctx.sampleRate * dur);
+    const buf = ctx.createBuffer(1, n, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (taper ? 1 - i / n : 1);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    return src;
+  }
+  // ────────────────────────────────────────────────────────────
+
+  private playNote(freqHz: number, t0: number, dur: number, type: OscType, vol: number, detune = 0): void {
+    const ctx = this.ctx!;
+    const o = ctx.createOscillator();
+    o.type = type; o.frequency.value = freqHz; o.detune.value = detune;
+    const g = ctx.createGain();
+    this.sustainEnv(g, t0, dur, vol, 0.008, Math.min(0.15, dur * 0.5));
+    o.connect(g); g.connect(this.master!);
+    o.start(t0); o.stop(t0 + dur + 0.05);
+  }
+
+  private playKick(t0: number, vol = 0.9): void {
+    const ctx = this.ctx!;
+    const o = ctx.createOscillator();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(150, t0);
+    o.frequency.exponentialRampToValueAtTime(40, t0 + 0.1);
+    const g = ctx.createGain();
+    this.expEnv(g, t0, vol, 0.22);
+    o.connect(g); g.connect(this.master!);
+    o.start(t0); o.stop(t0 + 0.25);
+  }
+
+  private playSnare(t0: number, vol = 0.6): void {
+    const ctx = this.ctx!;
+    const noise = this.noiseBuf(0.15, true);
+    const nf = ctx.createBiquadFilter();
+    nf.type = 'highpass'; nf.frequency.value = 1000;
+    const ng = ctx.createGain();
+    this.expEnv(ng, t0, vol, 0.13);
+    noise.connect(nf); nf.connect(ng); ng.connect(this.master!);
+    noise.start(t0);
 
     const tone = ctx.createOscillator();
-    tone.type = 'triangle';
-    tone.frequency.value = 180;
-    const toneGain = ctx.createGain();
-    toneGain.gain.setValueAtTime(vol * 0.5, startTime);
-    toneGain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.08);
-    tone.connect(toneGain);
-    toneGain.connect(this.master!);
-    tone.start(startTime);
-    tone.stop(startTime + 0.1);
+    tone.type = 'triangle'; tone.frequency.value = 180;
+    const tg = ctx.createGain();
+    this.expEnv(tg, t0, vol * 0.5, 0.08);
+    tone.connect(tg); tg.connect(this.master!);
+    tone.start(t0); tone.stop(t0 + 0.1);
   }
 
-  private playHihat(startTime: number, vol = 0.25): void {
+  private playHihat(t0: number, vol = 0.25): void {
     const ctx = this.ctx!;
-    const bufferSize = ctx.sampleRate * 0.05;
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = Math.random() * 2 - 1;
-    }
-    const noise = ctx.createBufferSource();
-    noise.buffer = buffer;
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'highpass';
-    filter.frequency.value = 7000;
-    const gain = ctx.createGain();
-    gain.gain.setValueAtTime(vol, startTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.04);
-    noise.connect(filter);
-    filter.connect(gain);
-    gain.connect(this.master!);
-    noise.start(startTime);
+    const noise = this.noiseBuf(0.05);
+    const f = ctx.createBiquadFilter();
+    f.type = 'highpass'; f.frequency.value = 7000;
+    const g = ctx.createGain();
+    this.expEnv(g, t0, vol, 0.04);
+    noise.connect(f); f.connect(g); g.connect(this.master!);
+    noise.start(t0);
   }
 
-  // Dark tolling bell for the death sting: a handful of sine partials at
-  // inharmonic ratios (not clean integer multiples) so it reads as metal,
-  // not a pure tone. Higher partials decay faster than the fundamental,
-  // which is what gives real bells their "shimmer then hollow out" character.
-  private playBell(freq: number, startTime: number, dur: number, vol = 0.5): void {
+  // Dark tolling bell for the death sting: sine partials at inharmonic
+  // ratios (not clean integer multiples) so it reads as metal, not a pure
+  // tone. Higher partials decay faster, giving the "shimmer then hollow
+  // out" character of a real bell.
+  private playBell(freqHz: number, t0: number, dur: number, vol = 0.5): void {
     const ctx = this.ctx!;
-    const partials = [1, 2.01, 2.74, 3.98, 5.43];
-    const partialGains = [1, 0.55, 0.32, 0.18, 0.1];
-    partials.forEach((ratio, idx) => {
-      const osc = ctx.createOscillator();
-      osc.type = 'sine';
-      osc.frequency.value = freq * ratio;
-      const gain = ctx.createGain();
-      const partialVol = vol * partialGains[idx];
-      const decay = Math.max(0.3, dur * (1 - idx * 0.15));
-      gain.gain.setValueAtTime(0, startTime);
-      gain.gain.linearRampToValueAtTime(partialVol, startTime + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.001, startTime + decay);
-      osc.connect(gain);
-      gain.connect(this.master!);
-      osc.start(startTime);
-      osc.stop(startTime + decay + 0.1);
+    const partials: [number, number][] = [[1, 1], [2.01, 0.55], [2.74, 0.32], [3.98, 0.18], [5.43, 0.1]];
+    partials.forEach(([ratio, g0], i) => {
+      const decay = Math.max(0.3, dur * (1 - i * 0.15));
+      const o = ctx.createOscillator();
+      o.type = 'sine'; o.frequency.value = freqHz * ratio;
+      const g = ctx.createGain();
+      this.ad(g, t0, vol * g0, 0.02, decay);
+      o.connect(g); g.connect(this.master!);
+      o.start(t0); o.stop(t0 + decay + 0.1);
     });
   }
 
-  // Low dissonant drone: two detuned sawtooths through a lowpass filter,
-  // slow attack/release. Stack two of these a minor 2nd apart for that
-  // uneasy "something is wrong" Souls-death-screen quality.
-  private playDrone(freq: number, startTime: number, dur: number, vol = 0.3): void {
+  // Low dissonant drone: two detuned sawtooths through a lowpass filter.
+  // Stack two a minor 2nd apart for that uneasy Souls-death-screen quality.
+  private playDrone(freqHz: number, t0: number, dur: number, vol = 0.3): void {
     const ctx = this.ctx!;
     [-4, 4].forEach((detune) => {
-      const osc = ctx.createOscillator();
-      osc.type = 'sawtooth';
-      osc.frequency.value = freq;
-      osc.detune.value = detune;
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.value = 400;
-      const gain = ctx.createGain();
-      const attack = 0.6;
-      const release = dur * 0.4;
-      gain.gain.setValueAtTime(0, startTime);
-      gain.gain.linearRampToValueAtTime(vol, startTime + attack);
-      gain.gain.setValueAtTime(vol, startTime + dur - release);
-      gain.gain.linearRampToValueAtTime(0, startTime + dur);
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(this.master!);
-      osc.start(startTime);
-      osc.stop(startTime + dur + 0.1);
+      const o = ctx.createOscillator();
+      o.type = 'sawtooth'; o.frequency.value = freqHz; o.detune.value = detune;
+      const f = ctx.createBiquadFilter();
+      f.type = 'lowpass'; f.frequency.value = 400;
+      const g = ctx.createGain();
+      this.sustainEnv(g, t0, dur, vol, 0.6, dur * 0.4);
+      o.connect(f); f.connect(g); g.connect(this.master!);
+      o.start(t0); o.stop(t0 + dur + 0.1);
     });
   }
 
@@ -364,28 +322,20 @@ class MusicEngine {
         const bass = t.bassVariants[variant];
         const mode = arrangement[loopCount % arrangement.length];
 
-        const isFillLoop = (loopCount + 1) % fillEvery === 0;
-        const isFillZone = isFillLoop && i >= stepsPerLoop - 4 && mode !== 'noDrums';
-
+        const isFillZone = (loopCount + 1) % fillEvery === 0 && i >= stepsPerLoop - 4 && mode !== 'noDrums';
         const swingOffset = t.swing && i % 2 === 1 ? t.step * t.swing : 0;
         const hitTime = nextTime + swingOffset;
 
         const melodyAllowed = mode !== 'drumsOnly';
-        const bassAllowed = mode !== 'drumsOnly' && mode !== 'noBass';
+        const bassAllowed = melodyAllowed && mode !== 'noBass';
         const drumsAllowed = mode !== 'noDrums';
 
-        if (melodyAllowed) {
-          const note = melody[i];
-          if (note) {
-            this.playNote(NOTE_FREQS[note], hitTime, t.step * 0.85, t.melodyType, 0.3, t.detune ?? 0);
-          }
-        }
-        if (bassAllowed) {
-          const bassNote = bass[i];
-          if (bassNote) {
-            this.playNote(NOTE_FREQS[bassNote], hitTime, t.step * 1.4, t.bassType, 0.35, t.detune ?? 0);
-          }
-        }
+        const tryNote = (allowed: boolean, arr: (string | null)[], type: OscType, durMult: number, vol: number): void => {
+          const note = allowed && arr[i];
+          if (note) this.playNote(freq(note), hitTime, t.step * durMult, type, vol, t.detune ?? 0);
+        };
+        tryNote(melodyAllowed, melody, t.melodyType, 0.85, 0.3);
+        tryNote(bassAllowed, bass, t.bassType, 1.4, 0.35);
 
         if (drumsAllowed) {
           if (isFillZone) {
@@ -409,24 +359,10 @@ class MusicEngine {
 
   play(name: TrackName): void {
     this.init();
-    if (!this.ctx) {
-      return;
-    }
-
+    if (!this.ctx || !tracks[name] || this.currentTrack === name) return;
     if (this.ctx.state === 'suspended') this.ctx.resume();
-    if (!tracks[name]) {
-      console.warn('Unknown track:', name);
-      return;
-    }
-
-    if (this.currentTrack === name) {
-      return;
-    }
 
     const fadeDur = 0.3;
-
-    console.log('playing ', name, '(was ', this.currentTrack);
-
     const start = (): void => {
       this.currentTrack = name;
       this.scheduleLoop(name);
@@ -436,10 +372,7 @@ class MusicEngine {
     if (this.currentTrack !== null || this.currentLoopId > 0) {
       // Fade the old track out first, then swap and fade the new one in.
       this.fadeTo(0, fadeDur);
-      setTimeout(() => {
-        this.stop();
-        start();
-      }, fadeDur * 1000);
+      setTimeout(() => { this.stop(); start(); }, fadeDur * 1000);
     } else {
       this.master!.gain.value = 0;
       start();
@@ -457,33 +390,23 @@ class MusicEngine {
     if (!this.ctx) return;
     if (this.ctx.state === 'suspended') this.ctx.resume();
 
-    const fadeDur = 0;
-
     const startJingle = (): void => {
       this.currentTrack = null;
-      this.fadeTo(this.volume, fadeDur);
+      this.fadeTo(this.volume, 0);
       const ctx = this.ctx!;
-      const t0 = ctx.currentTime + fadeDur + 0.05;
+      const t0 = ctx.currentTime + 0.05;
 
-      // Low dissonant drone (root + minor 2nd) under everything
-      this.playDrone(NOTE_FREQS['A1'], t0, 3.3, 0.28);
-      this.playDrone(NOTE_FREQS['A#1'], t0, 3.3, 0.14);
-
-      // Main toll, then a fainter second toll for closure near the end
-      this.playBell(NOTE_FREQS['A2'], t0 + 0.1, 2.6, 1.5);
-      this.playBell(NOTE_FREQS['E2'], t0 + 1.0, 1.5, 1.28);
+      this.playDrone(freq('A1'), t0, 3.3, 0.28);
+      this.playDrone(freq('A#1'), t0, 3.3, 0.14);
+      this.playBell(freq('A2'), t0 + 0.1, 2.6, 1.5);
+      this.playBell(freq('E2'), t0 + 1.0, 1.5, 1.28);
     };
 
     if (this.currentTrack !== null || this.currentLoopId > 0) {
-      this.fadeTo(0, fadeDur);
-      setTimeout(() => {
-        this.stop();
-        startJingle();
-      }, fadeDur * 1000);
-    } else {
-      this.master!.gain.value = 0;
-      startJingle();
+      this.stop();
     }
+    this.master!.gain.value = 0;
+    startJingle();
   }
 
   stop(): void {
