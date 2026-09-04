@@ -5,8 +5,6 @@ import { TileType } from './levels/level-type';
 import { getTileDimensions } from './levels/levelGeometry';
 import Music from './music';
 
-const BLINK_INTERVAL = 3000;
-const BLINK_DURATION = 140;
 const UNICORN_SIZE_MULTIPLIER = 1.3;
 
 // Unicorn properties and state
@@ -38,9 +36,6 @@ export const unicorn = {
   gravity: 0.7,
   rotation: 0,
   balancePhase: 0,
-  isBlinking: false,
-  blinkEndsAt: 0,
-  nextBlinkAt: 0,
   colors: {
     hornColor: '#FFD700', // Gold
     tailColor: '#FF69B4', // Hot Pink
@@ -48,7 +43,6 @@ export const unicorn = {
     leftFootColor: '#8B4513', // Saddle Brown
     rightFootColor: '#8B4513', // Saddle Brown
     maneColor: '#FF69B4', // Dodger Blue
-    isBlinking: false,
   },
 };
 
@@ -57,9 +51,6 @@ export type Unicorn = typeof unicorn;
 export function initializeUnicorn(): void {
   setUnicornImage();
   resetUnicornPosition();
-  unicorn.isBlinking = false;
-  unicorn.blinkEndsAt = 0;
-  unicorn.nextBlinkAt = performance.now() + BLINK_INTERVAL;
 }
 
 export function resetUnicornPosition(): void {
@@ -91,18 +82,6 @@ export function killUnicorn(currentTime: number): void {
   Music.playDeathJingle();
 }
 
-export function updateUnicornBlink(currentTime: number): void {
-  if (!unicorn.isBlinking && currentTime >= unicorn.nextBlinkAt) {
-    unicorn.isBlinking = true;
-    unicorn.blinkEndsAt = currentTime + BLINK_DURATION;
-    setUnicornImage();
-  } else if (unicorn.isBlinking && currentTime >= unicorn.blinkEndsAt) {
-    unicorn.isBlinking = false;
-    unicorn.nextBlinkAt = currentTime + BLINK_INTERVAL;
-    setUnicornImage();
-  }
-}
-
 function setUnicornImage(): void {
   const bodyColor = unicorn.isDead ? `rgb(139, 0, 0)` : unicorn.colors.bodyColor;
 
@@ -110,12 +89,11 @@ function setUnicornImage(): void {
     createUnicornSvg({
       ...unicorn.colors,
       bodyColor,
-      isBlinking: unicorn.isBlinking,
     })
   )}`;
 }
 
-export type UnicornSvgProps = Partial<typeof unicorn.colors> & { isBlinking?: boolean };
+export type UnicornSvgProps = Partial<typeof unicorn.colors>;
 
 export function createUnicornSvg({
   hornColor,
@@ -124,11 +102,8 @@ export function createUnicornSvg({
   leftFootColor,
   rightFootColor,
   maneColor,
-  isBlinking = false,
 }: UnicornSvgProps = {}): string {
-  const eye = isBlinking
-    ? '<path id="closed_eye" fill="none" d="m627,121c4,4 10,4 14,0" />'
-    : `<ellipse class="eye_ext" fill="#fff" ry="7" rx="7" id="svg_12" cy="121" cx="634" />
+  const eye = `<ellipse class="eye_ext" fill="#fff" ry="7" rx="7" id="svg_12" cy="121" cx="634" />
   <ellipse class="eye_int" stroke="#fff" fill="#000" ry="4.57143" rx="4.28572" id="svg_14" cy="124.00009" cx="636.28599" />`;
 
   return `

@@ -2,7 +2,7 @@ import { draw } from './drawing';
 import { hasTile, resetToStartLevel } from './levels/levels';
 import { updateMovement } from './movement';
 import { updatePhysics } from './physics';
-import { killUnicorn, resetUnicornPosition, unicorn, updateUnicornBlink } from './unicorn';
+import { killUnicorn, resetUnicornPosition, unicorn } from './unicorn';
 import { DEATH_SCREEN_DURATION, MAX_FRAME_SCALE } from './constants';
 import { getCurrentLevel } from './levels/levels';
 import { canvas } from './canvas';
@@ -23,8 +23,6 @@ export function update(currentTime = performance.now(), frameScale = 1): void {
     updateEnemyMovement(frameScale);
     return;
   }
-
-  updateUnicornBlink(currentTime);
 
   // Update physics first (handle jumping and gravity)
   updatePhysics(frameScale);
