@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "lint": "eslint ./src --ext .ts,.tsx",
     "lint:fix": "npm run lint -- --fix",
+    "analyse:bundle": "npx vite-bundle-analyzer",
     "test": "vitest run",
     "test:watch": "vitest",
     "prepare": "husky"
