@@ -1,4 +1,5 @@
 import { hasVisited } from './levels/levels';
+import { encodeSvg } from './svg-helpers';
 import { createUnicornSvg, unicorn } from './unicorn';
 
 export type NPC = typeof sageNpc;
@@ -65,6 +66,4 @@ export const sageNpc = {
     }
   },
 };
-sageNpc.image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-  createUnicornSvg(sageNpc.colors)
-)}`;
+sageNpc.image.src = encodeSvg(createUnicornSvg(sageNpc.colors));

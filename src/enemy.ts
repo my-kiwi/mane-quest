@@ -1,5 +1,6 @@
 import { canvas } from './canvas';
 import { getCurrentLevel } from './levels/levels';
+import { encodeSvg } from './svg-helpers';
 
 export type Enemy = typeof firstEnemy;
 
@@ -57,4 +58,4 @@ const enemySvg = `<svg width="200" height="200" viewBox="0 0 200 200" xmlns="htt
   </defs>
 </svg>`;
 
-firstEnemy.image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(enemySvg)}`;
+firstEnemy.image.src = encodeSvg(enemySvg);

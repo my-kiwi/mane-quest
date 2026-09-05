@@ -4,6 +4,7 @@ import { getCurrentLevel } from './levels/levels';
 import { TileType } from './levels/level-type';
 import { getTileDimensions } from './levels/levelGeometry';
 import Music from './music';
+import { encodeSvg } from './svg-helpers';
 
 const UNICORN_SIZE_MULTIPLIER = 1.3;
 
@@ -85,12 +86,12 @@ export function killUnicorn(currentTime: number): void {
 function setUnicornImage(): void {
   const bodyColor = unicorn.isDead ? `rgb(139, 0, 0)` : unicorn.colors.bodyColor;
 
-  unicorn.image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+  unicorn.image.src = encodeSvg(
     createUnicornSvg({
       ...unicorn.colors,
       bodyColor,
     })
-  )}`;
+  );
 }
 
 export type UnicornSvgProps = Partial<typeof unicorn.colors>;
