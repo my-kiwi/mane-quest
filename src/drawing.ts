@@ -185,6 +185,15 @@ function drawUnicorn() {
       unicorn.width,
       unicorn.height
     );
+    // DEBUG: Draw hitbox for debugging purposes
+    // ctx.strokeRect(-unicorn.width / 2, -unicorn.height / 2, unicorn.width, unicorn.height);
+    // // draw circle at x, y coordinates for debugging purposes
+    // ctx.beginPath();
+    // ctx.arc(0, 0, 5, 0, Math.PI * 2);
+    // ctx.fillStyle = 'red';
+    // ctx.fill();
+
     ctx.restore();
   }
+
 }

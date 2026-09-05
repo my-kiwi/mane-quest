@@ -10,6 +10,7 @@ const BALANCE_ROTATION = 0.12;
 const BALANCE_STEP = 0.35;
 
 function moveHorizontally(nextX: number): boolean {
+  // console.log(`moving horizontally to ${nextX}`);
   // Collision checks use the current level's tile size so they stay correct
   // when the canvas or level layout is resized.
   const { width: tileWidth, height: tileHeight } = getTileDimensions();
@@ -18,7 +19,7 @@ function moveHorizontally(nextX: number): boolean {
   // The unicorn's x/y coordinates are its center. Use its horizontal hitbox
   // and vertical bounds to find the tiles that could block this move.
   const currentX = unicorn.x;
-  const hitboxWidth = unicorn.width / 4;
+  const hitboxWidth = unicorn.width / 2;
   const currentLeft = currentX - hitboxWidth;
   const currentRight = currentX + hitboxWidth;
   const top = unicorn.y - unicorn.height / 2;
@@ -51,9 +52,13 @@ function moveHorizontally(nextX: number): boolean {
       const tileLeft = column * tileWidth;
       const tileRight = tileLeft + tileWidth;
       if (movingRight && currentRight <= tileLeft && nextRight > tileLeft) {
+        // moving right >>>>>>>>>
+        // console.log(`moving right and will collide with tile at ${column},${row}`);
         // The unicorn is moving right and will collide with the left edge of a solid tile.
         resolvedX = Math.min(resolvedX, tileLeft - hitboxWidth);
       } else if (movingLeft && currentLeft >= tileRight && nextLeft < tileRight) {
+        // moving left <<<<<<<<
+        // console.log(`moving left and will collide with tile at ${column},${row}`);
         // The unicorn is moving left and will collide with the right edge of a solid tile.
         resolvedX = Math.max(resolvedX, tileRight + hitboxWidth);
       }
@@ -62,14 +67,18 @@ function moveHorizontally(nextX: number): boolean {
 
   // Move to the next map when the unicorn walks through the right edge.
   if (movingRight && resolvedX >= canvas.width - hitboxWidth && moveToNextXLevel()) {
-    unicorn.x = hitboxWidth;
+    // If the next level has a solid tile on the right edge, place the unicorn
+    // just to the left of it. Otherwise, place it at the right edge of the canvas.
+    const hasLeftWall = getCurrentLevel().map.some((row) => isSolid(row[0]));
+    unicorn.x = hasLeftWall ? tileWidth + hitboxWidth : hitboxWidth;
     setTargetPosition(unicorn.x, unicorn.y);
     return true;
   }
 
   // Move to the previous map when the unicorn walks through the left edge.
   if (movingLeft && resolvedX <= hitboxWidth && moveToPreviousXLevel()) {
-    unicorn.x = canvas.width - hitboxWidth;
+    const hasRightWall = getCurrentLevel().map.some((row) => isSolid(row.at(-1)));
+    unicorn.x = hasRightWall ? canvas.width - tileWidth - hitboxWidth : canvas.width - hitboxWidth;
     setTargetPosition(unicorn.x, unicorn.y);
     return true;
   }
