@@ -17,6 +17,8 @@
 //   quote characters and replaces the name -> semitone table + regex
 //   parser with a single arithmetic expression.
 
+import { win } from "./utils";
+
 type OscType = OscillatorType;
 type TrackName = 'overworld' | 'platforming' | 'cavern';
 // layer modes, kept to single chars since they're plain string data:
@@ -119,7 +121,7 @@ let volume = 0.28;
 
 let init = (): void => {
   if (ctx) return;
-  let C = typeof window !== 'undefined' && (window.AudioContext || (window as any).webkitAudioContext);
+  let C = typeof win !== 'undefined' && (win.AudioContext || (win as any).webkitAudioContext);
   if (!C) return;
   ctx = new C();
   master = ctx.createGain();

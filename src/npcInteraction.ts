@@ -4,6 +4,7 @@ import { unicorn } from './unicorn';
 import { NPC } from './NPC';
 import { TileType, type Level } from './levels/level-type';
 import { showActionbar, triggerWeapon } from './action';
+import { createElement, querySelectorAll, querySelector } from './utils';
 import {
   dialogueBubble,
   showDialog,
@@ -106,14 +107,14 @@ export function updateNpcInteractionUi(): void {
 
     if (choices.length > 0) {
       choices.forEach((choice, index) => {
-        const option = document.createElement('button');
+        const option = createElement('button');
         option.type = 'button';
         option.className = 'npc-dialogue-choice ' + choice.name;
 
-        const icon = document.createElement('span');
+        const icon = createElement('span');
         icon.className = 'npc-dialogue-choice-icon ' + choice.name;
 
-        const label = document.createElement('span');
+        const label = createElement('span');
         label.textContent = choice.name;
 
         option.append(icon, label);
@@ -181,12 +182,8 @@ export function setWeaponSelection(index: number): boolean {
   selectedWeaponIndex = ((index % choices.length) + choices.length) % choices.length;
   const selectedWeapon = getSelectedWeapon();
   if (selectedWeapon) {
-    document
-      .querySelectorAll('.npc-dialogue-choice')
-      .forEach((el) => el.classList.remove('is-selected'));
-    document
-      .querySelector('.npc-dialogue-choice.' + selectedWeapon.name)
-      ?.classList.add('is-selected');
+    querySelectorAll('.npc-dialogue-choice').forEach((el) => el.classList.remove('is-selected'));
+    querySelector('.npc-dialogue-choice.' + selectedWeapon.name)?.classList.add('is-selected');
   }
   return true;
 }

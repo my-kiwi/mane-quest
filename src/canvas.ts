@@ -1,10 +1,11 @@
 // Canvas setup and management
 import { GAME_HEIGHT, GAME_WIDTH } from './constants';
+import { addEventListener, getElementById } from './utils';
 
-export const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
+export const canvas = getElementById('game-canvas') as HTMLCanvasElement;
 
 resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
+addEventListener('resize', resizeCanvas);
 
 export function resizeCanvas(): void {
   canvas.width = GAME_WIDTH;

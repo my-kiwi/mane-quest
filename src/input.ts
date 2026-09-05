@@ -52,7 +52,7 @@ function handleCanvasInteraction(x: number, y: number): void {
 
 export function initializeInput(): void {
   // Keyboard input
-  document.addEventListener('keydown', (e) => {
+  addEventListener('keydown', (e) => {
     const key = e.key.toLowerCase();
 
     if (getWeaponChoices().length > 0) {
@@ -94,7 +94,7 @@ export function initializeInput(): void {
     }
   });
 
-  document.addEventListener('keyup', (e) => {
+  addEventListener('keyup', (e) => {
     keys[e.key] = false;
   });
 

@@ -1,12 +1,13 @@
 import { dialogueBubble, dialogueLine, dialogueName, displayLine, showDialog } from './dialog';
 import { getCurrentLevel, isInLevel } from './levels/levels';
 import { unicorn } from './unicorn';
+import { getElementById, querySelectorAll } from './utils';
 
-const actionbar = document.getElementById('action-bar')!;
+const actionbar = getElementById('action-bar')!;
 
 export const showActionbar = () => {
   actionbar.style.display = 'block';
-  const actionButton = document.querySelectorAll('.action')[0];
+  const actionButton = querySelectorAll('.action')[0];
   actionButton.classList.add(unicorn.weapon!);
   actionButton.addEventListener('pointerdown', triggerWeapon);
 };

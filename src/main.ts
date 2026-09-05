@@ -6,6 +6,7 @@ import { initializeUnicorn } from './unicorn';
 import { resetToStartLevel } from './levels/levels';
 import { initializeInput } from './input';
 import { startGameLoop } from './gameLoop';
+import { addEventListener, removeEventListener } from './utils';
 import Music from './music';
 
 // Initialize all systems
@@ -18,11 +19,11 @@ initializeInput();
 startGameLoop();
 
 function startMusic() {
-  window.removeEventListener('pointerdown', startMusic);
-  window.removeEventListener('keydown', startMusic);
+  removeEventListener('pointerdown', startMusic);
+  removeEventListener('keydown', startMusic);
   Music.play('overworld');
 }
 
 // start music
-window.addEventListener('pointerdown', startMusic);
-window.addEventListener('keydown', startMusic);
+addEventListener('pointerdown', startMusic);
+addEventListener('keydown', startMusic);
