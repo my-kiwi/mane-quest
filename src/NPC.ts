@@ -1,6 +1,7 @@
 import { hasVisited } from './levels/levels';
 import { encodeSvg } from './svg-helpers';
 import { createUnicornSvg, unicorn } from './unicorn';
+import { addFireBallToActionBar, addWeaponToActionBar } from './action';
 
 export type NPC = typeof sageNpc;
 
@@ -18,6 +19,8 @@ export const sageNpc = {
   },
   get dialogue() {
     if (unicorn.deaths === 0) {
+      // addWeaponToActionBar();
+      // addFireBallToActionBar();
       return [
         { line: 'Welcome, dear unicorn.' },
         //{ line: 'Choose wisely:', weapons: ['Bow', 'Sword', 'Buckler'] },
@@ -29,7 +32,8 @@ export const sageNpc = {
         { line: "Look, I don't actually have any wisdom. I just stand here." },
         { line: 'What do you want, a goodbye kiss?' },
       ];
-    } else if (!hasVisited(0, 1)) {
+    }
+    if (!hasVisited(0, 1)) {
       // has died in cliff
       return [
         { line: 'Welcome, dear unicorn.' },
@@ -42,8 +46,8 @@ export const sageNpc = {
         { line: "Oh, you're looking for the exit? " },
         { line: "⬅️ It's that way." },
       ];
-    } else if (hasVisited(3, 1)) {
-      // TODO and has not tried weapon on ennemy yet
+    }
+    if (hasVisited(3, 1)) {
       // has been killed by enemy
       if (!unicorn.weapon) {
         return [
@@ -57,12 +61,34 @@ export const sageNpc = {
           { line: 'Choose wisely:', weapons: ['Bow', 'Sword', 'Buckler'] },
           // nota bene: cannot add extra dialog lines since unicorn.weapon is truthy (jumps to other if branch)
         ];
-      } else {
+      }
+      if (!unicorn.hasFailedToUseWeapon) {
         return [{ line: `Use your ${unicorn.weapon.toLowerCase()} wisely.` }];
       }
+
+      return [
+        { line: `You again? What's wrong?` },
+        {
+          line: `You're not able to use your ${unicorn.weapon?.toLowerCase()}? That's a shame, I can't give you another weapon.`,
+        },
+        { line: `Well, there is another way but it aint pretty.` },
+        { line: `You see, us unicorns have a special ability.` },
+        { line: 'We can use the power of fire to destroy our enemies.' },
+        {
+          get line() {
+            // hacky as heck
+            addFireBallToActionBar();
+            return `Just eat this burrito 🌯 and you'll understand what I mean.`;
+          },
+        },
+      ];
     } else {
       // has killed enemy
-      return [{ line: 'todo: implement rest of game :D' }];
+      return [
+        {
+          line: 'I just ran out of things to say, hopefully the lazy developer will add more dialogue soon!',
+        },
+      ];
     }
   },
 };

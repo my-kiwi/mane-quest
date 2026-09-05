@@ -3,7 +3,7 @@ import { getTileDimensions } from './levels/levelGeometry';
 import { unicorn } from './unicorn';
 import { NPC } from './NPC';
 import { TileType, type Level } from './levels/level-type';
-import { showActionbar, triggerWeapon } from './action';
+import { addWeaponToActionBar, triggerWeapon } from './action';
 import { createElement, querySelectorAll, querySelector } from './dom-helpers';
 import {
   dialogueBubble,
@@ -202,7 +202,7 @@ export function confirmCurrentWeaponChoice(): boolean {
   unicorn.weapon = selectedWeapon.name;
   selectedWeaponIndex = 0;
   activeNpc = undefined;
-  showActionbar();
+  addWeaponToActionBar();
   // FIXXME lot of duplication for enemy level coordinates 3, 1
   const enemy = getLevel(3, 1)?.enemy;
   if (enemy) {

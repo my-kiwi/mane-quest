@@ -13,7 +13,7 @@ import {
   moveWeaponSelection,
   updateNpcInteractionUi,
 } from './npcInteraction';
-import { triggerWeapon } from './action';
+import { triggerFireBall, triggerWeapon } from './action';
 
 // Input state
 export const keys: { [key: string]: boolean } = {};
@@ -91,6 +91,9 @@ export function initializeInput(): void {
 
     if (e.key === 'u' && unicorn.weapon) {
       triggerWeapon();
+    }
+    if (e.key === 'f' && unicorn.hasFireball) {
+      triggerFireBall();
     }
   });
 
