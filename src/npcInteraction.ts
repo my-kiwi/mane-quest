@@ -109,10 +109,10 @@ export function updateNpcInteractionUi(): void {
       choices.forEach((choice, index) => {
         const option = createElement('button');
         option.type = 'button';
-        option.className = 'npc-dialogue-choice ' + choice.name;
+        option.className = 'npc-choice ' + choice.name;
 
         const icon = createElement('span');
-        icon.className = 'npc-dialogue-choice-icon ' + choice.name;
+        icon.className = 'npc-choice-icon ' + choice.name;
 
         const label = createElement('span');
         label.textContent = choice.name;
@@ -182,8 +182,8 @@ export function setWeaponSelection(index: number): boolean {
   selectedWeaponIndex = ((index % choices.length) + choices.length) % choices.length;
   const selectedWeapon = getSelectedWeapon();
   if (selectedWeapon) {
-    querySelectorAll('.npc-dialogue-choice').forEach((el) => el.classList.remove('is-selected'));
-    querySelector('.npc-dialogue-choice.' + selectedWeapon.name)?.classList.add('is-selected');
+    querySelectorAll('.npc-choice').forEach((el) => el.classList.remove('is-selected'));
+    querySelector('.npc-choice.' + selectedWeapon.name)?.classList.add('is-selected');
   }
   return true;
 }
@@ -204,7 +204,10 @@ export function confirmCurrentWeaponChoice(): boolean {
   activeNpc = undefined;
   showActionbar();
   // FIXXME lot of duplication for enemy level coordinates 3, 1
-  getLevel(3, 1)!.enemy!.x = canvas.width - canvas.width * 0.2;
+  const enemy = getLevel(3, 1)?.enemy;
+  if (enemy) {
+    enemy.x = canvas.width - canvas.width * 0.2;
+  }
   return true;
 }
 
