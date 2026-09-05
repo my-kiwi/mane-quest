@@ -97,7 +97,7 @@ export const level_0: Level[] = [
   {
     backgroundColor: '#87CEEB', // Sky blue
     groundColor: '#228B22', // Forest green
-    map:  mapGenerator(5),//testMap,
+    map: mapGenerator(5), //testMap,
   },
   {
     backgroundColor: '#87CEEB', // Sky blue

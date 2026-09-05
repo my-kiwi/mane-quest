@@ -195,5 +195,4 @@ function drawUnicorn() {
 
     ctx.restore();
   }
-
 }
