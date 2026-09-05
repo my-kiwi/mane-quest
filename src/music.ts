@@ -17,7 +17,7 @@
 //   quote characters and replaces the name -> semitone table + regex
 //   parser with a single arithmetic expression.
 
-import { win } from "./utils";
+import { win } from "./dom-helpers";
 
 type OscType = OscillatorType;
 type TrackName = 'overworld' | 'platforming' | 'cavern';

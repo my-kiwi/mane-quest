@@ -6,7 +6,7 @@ import { initializeUnicorn } from './unicorn';
 import { resetToStartLevel } from './levels/levels';
 import { initializeInput } from './input';
 import { startGameLoop } from './gameLoop';
-import { addEventListener, removeEventListener } from './utils';
+import { addEventListener, removeEventListener } from './dom-helpers';
 import Music from './music';
 
 // Initialize all systems

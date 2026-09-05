@@ -4,7 +4,7 @@ import { unicorn } from './unicorn';
 import { NPC } from './NPC';
 import { TileType, type Level } from './levels/level-type';
 import { showActionbar, triggerWeapon } from './action';
-import { createElement, querySelectorAll, querySelector } from './utils';
+import { createElement, querySelectorAll, querySelector } from './dom-helpers';
 import {
   dialogueBubble,
   showDialog,

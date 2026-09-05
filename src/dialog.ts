@@ -1,7 +1,7 @@
 import { NPC } from './NPC';
 import { interactWithNpc } from './npcInteraction';
 import { Unicorn } from './unicorn';
-import { getElementById } from './utils';
+import { getElementById } from './dom-helpers';
 
 export const dialogueBubble = getElementById('npc-dialogue')!;
 export const dialogueName = getElementById('npc-dialogue-name')!;

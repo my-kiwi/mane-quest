@@ -1,7 +1,7 @@
 import { dialogueBubble, dialogueLine, dialogueName, displayLine, showDialog } from './dialog';
 import { getCurrentLevel, isInLevel } from './levels/levels';
 import { unicorn } from './unicorn';
-import { getElementById, querySelectorAll } from './utils';
+import { getElementById, querySelectorAll } from './dom-helpers';
 
 const actionbar = getElementById('action-bar')!;
 
