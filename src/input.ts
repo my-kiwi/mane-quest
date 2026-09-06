@@ -44,14 +44,14 @@ function handleCanvasInteraction(x: number, y: number): boolean {
 
   setTargetPosition(x, getGroundY());
 
-  if (
-    y < unicorn.y - unicorn.height / 1.5 || // jump when y above unicorn
-    (x >= unicorn.x - unicorn.width / 2 && x <= unicorn.x + unicorn.width / 2) || // or when clicking on x unicorn
-    unicorn.isJumping // or if already jumping
-  ) {
-    triggerJump();
-    return true;
-  }
+  // if (
+  //   y < unicorn.y - unicorn.height / 1.5 || // jump when y above unicorn
+  //   (x >= unicorn.x - unicorn.width / 2 && x <= unicorn.x + unicorn.width / 2) || // or when clicking on x unicorn
+  //   unicorn.isJumping // or if already jumping
+  // ) {
+  //   triggerJump();
+  //   return true;
+  // }
 
   return false;
 }
