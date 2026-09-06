@@ -45,11 +45,12 @@ export const level_1: Level[] = [
         .map((row) => row.slice(0, -1) + TileType.GROUND)
         .map((row) => TileType.GROUND + row.slice(1))
         .map((row, index) => {
-          const indexToReplace = 9;
-          if (index !== indexToReplace) return row;
-          return (row.slice(0, indexToReplace) +
+          const rowIndex = 9;
+          const colIndex = 16;
+          if (index !== rowIndex) return row;
+          return (row.slice(0, colIndex) +
             TileType.ENEMY +
-            row.slice(indexToReplace + 1)) as string;
+            row.slice(colIndex + 1)) as string;
         });
     },
     getMusic() {
