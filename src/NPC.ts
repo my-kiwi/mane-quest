@@ -19,8 +19,8 @@ export const sageNpc = {
   },
   get dialogue() {
     if (unicorn.deaths === 0) {
-      // addWeaponToActionBar();
-      // addFireBallToActionBar();
+      addWeaponToActionBar();
+      addFireBallToActionBar();
       return [
         { line: 'Welcome, dear unicorn.' },
         //{ line: 'Choose wisely:', weapons: ['Bow', 'Sword', 'Buckler'] },

@@ -2,7 +2,9 @@ import { dialogueBubble, dialogueLine, dialogueName, displayLine, showDialog } f
 import { getCurrentLevel, isInLevel } from './levels/levels';
 import { unicorn } from './unicorn';
 import { getElementById, querySelectorAll } from './dom-helpers';
-import { launchFireball } from './fireball';
+import { getFireballCooldownRemaining, launchFireball } from './fireball';
+
+let fireballCooldownTimer: ReturnType<typeof setTimeout> | undefined;
 
 export function triggerWeapon() {
   showDialog();
@@ -28,9 +30,28 @@ export const addWeaponToActionBar = () => {
 };
 
 export const triggerFireBall = () => {
-  // showDialog();
-  launchFireball(unicorn.x, unicorn.y, -unicorn.direction);
-  // displayLine(unicorn, `I can use the power of fire to destroy my enemies!`);
+  const launched = launchFireball(unicorn.x, unicorn.y, -unicorn.direction);
+  if (launched) {
+    updateFireballActionButton();
+  }
+};
+
+const updateFireballActionButton = () => {
+  const actionButton = querySelectorAll('.action.f')[0] as HTMLButtonElement | undefined;
+  if (!actionButton) {
+    return;
+  }
+
+  const remaining = getFireballCooldownRemaining();
+  actionButton.disabled = remaining > 0;
+
+  if (remaining > 0) {
+    actionButton.dataset.cooldown = `${Math.ceil(remaining / 1000)}`;
+    fireballCooldownTimer = setTimeout(updateFireballActionButton, 100);
+  } else {
+    delete actionButton.dataset.cooldown;
+    fireballCooldownTimer = undefined;
+  }
 };
 
 export const addFireBallToActionBar = () => {
@@ -39,4 +60,8 @@ export const addFireBallToActionBar = () => {
   actionButton.style.display = 'inline-block';
   actionButton.classList.add('fireball');
   actionButton.addEventListener('pointerdown', triggerFireBall);
+  if (fireballCooldownTimer) {
+    clearTimeout(fireballCooldownTimer);
+  }
+  updateFireballActionButton();
 };

@@ -10,14 +10,30 @@ export const fireball = {
   position: { x: 0, y: 0 },
   direction: 1,
   isActive: false,
+  cooldownUntil: 0,
 };
 
-// TODO cooldown
-export function launchFireball(x: number, y: number, direction: number): void {
+export const FIREBALL_COOLDOWN_MS = 5000;
+
+export function isFireballOnCooldown(currentTime = Date.now()): boolean {
+  return currentTime < fireball.cooldownUntil;
+}
+
+export function getFireballCooldownRemaining(currentTime = Date.now()): number {
+  return Math.max(0, fireball.cooldownUntil - currentTime);
+}
+
+export function launchFireball(x: number, y: number, direction: number): boolean {
+  if (isFireballOnCooldown()) {
+    return false;
+  }
+
   fireball.position.x = x + direction * fireball.width;
   fireball.position.y = y;
   fireball.direction = direction;
   fireball.isActive = true;
+  fireball.cooldownUntil = Date.now() + FIREBALL_COOLDOWN_MS;
+  return true;
 }
 
 export function updateFireball(frameScale: number): void {
