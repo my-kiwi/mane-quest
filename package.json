@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && npm run lint:fix && npm run test && vite build && rm -rf ./dist.zip && zip -r -9 dist.zip dist/ && ls -lh | grep dist",
+    "build": "tsc && npm run lint:fix && npm run test && vite build && rm -rf ./dist.zip && zip -r -9 dist.zip dist/ && ls -l | grep dist",
     "preview": "vite preview",
     "lint": "eslint ./src --ext .ts,.tsx",
     "lint:fix": "npm run lint -- --fix",
