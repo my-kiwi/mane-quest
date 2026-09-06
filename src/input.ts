@@ -20,6 +20,9 @@ export const keys: { [key: string]: boolean } = {};
 export let targetX = 0;
 export let targetY = 0;
 
+const DOUBLE_TAP_DELAY = 300;
+let lastPointerDownAt = 0;
+
 export function setTargetPosition(x: number, y: number): void {
   targetX = x;
   targetY = y;
@@ -33,10 +36,10 @@ export function getGroundY(): number {
   return groundTop - unicorn.height / 2;
 }
 
-function handleCanvasInteraction(x: number, y: number): void {
+function handleCanvasInteraction(x: number, y: number): boolean {
   updateNpcInteractionUi();
   if (isPointOnNpc(x, y) && interactWithNpc()) {
-    return;
+    return false;
   }
 
   setTargetPosition(x, getGroundY());
@@ -47,7 +50,10 @@ function handleCanvasInteraction(x: number, y: number): void {
     unicorn.isJumping // or if already jumping
   ) {
     triggerJump();
+    return true;
   }
+
+  return false;
 }
 
 export function initializeInput(): void {
@@ -106,8 +112,14 @@ export function initializeInput(): void {
     const rect = canvas.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * canvas.width;
     const y = ((e.clientY - rect.top) / rect.height) * canvas.height;
+    const now = performance.now();
+    const isDoubleTap = now - lastPointerDownAt <= DOUBLE_TAP_DELAY;
+    lastPointerDownAt = isDoubleTap ? 0 : now;
 
-    handleCanvasInteraction(x, y);
+    const jumped = handleCanvasInteraction(x, y);
+    if (isDoubleTap && !jumped) {
+      triggerJump();
+    }
   });
 
   // Initialize target position
