@@ -7,6 +7,7 @@ import { NPC } from './NPC';
 import { Enemy } from './enemy';
 import { isNpcInRange } from './npcInteraction';
 import { canvas } from './canvas';
+import { fireball } from './fireball';
 
 export const ctx = canvas.getContext('2d')!;
 ctx.imageSmoothingEnabled = true;
@@ -41,6 +42,8 @@ export function draw() {
 
   // Draw enemies
   drawEnemies();
+
+  drawFireball();
 
   // Draw unicorn
   drawUnicorn();
@@ -139,6 +142,26 @@ function drawEnemies(): void {
     -enemy.height / 2 + enemy.yOffset,
     enemy.width,
     enemy.height
+  );
+  ctx.restore();
+}
+
+function drawFireball(): void {
+  if (!fireball.isActive || !fireball.image.complete || fireball.image.naturalWidth <= 0) {
+    return;
+  }
+  ctx.save();
+  ctx.translate(fireball.position.x, fireball.position.y);
+  if (fireball.direction === -1) {
+    ctx.scale(-1, 1);
+  }
+
+  ctx.drawImage(
+    fireball.image,
+    -fireball.width / 2,
+    -fireball.height / 2,
+    fireball.width,
+    fireball.height
   );
   ctx.restore();
 }

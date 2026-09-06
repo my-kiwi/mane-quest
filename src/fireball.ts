@@ -1,14 +1,33 @@
 import { encodeSvg } from './svg-helpers';
+import { getTileDimensions } from './levels/levelGeometry';
 
 export const fireball = {
-  width: 20,
-  height: 20,
+  width: getTileDimensions().width * 3,
+  height: getTileDimensions().height * 2,
   speed: 5,
   damage: 10,
   image: new Image(),
   position: { x: 0, y: 0 },
+  direction: 1,
+  isActive: false,
 };
 
+// TODO cooldown
+export function launchFireball(x: number, y: number, direction: number): void {
+  fireball.position.x = x + direction * fireball.width;
+  fireball.position.y = y;
+  fireball.direction = direction;
+  fireball.isActive = true;
+}
+
+export function updateFireball(frameScale: number): void {
+  if (!fireball.isActive) {
+    return;
+  }
+
+  fireball.position.x += fireball.speed * fireball.direction * frameScale;
+}
+
 fireball.image.src = encodeSvg(
-  '<svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg"><path d="M340 60c-80 100-120 170-100 230 15 45 60 70 100 70s85-25 100-70c20-60-20-130-100-230" style="fill:#c0392b;stroke:none;color:#0b0b0b"/><path d="M340 110c-60 80-85 130-72 175 12 35 42 50 67 50 30 0 65-15 75-50 15-45-10-95-70-175" style="fill:#e67e22;stroke:none;color:#0b0b0b"/><path d="M335 160c-35 50-50 85-42 115 9 25 27 35 42 35 20 0 43-10 50-35 10-30-7-65-50-115" style="fill:#f39c12;stroke:none;color:#0b0b0b"/><path d="M330 210c-20 30-28 50-22 68 5 14 14 20 22 20 12 0 25-6 30-20 6-18-5-38-30-68" style="fill:#f1c40f;stroke:none;color:#0b0b0b"/></svg>'
+  '<svg width="680" height="400" xmlns="http://www.w3.org/2000/svg"><path fill="#c0392b" d="M190 210c100 80 170 120 230 100 45-15 70-60 70-100s-25-85-70-100c-60-20-130 20-230 100"/><path fill="#e67e22" d="M240 210c80 60 130 85 175 72 35-12 50-42 50-67 0-30-15-65-50-75-45-15-95 10-175 70"/><path stroke="null" fill="#f1c40f" d="M299 213.36c43.295 29.72 72.16 41.609 98.136 32.693C417.341 238.623 426 225.249 426 213.36c0-17.833-8.66-37.15-28.864-44.58-25.977-8.917-54.84 7.43-98.136 44.58"/></svg>'
 );

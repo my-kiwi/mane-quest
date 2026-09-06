@@ -9,6 +9,7 @@ import { canvas } from './canvas';
 import { isUnicornTouchingEnemy } from './collisions';
 import { updateEnemyMovement } from './enemy';
 import { TileType } from './levels/level-type';
+import { updateFireball } from './fireball';
 
 const FRAME_DURATION = 1000 / 60;
 
@@ -26,6 +27,8 @@ export function update(currentTime = performance.now(), frameScale = 1): void {
 
   // Update physics first (handle jumping and gravity)
   updatePhysics(frameScale);
+
+  updateFireball(frameScale);
 
   // Update movement (handle input and target movement)
   updateMovement(frameScale);

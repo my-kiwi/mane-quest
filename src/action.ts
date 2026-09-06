@@ -2,6 +2,7 @@ import { dialogueBubble, dialogueLine, dialogueName, displayLine, showDialog } f
 import { getCurrentLevel, isInLevel } from './levels/levels';
 import { unicorn } from './unicorn';
 import { getElementById, querySelectorAll } from './dom-helpers';
+import { launchFireball } from './fireball';
 
 export function triggerWeapon() {
   showDialog();
@@ -27,8 +28,9 @@ export const addWeaponToActionBar = () => {
 };
 
 export const triggerFireBall = () => {
-  showDialog();
-  displayLine(unicorn, `I can use the power of fire to destroy my enemies!`);
+  // showDialog();
+  launchFireball(unicorn.x, unicorn.y, -unicorn.direction);
+  // displayLine(unicorn, `I can use the power of fire to destroy my enemies!`);
 };
 
 export const addFireBallToActionBar = () => {
