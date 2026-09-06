@@ -48,9 +48,7 @@ export const level_1: Level[] = [
           const rowIndex = 9;
           const colIndex = 16;
           if (index !== rowIndex) return row;
-          return (row.slice(0, colIndex) +
-            TileType.ENEMY +
-            row.slice(colIndex + 1)) as string;
+          return (row.slice(0, colIndex) + TileType.ENEMY + row.slice(colIndex + 1)) as string;
         });
     },
     getMusic() {
