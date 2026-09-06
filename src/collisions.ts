@@ -20,13 +20,31 @@ export function isUnicornTouchingEnemy(
   unicornSprite: { x: number; y: number; width: number; height: number },
   enemySprite: { x: number; y: number; width: number; height: number }
 ): boolean {
-  const unicornHitbox = getHitbox(unicornSprite, 1, 1);
-  const enemyHitbox = getHitbox(enemySprite, 0.6, 0.8);
+  return areSpritesTouching(unicornSprite, enemySprite, 1, 1, 0.6, 0.8);
+}
+
+export function isFireballTouchingEnemy(
+  fireballSprite: { x: number; y: number; width: number; height: number },
+  enemySprite: { x: number; y: number; width: number; height: number }
+): boolean {
+  return areSpritesTouching(fireballSprite, enemySprite, 1, 1, 0.6, 0.8);
+}
+
+function areSpritesTouching(
+  firstSprite: { x: number; y: number; width: number; height: number },
+  secondSprite: { x: number; y: number; width: number; height: number },
+  firstWidthScale: number,
+  firstHeightScale: number,
+  secondWidthScale: number,
+  secondHeightScale: number
+): boolean {
+  const firstHitbox = getHitbox(firstSprite, firstWidthScale, firstHeightScale);
+  const secondHitbox = getHitbox(secondSprite, secondWidthScale, secondHeightScale);
 
   return (
-    unicornHitbox.right >= enemyHitbox.left &&
-    unicornHitbox.left <= enemyHitbox.right &&
-    unicornHitbox.bottom >= enemyHitbox.top &&
-    unicornHitbox.top <= enemyHitbox.bottom
+    firstHitbox.right >= secondHitbox.left &&
+    firstHitbox.left <= secondHitbox.right &&
+    firstHitbox.bottom >= secondHitbox.top &&
+    firstHitbox.top <= secondHitbox.bottom
   );
 }

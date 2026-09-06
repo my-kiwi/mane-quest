@@ -5,10 +5,11 @@ import { encodeSvg } from './svg-helpers';
 export type Enemy = typeof firstEnemy;
 
 const ENEMY_SIZE_MULTIPLIER = 2.5;
+export const ENEMY_DEATH_DURATION = 2000;
 
 export function updateEnemyMovement(frameScale: number) {
   const level = getCurrentLevel();
-  if (level.enemy) {
+  if (level.enemy && !level.enemy.isDead) {
     level.enemy.x += level.enemy.speed * level.enemy.direction * frameScale;
     if (level.enemy.x > canvas.width - 10 || level.enemy.x < 0) {
       level.enemy.direction = -level.enemy.direction;
@@ -18,8 +19,11 @@ export function updateEnemyMovement(frameScale: number) {
 
 export const firstEnemy = {
   hp: 1,
+  isDead: false,
+  diedAt: 0,
   // svg etc
   image: new Image(),
+  deadImage: new Image(),
   x: 0, // will be initialized when level loads
   y: 0, // will be initialized when level loads
   speed: canvas.width * 0.001,
@@ -59,3 +63,6 @@ const enemySvg = `<svg width="200" height="200" viewBox="0 0 200 200" xmlns="htt
 </svg>`;
 
 firstEnemy.image.src = encodeSvg(enemySvg);
+firstEnemy.deadImage.src = encodeSvg(
+  enemySvg.replace('url(#rainbow)', 'black').replace('fill="pink"', 'fill="black"')
+);

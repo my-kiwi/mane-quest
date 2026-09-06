@@ -4,7 +4,7 @@ import { TileType, NB_OF_TILES_HORIZONTALLY } from './levels/level-type';
 import type { Level } from './levels/level-type';
 import { getTileDimensions } from './levels/levelGeometry';
 import { NPC } from './NPC';
-import { Enemy } from './enemy';
+import { ENEMY_DEATH_DURATION, Enemy } from './enemy';
 import { isNpcInRange } from './npcInteraction';
 import { canvas } from './canvas';
 import { fireball } from './fireball';
@@ -127,7 +127,12 @@ function drawEnemies(): void {
   }
 
   const enemy = level.enemy;
-  if (!enemy.image.complete || enemy.image.naturalWidth <= 0) {
+  if (enemy.isDead && performance.now() - enemy.diedAt >= ENEMY_DEATH_DURATION) {
+    return;
+  }
+
+  const enemyImage = enemy.isDead ? enemy.deadImage : enemy.image;
+  if (!enemyImage.complete || enemyImage.naturalWidth <= 0) {
     return;
   }
 
@@ -137,7 +142,7 @@ function drawEnemies(): void {
     ctx.scale(-1, 1);
   }
   ctx.drawImage(
-    enemy.image,
+    enemyImage,
     -enemy.width / 2,
     -enemy.height / 2 + enemy.yOffset,
     enemy.width,

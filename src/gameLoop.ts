@@ -6,10 +6,10 @@ import { killUnicorn, resetUnicornPosition, unicorn } from './unicorn';
 import { DEATH_SCREEN_DURATION, MAX_FRAME_SCALE } from './constants';
 import { getCurrentLevel } from './levels/levels';
 import { canvas } from './canvas';
-import { isUnicornTouchingEnemy } from './collisions';
+import { isFireballTouchingEnemy, isUnicornTouchingEnemy } from './collisions';
 import { updateEnemyMovement } from './enemy';
 import { TileType } from './levels/level-type';
-import { updateFireball } from './fireball';
+import { fireball, updateFireball } from './fireball';
 
 const FRAME_DURATION = 1000 / 60;
 
@@ -37,7 +37,16 @@ export function update(currentTime = performance.now(), frameScale = 1): void {
   const level = getCurrentLevel();
   if (level.enemy && hasTile(level, TileType.ENEMY)) {
     updateEnemyMovement(frameScale);
-    if (isUnicornTouchingEnemy(unicorn, level.enemy)) {
+    if (
+      !level.enemy.isDead &&
+      fireball.isActive &&
+      isFireballTouchingEnemy({ ...fireball.position, ...fireball }, level.enemy)
+    ) {
+      level.enemy.isDead = true;
+      level.enemy.diedAt = currentTime;
+      fireball.isActive = false;
+    }
+    if (!level.enemy.isDead && isUnicornTouchingEnemy(unicorn, level.enemy)) {
       killUnicorn(currentTime);
     }
   }
