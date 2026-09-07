@@ -1,5 +1,13 @@
 import { sageNpc } from '../NPC';
-import { mapGenerator, Level, rowGenerator, TileType } from './level-type';
+import { canvas } from '../canvas';
+import {
+  mapGenerator,
+  Level,
+  NB_OF_TILES_HORIZONTALLY,
+  NB_OF_TILES_VERTICALLY,
+  rowGenerator,
+  TileType,
+} from './level-type';
 import { firstEnemy } from '../enemy';
 import { getLevel } from './levels';
 
@@ -38,6 +46,25 @@ export const level_1: Level[] = [
   {
     visited: false,
     getMap() {
+      if (firstEnemy?.isDead) {
+        // If the enemy is dead, create a hole in the ground for the unicorn to fall through
+        const enemyColumn = Math.floor((firstEnemy.x / canvas.width) * NB_OF_TILES_HORIZONTALLY);
+        const holeWidth = 6;
+        const holeStart = Math.max(0, enemyColumn - Math.floor(holeWidth / 2));
+        const holeEnd = Math.min(NB_OF_TILES_HORIZONTALLY, holeStart + holeWidth);
+
+        return defaultLvl.map((row, index) => {
+          if (!row.includes(TileType.GROUND) || index < NB_OF_TILES_VERTICALLY - GROUND_LVL) {
+            return row;
+          }
+          return (
+            row.slice(0, holeStart) +
+            TileType.EMPTY.repeat(holeEnd - holeStart) +
+            row.slice(holeEnd)
+          );
+        });
+      }
+
       if (!getLevel?.(3, 1)?.visited /** TODO or ennemy is dead */) {
         return defaultLvl;
       }

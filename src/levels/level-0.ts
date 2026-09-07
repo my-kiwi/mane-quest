@@ -102,29 +102,40 @@ export const level_0: Level[] = [
   {
     backgroundColor: '#87CEEB', // Sky blue
     groundColor: '#228B22', // Forest green
-    map: [
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '■■■■■■■■■■■■■■■■■■              ',
-      '■■■■■■■■■■■■■■■■■■              ',
-      '■■■■■■■■■■■■■■■■■■              ',
-      '■■■■■■■■■■■■■■■■■■              ',
-      '■■■■■■■■■■■■■■■■■■              ',
-    ],
+    getMap() {
+      return [
+        '                                ',
+        '                                ',
+        '                                ',
+        '                                ',
+        '                                ',
+        '                                ',
+        '                                ',
+        '                                ',
+        '                                ',
+        '                                ',
+        '                                ',
+        '                                ',
+        '                                ',
+        '■■■■■■■■■■■■■■■■■■' + (firstEnemy?.isDead ? '──────────────' : '              '),
+        '■■■■■■■■■■■■■■■■■■              ',
+        '■■■■■■■■■■■■■■■■■■              ',
+        '■■■■■■■■■■■■■■■■■■              ',
+        '■■■■■■■■■■■■■■■■■■              ',
+      ];
+    },
+  },
+  {
+    // TODO next level
+    backgroundColor: '#c98a04', // Sky blue
+    groundColor: '#105c10', // Forest green
+    map: mapGenerator(5), //testMap,
   },
 ].map((level, index) => ({
   ...level,
+  get map() {
+    return level.map ?? level.getMap();
+  },
   position: { x: index, y: 0 },
   music: 'overworld',
 }));

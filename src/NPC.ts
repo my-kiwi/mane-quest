@@ -2,6 +2,7 @@ import { hasVisited } from './levels/levels';
 import { encodeSvg } from './svg-helpers';
 import { createUnicornSvg, unicorn } from './unicorn';
 import { addFireBallToActionBar, addWeaponToActionBar } from './action';
+import { firstEnemy } from './enemy';
 
 export type NPC = typeof sageNpc;
 
@@ -66,30 +67,37 @@ export const sageNpc = {
         return [{ line: `Use your ${unicorn.weapon.toLowerCase()} wisely.` }];
       }
 
-      return [
-        { line: `You again? What's wrong?` },
-        {
-          line: `You're not able to use your ${unicorn.weapon?.toLowerCase()}? That's a shame, I can't give you another weapon.`,
-        },
-        { line: `Well, there is another way but it aint pretty.` },
-        { line: `You see, us unicorns have a special ability.` },
-        { line: 'We can use the power of fire to destroy our enemies.' },
-        {
-          get line() {
-            // hacky as heck
-            addFireBallToActionBar();
-            return `Just eat this burrito 🌯 and you'll understand what I mean.`;
+      if (!firstEnemy?.isDead) {
+        return [
+          { line: `You again? What's wrong?` },
+          {
+            line: `You're not able to use your ${unicorn.weapon?.toLowerCase()}? That's a shame, I can't give you another weapon.`,
           },
-        },
-      ];
-    } else {
-      // has killed enemy
+          { line: `Well, there is another way but it aint pretty.` },
+          { line: `You see, us unicorns have a special ability.` },
+          { line: 'We can use the power of fire to destroy our enemies.' },
+          {
+            get line() {
+              // hacky as heck
+              addFireBallToActionBar();
+              return `Just eat this burrito 🌯 and you'll understand what I mean.`;
+            },
+          },
+        ];
+      }
       return [
         {
-          line: 'I just ran out of things to say, hopefully the lazy developer will add more dialogue soon!',
+          line: `You have defeated my nemesis! You have my thanks!`,
         },
+        { line: 'You can now continue your journey.' },
+        { line: `It's that way ➡️` },
       ];
     }
+    return [
+      {
+        line: 'I just ran out of things to say, hopefully the lazy developer will add more dialogue soon!',
+      },
+    ];
   },
 };
 sageNpc.image.src = encodeSvg(createUnicornSvg(sageNpc.colors));
