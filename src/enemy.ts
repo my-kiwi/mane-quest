@@ -1,6 +1,6 @@
 import { canvas } from './canvas';
 import { getCurrentLevel } from './levels/levels';
-import { encodeSvg } from './svg-helpers';
+import { createLinearGradient, encodeSvg } from './svg-helpers';
 
 export type Enemy = typeof firstEnemy;
 
@@ -39,7 +39,10 @@ export const firstEnemy = {
   },
 };
 
-const enemySvg = `<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="M50 80q20-50 50-30 30-30 50 30 20 40-10 70-40 20-70-10-30-20-20-60" fill="url(#a)" stroke="#000" stroke-width="2"/><circle cx="90" cy="60" r="15" fill="#fff" stroke="#000" stroke-width="2"/><circle cx="95" cy="65" r="5"/><circle cx="120" cy="60" r="15" fill="#fff" stroke="#000" stroke-width="2"/><circle cx="120" cy="65" r="5"/><path d="M70 100q20 20 40 0" stroke="#000" stroke-width="2" fill="none"/><defs><linearGradient id="a" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="red"/><stop offset="25%" stop-color="orange"/><stop offset="50%" stop-color="#ff0"/><stop offset="75%" stop-color="green"/><stop offset="100%" stop-color="#00f"/></linearGradient></defs></svg>`;
+const firstEnemyGradient = createLinearGradient('a', ['red', 'orange', '#ff0', 'green', '#00f']);
+
+const enemySvg = `<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="M50 80q20-50 50-30 30-30 50 30 20 40-10 70-40 20-70-10-30-20-20-60" fill="url(#a)" stroke="#000" stroke-width="2"/><circle cx="90" cy="60" r="15" fill="#fff" stroke="#000" stroke-width="2"/><circle cx="95" cy="65" r="5"/><circle cx="120" cy="60" r="15" fill="#fff" stroke="#000" stroke-width="2"/><circle cx="120" cy="65" r="5"/><path d="M70 100q20 20 40 0" stroke="#000" stroke-width="2" fill="none"/>
+  <defs>${firstEnemyGradient}</defs></svg>`;
 
 firstEnemy.image.src = encodeSvg(enemySvg);
 firstEnemy.deadImage.src = encodeSvg(enemySvg.replace('url(#a)', 'black'));
@@ -63,8 +66,8 @@ export const secondEnemy = {
 const secondEnemySvg = enemySvg
   .replace('url(#a)', 'url(#b)')
   .replace(
-    '<defs>',
-    `<defs><linearGradient id="b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="purple"/><stop offset="25%" stop-color="blue"/><stop offset="50%" stop-color="#0ff"/><stop offset="75%" stop-color="green"/><stop offset="100%" stop-color="#ff0"/></linearGradient>`
+    firstEnemyGradient,
+    createLinearGradient('b', ['purple', 'blue', '#0ff', 'green', '#ff0'])
   );
 
 secondEnemy.image.src = encodeSvg(secondEnemySvg);
