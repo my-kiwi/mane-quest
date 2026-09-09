@@ -13,8 +13,7 @@ export function isSolid(tile: string | undefined): boolean {
   return (
     tile === TileType.GROUND ||
     tile === TileType.PLATFORM ||
-    tile === TileType.INVISIBLE_PLATFORM ||
-    tile === TileType.NPC
+    tile === TileType.INVISIBLE_PLATFORM
   );
 }
 
