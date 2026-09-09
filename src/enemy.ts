@@ -18,7 +18,7 @@ export function updateEnemyMovement(frameScale: number) {
 }
 
 export const firstEnemy = {
-  hp: 1,
+  hp: 1, // TODO more hp?
   isDead: false,
   diedAt: 0,
   // svg etc

@@ -15,7 +15,11 @@ import { getTileDimensions } from './levelGeometry';
 export const levels: Level[] = [...level_0, ...level_1] as const;
 
 const getStartLevel = (): Level => {
-  return levels.find((level) => level.map.some((row) => row.includes(TileType.START))) as Level;
+  const startLevel = levels.find((level) => level.map.some((row) => row.includes(TileType.START)));
+  if (!startLevel) {
+    throw new Error('No start level found, need to add a level with a START tile in the map');
+  }
+  return startLevel;
 };
 
 export const getLevel = (x: number, y: number) => {
@@ -32,7 +36,8 @@ export const isInLevel = (x: number, y: number) => {
 };
 
 export const setCurrentLevel = (level: Level): void => {
-  console.log(`entering level ${level.position.x},${level.position.y}`);
+  console.error(`setCurrentLevel called with level `);
+  // console.log(`entering level ${level.position.x},${level.position.y}`);
   level.visited = true;
   initializeEnemyPosition(level);
   Music.play(level.music);

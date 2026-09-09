@@ -58,7 +58,7 @@ export const level_0: Level[] = [
     backgroundColor: '#87CEEB', // Sky blue
     groundColor: '#228B22', // Forest green
     map: [
-      '                                ',
+      '                  S             ',
       '                                ',
       '                                ',
       '                                ',
@@ -152,7 +152,9 @@ export const level_0: Level[] = [
       '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
     ],
     enemy: secondEnemy,
-    music: 'platforming' as TrackName,
+    getMusic() {
+      return 'platforming' as TrackName;
+    },
   },
 ].map((level, index) => ({
   ...level,
@@ -160,5 +162,7 @@ export const level_0: Level[] = [
     return level.map ?? level.getMap();
   },
   position: { x: index, y: 0 },
-  music: level.music || 'overworld',
+  get music() {
+    return level.getMusic?.() || 'overworld';
+  },
 }));
