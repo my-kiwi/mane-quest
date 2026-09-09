@@ -4,7 +4,6 @@ import { Level, mapGenerator, NB_OF_TILES_VERTICALLY, rowGenerator, TileType } f
 
 const GROUND_LVL = 5;
 
-
 export const level_0: Level[] = [
   {
     backgroundColor: '#87CEEB', // Sky blue
@@ -58,7 +57,7 @@ export const level_0: Level[] = [
     backgroundColor: '#87CEEB', // Sky blue
     groundColor: '#228B22', // Forest green
     map: [
-      '                                ',
+      '                S               ',
       '                                ',
       '                                ',
       '                                ',
@@ -92,7 +91,7 @@ export const level_0: Level[] = [
       return [
         '                                ',
         '                                ',
-        '        S                       ',
+        '                                ',
         '                                ',
         '                                ',
         '                                ',
