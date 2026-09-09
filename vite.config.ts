@@ -1,6 +1,25 @@
 import { defineConfig } from 'vite';
 
+function replaceCharPlugin(target: string, replacement: string) {
+  return {
+    name: 'vite-plugin-replace-char',
+    transform(code: string, id: string) {
+      // Filter for JS/TS source files, excluding node_modules
+      if (/\.(js|ts|jsx|tsx)$/.test(id) && !id.includes('node_modules')) {
+        return {
+          code: code.replaceAll(target, replacement),
+          map: null, // Pass sourcemap if needed
+        };
+      }
+    },
+  };
+}
+
+
 export default defineConfig({
+  plugins: [
+    replaceCharPlugin('■', 'W'), // Replaces all occurrences of '■' with 'W'
+  ],
   base: './', // Ensures relative paths are used in the generated HTML
   build: {
     target: 'esnext',          // Emits raw modern JS without bulky polyfills
