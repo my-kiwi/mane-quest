@@ -1,23 +1,9 @@
 import { firstEnemy } from '../enemy';
-import { sageNpc } from '../NPC';
-import { Level, mapGenerator, rowGenerator, TileType } from './level-type';
+import { randomNpc, sageNpc } from '../NPC';
+import { Level, mapGenerator, NB_OF_TILES_VERTICALLY, rowGenerator, TileType } from './level-type';
 
-// const GROUND_LVL = 5;
+const GROUND_LVL = 5;
 
-// const defaultLvl = mapGenerator(GROUND_LVL).map((row, index) =>
-//   index === 0 ? rowGenerator(TileType.GROUND) : row
-// );
-
-// const testMap = defaultLvl
-//   .map((row) => row.slice(0, -1) + TileType.GROUND)
-//   .map((row) => TileType.GROUND + row.slice(1))
-//   .map((row, index) => {
-//     const indexToReplace = 9;
-//     if (index !== indexToReplace) return row;
-//     return (row.slice(0, indexToReplace) +
-//       TileType.ENEMY +
-//       row.slice(indexToReplace + 1)) as string;
-//   });
 
 export const level_0: Level[] = [
   {
@@ -72,7 +58,7 @@ export const level_0: Level[] = [
     backgroundColor: '#87CEEB', // Sky blue
     groundColor: '#228B22', // Forest green
     map: [
-      '                S               ',
+      '                                ',
       '                                ',
       '                                ',
       '                                ',
@@ -97,7 +83,7 @@ export const level_0: Level[] = [
   {
     backgroundColor: '#87CEEB', // Sky blue
     groundColor: '#228B22', // Forest green
-    map: mapGenerator(5), //testMap,
+    map: mapGenerator(GROUND_LVL), //testMap,
   },
   {
     backgroundColor: '#87CEEB', // Sky blue
@@ -106,7 +92,7 @@ export const level_0: Level[] = [
       return [
         '                                ',
         '                                ',
-        '                                ',
+        '        S                       ',
         '                                ',
         '                                ',
         '                                ',
@@ -127,9 +113,20 @@ export const level_0: Level[] = [
   },
   {
     // TODO next level
-    backgroundColor: '#c98a04', // Sky blue
-    groundColor: '#105c10', // Forest green
-    map: mapGenerator(5), //testMap,
+    backgroundColor: '#c98a04',
+    groundColor: '#105c10',
+    map: mapGenerator(GROUND_LVL),
+  },
+  {
+    backgroundColor: '#d65906',
+    groundColor: '#175c17',
+    map: mapGenerator(GROUND_LVL).map((row, index) => {
+      const rowIndex = NB_OF_TILES_VERTICALLY - GROUND_LVL - 1;
+      const colIndex = 16;
+      if (index !== rowIndex) return row;
+      return (row.slice(0, colIndex) + TileType.NPC + row.slice(colIndex + 1)) as string;
+    }),
+    npc: randomNpc,
   },
 ].map((level, index) => ({
   ...level,

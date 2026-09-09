@@ -178,7 +178,7 @@ export function drawNPC(npc: NPC): void {
       ctx.shadowColor = 'yellow';
       ctx.shadowBlur = 12;
     }
-    ctx.scale(npc.scale, npc.scale);
+    ctx.scale(npc.scaleX, npc.scaleY);
     ctx.drawImage(
       npc.image,
       -unicorn.width / 2,

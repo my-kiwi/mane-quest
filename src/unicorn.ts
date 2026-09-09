@@ -128,4 +128,4 @@ export function createUnicornSvg({
 
 export const hero = createUnicornSvg(unicorn.colors);
 
-//console.log('Hero SVG:', hero);
+// console.log('Hero SVG:', hero);

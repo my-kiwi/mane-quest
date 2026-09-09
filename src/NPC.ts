@@ -1,4 +1,4 @@
-import { hasVisited } from './levels/levels';
+import { getCurrentLevel, hasVisited } from './levels/levels';
 import { encodeSvg } from './svg-helpers';
 import { createUnicornSvg, unicorn } from './unicorn';
 import { addFireBallToActionBar, addWeaponToActionBar } from './action';
@@ -9,7 +9,8 @@ export type NPC = typeof sageNpc;
 export const sageNpc = {
   name: 'Sage',
   image: new Image(),
-  scale: 1,
+  scaleX: 1,
+  scaleY: 1,
   colors: {
     hornColor: '#B68B3C',
     tailColor: '#A7AFB7',
@@ -23,13 +24,13 @@ export const sageNpc = {
       // addWeaponToActionBar();
       // addFireBallToActionBar();
       return [
-        { line: 'Welcome, dear unicorn.' },
+        { line: 'Welcome!' },
         //{ line: 'Choose wisely:', weapons: ['Bow', 'Sword', 'Buckler'] },
         { line: 'I am the wise sage of this land.' },
         { line: '...' },
-        { who: unicorn, line: '...' },
+        { who: unicorn, line: '...where are we?' },
         { line: '...' },
-        { who: unicorn, line: '...' },
+        { who: unicorn, line: `Actually, I just fell there and...` },
         { line: "Look, I don't actually have any wisdom. I just stand here." },
         { line: 'What do you want, a goodbye kiss?' },
       ];
@@ -37,13 +38,13 @@ export const sageNpc = {
     if (!hasVisited(0, 1)) {
       // has died in cliff
       return [
-        { line: 'Welcome, dear unicorn.' },
+        { line: 'Welcome, ' + unicorn.name + '!' },
         { line: 'I am the wise sage of this land.' },
         { who: unicorn, line: '...' },
         { line: '...' },
         { who: unicorn, line: '...' },
         { line: 'Wait, you actually did jump off the cliff? Why would you do that for?' },
-        { who: unicorn, line: '...' },
+        { who: unicorn, line: 'I...' },
         { line: "Oh, you're looking for the exit? " },
         { line: "⬅️ It's that way." },
       ];
@@ -54,7 +55,7 @@ export const sageNpc = {
         return [
           { line: 'Ah, you have returned once again.' },
           { line: 'This fiend? Yes I can help with that.' },
-          { line: 'You see, you need a weapon to get rid of him.' },
+          { line: 'See, you need a weapon to get rid of him.' },
           // TODO ask for money=> greed talsiman=>death,
           {
             line: `Choose between 3 weapons, but choose wisely because as soon as you have chosen, the other ones will vanish in thin air for some reason.`,
@@ -74,8 +75,10 @@ export const sageNpc = {
             line: `You're not able to use your ${unicorn.weapon?.toLowerCase()}? That's a shame, I can't give you another weapon.`,
           },
           { line: `Well, there is another way but it aint pretty.` },
-          { line: `You see, us unicorns have a special ability.` },
-          { line: 'We can use the power of fire to destroy our enemies.' },
+          { who: unicorn, line: 'OK...' },
+          { line: `See, us unicorns have a special ability.` },
+          { line: 'We can use the power of fire to destroy our enemies. Are you in?' },
+          { who: unicorn, line: '...sure?' },
           {
             get line() {
               // hacky as heck
@@ -89,15 +92,61 @@ export const sageNpc = {
         {
           line: `You have defeated my nemesis! You have my thanks!`,
         },
+        { who: unicorn, line: 'Your...?' },
         { line: 'You can now continue your journey.' },
         { line: `It's that way ➡️` },
+        { line: 'What do you want, a goodbye kiss?' },
       ];
     }
     return [
       {
-        line: 'I just ran out of things to say, hopefully the lazy developer will add more dialogue soon!',
+        line: '...bye',
       },
     ];
   },
 };
 sageNpc.image.src = encodeSvg(createUnicornSvg(sageNpc.colors));
+
+export const randomNpc: NPC = {
+  name: 'Some dude',
+  image: new Image(),
+  scaleX: -1,
+  scaleY: 1,
+  colors: {
+    hornColor: '#df0ec7',
+    tailColor: '#147ce3',
+    bodyColor: '#F1E8D8',
+    leftFootColor: '#6B4F3A',
+    rightFootColor: '#6B4F3A',
+    maneColor: '#147ce3', // TODO if always same as tailcolor centralize
+  },
+  get dialogue() {
+    return [
+      { line: 'Why, hello there!' },
+      { line: 'You look lost.' },
+      { who: unicorn, line: '...' },
+      { who: unicorn, line: `Yeah, and pissed! That "Sage" over there really screwed me over.` },
+      { line: `Yeah, he's a bit of a jerk.` },
+      { who: unicorn, line: '...' },
+      { line: `So anyway, why are you here?` },
+      {
+        who: unicorn,
+        line: `I surely wish I could answer that. All I know is that I fell from the sky and...`,
+      },
+      { line: `Oh, I see, you're one of "these".` },
+      { who: unicorn, line: 'One of "these" what?' },
+      { line: `You know, the ones that fall from the sky.` },
+      { who: unicorn, line: '...' },
+      { line: `Anyway, I don't have much time to chat. I have to go. Byyyyyyye!` },
+      {
+        who: unicorn,
+        get line() {
+          getCurrentLevel().npc = undefined; // erases itself from existence
+          return `What the deuce?`;
+        },
+      },
+      // { line: 'What do you want, a goodbye kiss?' },
+    ];
+  },
+};
+randomNpc.image.src = encodeSvg(createUnicornSvg(randomNpc.colors));
