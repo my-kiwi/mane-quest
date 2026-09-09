@@ -36,7 +36,6 @@ export const isInLevel = (x: number, y: number) => {
 };
 
 export const setCurrentLevel = (level: Level): void => {
-  console.error(`setCurrentLevel called with level `);
   // console.log(`entering level ${level.position.x},${level.position.y}`);
   level.visited = true;
   initializeEnemyPosition(level);
