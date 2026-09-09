@@ -43,3 +43,24 @@ const enemySvg = `<svg width="200" height="200" viewBox="0 0 200 200" xmlns="htt
 
 firstEnemy.image.src = encodeSvg(enemySvg);
 firstEnemy.deadImage.src = encodeSvg(enemySvg.replace('url(#a)', 'black'));
+
+export const secondEnemy = {
+  ...firstEnemy,
+  image: new Image(),
+  deadImage: new Image(),
+  speed: canvas.width * 0.002,
+  get width() {
+    return canvas.width * 0.1 * ENEMY_SIZE_MULTIPLIER;
+  },
+  get height() {
+    return canvas.height * 0.2 * ENEMY_SIZE_MULTIPLIER;
+  },
+  get yOffset() {
+    return -canvas.height * 0.015 * ENEMY_SIZE_MULTIPLIER;
+  },
+};
+
+const secondEnemySvg = enemySvg.replace('url(#a)', 'url(#b)').replace('<defs>', `<defs><linearGradient id="b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="purple"/><stop offset="25%" stop-color="blue"/><stop offset="50%" stop-color="#0ff"/><stop offset="75%" stop-color="green"/><stop offset="100%" stop-color="#ff0"/></linearGradient>`);
+
+secondEnemy.image.src = encodeSvg(secondEnemySvg);
+secondEnemy.deadImage.src = encodeSvg(secondEnemySvg.replace('url(#b)', 'black'));

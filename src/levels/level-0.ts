@@ -1,4 +1,5 @@
-import { firstEnemy } from '../enemy';
+import { firstEnemy, secondEnemy } from '../enemy';
+import { TrackName } from '../music';
 import { randomNpc, sageNpc } from '../NPC';
 import { Level, mapGenerator, NB_OF_TILES_VERTICALLY, rowGenerator, TileType } from './level-type';
 
@@ -57,7 +58,7 @@ export const level_0: Level[] = [
     backgroundColor: '#87CEEB', // Sky blue
     groundColor: '#228B22', // Forest green
     map: [
-      '                S               ',
+      '                                ',
       '                                ',
       '                                ',
       '                                ',
@@ -127,11 +128,37 @@ export const level_0: Level[] = [
     }),
     npc: randomNpc,
   },
+  {
+    backgroundColor: '#d60667',
+    groundColor: '#0e390e',
+    map: [
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                         E      ',
+      '                                ',
+      '                                ',
+      '               ■■■■■■■■■■■■■■■■■',
+      '            ■■■■■■■■■■■■■■■■■■■■',
+      '         ■■■■■■■■■■■■■■■■■■■■■■■',
+      '      ■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '   ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+    ],
+    enemy: secondEnemy,
+    music: 'platforming' as TrackName,
+  },
 ].map((level, index) => ({
   ...level,
   get map() {
     return level.map ?? level.getMap();
   },
   position: { x: index, y: 0 },
-  music: 'overworld',
+  music: level.music || 'overworld',
 }));
