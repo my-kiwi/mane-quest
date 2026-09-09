@@ -60,7 +60,12 @@ export const secondEnemy = {
   },
 };
 
-const secondEnemySvg = enemySvg.replace('url(#a)', 'url(#b)').replace('<defs>', `<defs><linearGradient id="b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="purple"/><stop offset="25%" stop-color="blue"/><stop offset="50%" stop-color="#0ff"/><stop offset="75%" stop-color="green"/><stop offset="100%" stop-color="#ff0"/></linearGradient>`);
+const secondEnemySvg = enemySvg
+  .replace('url(#a)', 'url(#b)')
+  .replace(
+    '<defs>',
+    `<defs><linearGradient id="b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="purple"/><stop offset="25%" stop-color="blue"/><stop offset="50%" stop-color="#0ff"/><stop offset="75%" stop-color="green"/><stop offset="100%" stop-color="#ff0"/></linearGradient>`
+  );
 
 secondEnemy.image.src = encodeSvg(secondEnemySvg);
 secondEnemy.deadImage.src = encodeSvg(secondEnemySvg.replace('url(#b)', 'black'));
