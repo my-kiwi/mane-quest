@@ -15,8 +15,25 @@ export function isSolid(tile: string | undefined): boolean {
   );
 }
 
-export function getTile(row: number, column: number): string | undefined {
-  return getCurrentLevel().map[row]?.[column];
+export function getTile(row: number, column: number): string {
+  const level = getCurrentLevel();
+  if (level.removedTiles?.has(`${row},${column}`)) {
+    return TileType.EMPTY;
+  }
+
+  return level.map[row]?.[column] ?? TileType.EMPTY;
+}
+
+export function removeTile(row: number, column: number): void {
+  const level = getCurrentLevel();
+  const tile = level.map[row]?.[column];
+
+  if (tile === undefined) {
+    return;
+  }
+
+  level.removedTiles ??= new Set<string>();
+  level.removedTiles.add(`${row},${column}`);
 }
 
 export function revealTile(row: number, column: number): void {

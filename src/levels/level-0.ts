@@ -6,7 +6,8 @@ import { Level, mapGenerator, NB_OF_TILES_VERTICALLY, rowGenerator, TileType } f
 
 const GROUND_LVL = 5;
 
-//setTimeout(() => addFireBallToActionBar(), 1000);
+// TODO do not commit
+// setTimeout(() => addFireBallToActionBar(), 1000);
 
 export const level_0: Level[] = [
   {
@@ -149,7 +150,7 @@ export const level_0: Level[] = [
         '               ■■■■■■■■■■■■■■■■■',
         '            ■■■■■■■■■■■■■■■■■■■■',
         '         ■■■■■■■■■■■■■■■■■■■■■■■',
-        '      ■■■■■■■■■■■■■■■■■■■■■■■■■■',
+        ' S    ■■■■■■■■■■■■■■■■■■■■■■■■■■',
         '   ■■■■■■■■■■■■■■■              ',
         '■■■■■■■■■■■■■■■■■               ',
         '■■■■■■■■■■■■■■■■■               ',
@@ -165,6 +166,7 @@ export const level_0: Level[] = [
     },
   },
   {
+    /* 8, 0 */
     backgroundColor: '#c5065f',
     groundColor: '#0e390e',
     map: [
@@ -180,15 +182,16 @@ export const level_0: Level[] = [
       '■■■■■■■■■■■■■                   ',
       '■■■■■■■■■■■■■■■■                ',
       '■■■■■■■■■■■■■■■■■■              ',
-      '.                               ',
+      '                                ',
       '                                ',
       '                                ',
       '                                ',
       '────────────────────────────────',
-      '.                               ',
+      '                                ',
     ],
   },
   {
+    /* 9, 0 */
     backgroundColor: '#b60557',
     groundColor: '#0c2e0c',
     map: [
@@ -205,11 +208,11 @@ export const level_0: Level[] = [
       '■■■■■■■■■                 ■■■■■■',
       '■■■■■■■■■                 ■■■■■■',
       '■■■■■■■■■                       ',
-      '■■■■■■■■■                       ',
-      '■■■■■■■■■                       ',
-      '■■■■■■■■■                       ',
-      '■■■■■■■■■                 ■■■■■■',
-      '■■■■■■■■■                 ■■■■■■',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                          ■■■■■■',
+      '────                      ■■■■■■',
     ],
   },
 ].map((level, index) => ({

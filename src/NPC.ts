@@ -3,6 +3,7 @@ import { encodeSvg } from './svg-helpers';
 import { createUnicornSvg, unicorn } from './unicorn';
 import { addFireBallToActionBar, addShovelToActionBar } from './action';
 import { firstEnemy } from './enemy';
+import { hideDialog } from './dialog';
 
 export type NPC = typeof sageNpc;
 
@@ -184,6 +185,7 @@ export const secretNpc: NPC = {
       {
         get line() {
           addShovelToActionBar();
+          hideDialog();
           return `You have received the magical shovel!`;
         },
       },

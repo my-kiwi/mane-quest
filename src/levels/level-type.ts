@@ -7,6 +7,7 @@ export type Level = {
   backgroundColor: string;
   groundColor: string;
   map: string[];
+  removedTiles?: Set<string>;
   visited?: boolean;
   npc?: NPC;
   enemy?: Enemy;

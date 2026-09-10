@@ -2,7 +2,7 @@ import { unicorn } from './unicorn';
 import { getCurrentLevel, hasTile } from './levels/levels';
 import { TileType, NB_OF_TILES_HORIZONTALLY } from './levels/level-type';
 import type { Level } from './levels/level-type';
-import { getTileDimensions } from './levels/levelGeometry';
+import { getTile, getTileDimensions } from './levels/levelGeometry';
 import { NPC } from './NPC';
 import { ENEMY_DEATH_DURATION, Enemy } from './enemy';
 import { isNpcInRange } from './npcInteraction';
@@ -35,7 +35,8 @@ export function draw() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   level.map.forEach((row, rowIndex) => {
-    [...row].forEach((tile, columnIndex) => {
+    [...row].forEach((_tile, columnIndex) => {
+      const tile = getTile(rowIndex, columnIndex);
       drawTile(tile, columnIndex * tileWidth, rowIndex * tileHeight, tileWidth, tileHeight, level);
     });
   });
