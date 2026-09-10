@@ -1,9 +1,12 @@
+import { addFireBallToActionBar } from '../action';
 import { firstEnemy, secondEnemy } from '../enemy';
 import { TrackName } from '../music';
 import { randomNpc, sageNpc } from '../NPC';
 import { Level, mapGenerator, NB_OF_TILES_VERTICALLY, rowGenerator, TileType } from './level-type';
 
 const GROUND_LVL = 5;
+
+setTimeout(() => addFireBallToActionBar(), 1000);
 
 export const level_0: Level[] = [
   {
@@ -58,7 +61,7 @@ export const level_0: Level[] = [
     backgroundColor: '#87CEEB', // Sky blue
     groundColor: '#228B22', // Forest green
     map: [
-      '                  S             ',
+      '                   S            ',
       '                                ',
       '                                ',
       '                                ',
@@ -144,17 +147,65 @@ export const level_0: Level[] = [
       '            ■■■■■■■■■■■■■■■■■■■■',
       '         ■■■■■■■■■■■■■■■■■■■■■■■',
       '      ■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '   ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '   ■■■■■■■■■■■■■■■■■            ',
+      '■■■■■■■■■■■■■■■■■■■             ',
+      '■■■■■■■■■■■■■■■■■■■             ',
+      '■■■■■■■■■■■■■■■■■■■■            ',
       '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
       '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
     ],
     enemy: secondEnemy,
     getMusic() {
-      return 'platforming' as TrackName;
+      return !secondEnemy.isDead ? 'platforming' : undefined;
     },
+  },
+  {
+    backgroundColor: '#c5065f',
+    groundColor: '#0e390e',
+    map: [
+      '                                ',
+      '                                ',
+      '                                ',
+      '                      ■■■■■■■■■■',
+      '                                ',
+      '                  ■■            ',
+      '                                ',
+      '                                ',
+      '■■■■■■■■■                       ',
+      '■■■■■■■■■■■■■                   ',
+      '■■■■■■■■■■■■■■■■                ',
+      '■■■■■■■■■■■■■■■■■■              ',
+      '.                               ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '■■■■■■■■■■■■■■■■■───────────────',
+      '■■■■■■■■■■■■■■■■■               ',
+    ],
+  },
+  {
+    backgroundColor: '#b60557',
+    groundColor: '#0c2e0c',
+    map: [
+      '                                ',
+      '                                ',
+      '                                ',
+      '■■■■■■■■■■                      ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '■■■■■■■■■                 ■■■■■■',
+      '■■■■■■■■■                 ■■■■■■',
+      '■■■■■■■■■                 ■■■■■■',
+      '■■■■■■■■■                 ■■■■■■',
+      '■■■■■■■■■                 ■■■■■■',
+      '■■■■■■■■■                 ■■■■■■',
+      '■■■■■■■■■                 ■■■■■■',
+      '■■■■■■■■■                 ■■■■■■',
+      '■■■■■■■■■                 ■■■■■■',
+      '■■■■■■■■■                 ■■■■■■',
+    ],
   },
 ].map((level, index) => ({
   ...level,
