@@ -24,7 +24,6 @@ const INTERACTION_RANGE_MULTIPLIER = 1.5;
 let activeDialogueLine = 0;
 let activeNpc: NPC | undefined;
 let selectedWeaponIndex = 0;
-let previousDialog: ReturnType<typeof getActiveDialogue> | null = null;
 
 export function getCurrentNpc(): NPC | undefined {
   return getCurrentLevel().npc;
@@ -91,13 +90,13 @@ export function isPointOnDialogueBubble(x: number, y: number): boolean {
 
 export function updateNpcInteractionUi(): void {
   if (!dialogueBubble || !dialogueName || !dialogueLine || !dialogueChoices) {
-    throw new Error('no dice');
+    return;
   }
 
   const dialogue = getActiveDialogue();
   if (dialogue) {
     console.log('writing dialog', dialogue.line);
-    previousDialog = dialogue;
+
     dialogueName.textContent = dialogue.name;
     dialogueName.style.color = dialogue.color;
     dialogueLine.textContent = dialogue.line;
@@ -225,7 +224,7 @@ export function interactWithNpc(): boolean {
     activeNpc = npc;
     activeDialogueLine = 0;
     selectedWeaponIndex = 0;
-  } else if (activeDialogueLine < npc.dialogue.length - 1) {
+  } else if (npc.dialogue[activeDialogueLine + 1]) {
     activeDialogueLine += 1;
   } else {
     activeNpc = undefined;
@@ -236,7 +235,7 @@ export function interactWithNpc(): boolean {
 }
 
 export function getActiveDialogue() {
-  if (!activeNpc) {
+  if (!activeNpc || !activeNpc.dialogue[activeDialogueLine]) {
     return undefined;
   }
 
