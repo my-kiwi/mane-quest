@@ -1,12 +1,12 @@
 import { addFireBallToActionBar } from '../action';
 import { firstEnemy, secondEnemy } from '../enemy';
 import { TrackName } from '../music';
-import { randomNpc, sageNpc } from '../NPC';
+import { randomNpc, sageNpc, secretNpc } from '../NPC';
 import { Level, mapGenerator, NB_OF_TILES_VERTICALLY, rowGenerator, TileType } from './level-type';
 
 const GROUND_LVL = 5;
 
-setTimeout(() => addFireBallToActionBar(), 1000);
+//setTimeout(() => addFireBallToActionBar(), 1000);
 
 export const level_0: Level[] = [
   {
@@ -132,29 +132,34 @@ export const level_0: Level[] = [
     npc: randomNpc,
   },
   {
+    /* 7, 0 */
     backgroundColor: '#d60667',
     groundColor: '#0e390e',
-    map: [
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                                ',
-      '                         E      ',
-      '                                ',
-      '                                ',
-      '               ■■■■■■■■■■■■■■■■■',
-      '            ■■■■■■■■■■■■■■■■■■■■',
-      '         ■■■■■■■■■■■■■■■■■■■■■■■',
-      '      ■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '   ■■■■■■■■■■■■■■■■■            ',
-      '■■■■■■■■■■■■■■■■■■■             ',
-      '■■■■■■■■■■■■■■■■■■■             ',
-      '■■■■■■■■■■■■■■■■■■■■            ',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-    ],
+    getMap() {
+      const showNpc = secondEnemy.isDead && secondEnemy.diedAt + 10000 < performance.now();
+      return [
+        '                                ',
+        '                                ',
+        '                                ',
+        '                                ',
+        '                                ',
+        '                         E      ',
+        '                                ',
+        '                                ',
+        '               ■■■■■■■■■■■■■■■■■',
+        '            ■■■■■■■■■■■■■■■■■■■■',
+        '         ■■■■■■■■■■■■■■■■■■■■■■■',
+        '      ■■■■■■■■■■■■■■■■■■■■■■■■■■',
+        '   ■■■■■■■■■■■■■■■              ',
+        '■■■■■■■■■■■■■■■■■               ',
+        '■■■■■■■■■■■■■■■■■               ',
+        `■■■■■■■■■■■■■■■■■■   ${showNpc ? 'P' : ' '}          `,
+        '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+        '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      ];
+    },
     enemy: secondEnemy,
+    npc: secretNpc,
     getMusic() {
       return !secondEnemy.isDead ? 'platforming' : undefined;
     },
@@ -179,8 +184,8 @@ export const level_0: Level[] = [
       '                                ',
       '                                ',
       '                                ',
-      '■■■■■■■■■■■■■■■■■───────────────',
-      '■■■■■■■■■■■■■■■■■               ',
+      '────────────────────────────────',
+      '.                               ',
     ],
   },
   {
@@ -199,10 +204,10 @@ export const level_0: Level[] = [
       '■■■■■■■■■                 ■■■■■■',
       '■■■■■■■■■                 ■■■■■■',
       '■■■■■■■■■                 ■■■■■■',
-      '■■■■■■■■■                 ■■■■■■',
-      '■■■■■■■■■                 ■■■■■■',
-      '■■■■■■■■■                 ■■■■■■',
-      '■■■■■■■■■                 ■■■■■■',
+      '■■■■■■■■■                       ',
+      '■■■■■■■■■                       ',
+      '■■■■■■■■■                       ',
+      '■■■■■■■■■                       ',
       '■■■■■■■■■                 ■■■■■■',
       '■■■■■■■■■                 ■■■■■■',
     ],

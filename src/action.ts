@@ -65,3 +65,17 @@ export const addFireBallToActionBar = () => {
   }
   updateFireballActionButton();
 };
+
+export const triggerShovel = () => {
+  // TODO implement shovel functionality
+};
+
+export const addShovelToActionBar = () => {
+  unicorn.hasShovel = true;
+  const actionButton = querySelectorAll('.action.s')[0] as HTMLButtonElement;
+  actionButton.style.display = 'inline-block';
+  actionButton.classList.add('shovel');
+  actionButton.addEventListener('pointerdown', () => {
+    triggerShovel();
+  });
+};

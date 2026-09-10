@@ -1,7 +1,7 @@
-import { getCurrentLevel, hasVisited } from './levels/levels';
+import { getCurrentLevel, isInLevel, hasVisited } from './levels/levels';
 import { encodeSvg } from './svg-helpers';
 import { createUnicornSvg, unicorn } from './unicorn';
-import { addFireBallToActionBar, addWeaponToActionBar } from './action';
+import { addFireBallToActionBar, addShovelToActionBar } from './action';
 import { firstEnemy } from './enemy';
 
 export type NPC = typeof sageNpc;
@@ -150,3 +150,44 @@ export const randomNpc: NPC = {
   },
 };
 randomNpc.image.src = encodeSvg(createUnicornSvg(randomNpc.colors));
+
+export const secretNpc: NPC = {
+  name: 'Xanaxaia',
+  image: new Image(),
+  scaleX: 1,
+  scaleY: 1,
+  colors: {
+    hornColor: '#d18f16',
+    tailColor: '#6e09e2',
+    bodyColor: '#2d0241',
+    leftFootColor: '#d18f16',
+    rightFootColor: '#d18f16',
+    maneColor: '#6e09e2', // TODO if always same as tailcolor centralize
+  },
+  get dialogue() {
+    if (unicorn.hasShovel) {
+      return [
+        { line: `What? You want to eat with that?` },
+        { who: unicorn, line: '...' },
+        { line: `Don't be silly, I don't have any food.` },
+        { line: 'You can dig with it though, and find treasure!' },
+        { line: 'Or death. Mostly death.' },
+      ];
+    }
+    return [
+      { line: 'You found me!' },
+      { line: 'I am Xanaxaia, the secret unicorn!' },
+      { who: unicorn, line: '...' },
+      { line: 'I am here to give you a special gift.' },
+      { who: unicorn, line: '...' },
+      { line: 'Here, take this magical shovel!' },
+      {
+        get line() {
+          addShovelToActionBar();
+          return `You have received the magical shovel!`;
+        },
+      },
+    ];
+  },
+};
+secretNpc.image.src = encodeSvg(createUnicornSvg(secretNpc.colors));

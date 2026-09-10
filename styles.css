@@ -150,6 +150,10 @@ canvas {
   content: "🔥";
 }
 
+.action.shovel::before {
+  content: "🥄";
+}
+
 .action .hint {
   font-size: 1rem;
   position: absolute;

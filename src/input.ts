@@ -1,7 +1,6 @@
 import { canvas } from './canvas';
 import { unicorn } from './unicorn';
 import { triggerJump } from './physics';
-import { clamp } from './utils';
 import { getCurrentLevel } from './levels/levels';
 import { TileType } from './levels/level-type';
 import { getTileDimensions } from './levels/levelGeometry';
@@ -13,7 +12,7 @@ import {
   moveWeaponSelection,
   updateNpcInteractionUi,
 } from './npcInteraction';
-import { triggerFireBall, triggerWeapon } from './action';
+import { triggerFireBall, triggerWeapon, triggerShovel } from './action';
 
 // Input state
 export const keys: { [key: string]: boolean } = {};
@@ -100,6 +99,9 @@ export function initializeInput(): void {
     }
     if (e.key === 'f' && unicorn.hasFireball) {
       triggerFireBall();
+    }
+    if (e.key === 't' && unicorn.hasShovel) {
+      triggerShovel();
     }
   });
 
