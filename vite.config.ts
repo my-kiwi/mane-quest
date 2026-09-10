@@ -18,7 +18,8 @@ function replaceCharPlugin(target: string, replacement: string) {
 
 export default defineConfig({
   plugins: [
-    replaceCharPlugin('■', 'W'), // Replaces all occurrences of '■' with 'W'
+    replaceCharPlugin('■', 'w'), // Replaces all occurrences of '■' with 'W'
+    replaceCharPlugin('─', 'p'), // Replaces all occurrences of '─' with 'p'
   ],
   base: './', // Ensures relative paths are used in the generated HTML
   build: {
