@@ -47,10 +47,7 @@ export default defineConfig({
         chunkFileNames: 'assets/[name].js',
         assetFileNames: 'assets/[name].[ext]',
       },
-      treeshake: {
-        preset: 'recommended', // Applies strict tree-shaking rules
-        moduleSideEffects: false, // Assumes modules have no side effects
-      },
+      treeshake: true
     },
   },
 });
