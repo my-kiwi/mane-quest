@@ -31,6 +31,27 @@ canvas {
   -webkit-tap-highlight-color: transparent;
 }
 
+.orientation {
+  display: none;
+}
+
+@media (orientation: portrait) and (max-width: 900px) {
+  .orientation {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    background: #121212;
+    color: #e0e0e0;
+    text-align: center;
+    font: 3rem sans-serif;
+  }
+}
+
 .npc-chat {
   display: none;
   position: absolute;
