@@ -12,7 +12,7 @@ export function updateEnemyMovement(frameScale: number, currentTime = Date.now()
   const level = getCurrentLevel();
   if (level.enemy && !level.enemy.isDead && currentTime >= level.enemy.stunnedUntil) {
     level.enemy.x += level.enemy.speed * level.enemy.direction * frameScale;
-    if (level.enemy.x > canvas.width - 10 || level.enemy.x < 0) {
+    if (level.enemy.x > canvas.width - canvas.width / 20 || level.enemy.x < canvas.width / 20) {
       level.enemy.direction = -level.enemy.direction;
     }
   }

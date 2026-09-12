@@ -137,7 +137,6 @@ export const level_0: Level[] = [
     backgroundColor: '#d60667',
     groundColor: '#0e390e',
     getMap() {
-      const showNpc = secondEnemy.isDead && secondEnemy.diedAt + 10000 < Date.now();
       return [
         '                                ',
         '                                ',
@@ -154,7 +153,7 @@ export const level_0: Level[] = [
         '   ■■■■■■■■■■■■■■■              ',
         '■■■■■■■■■■■■■■■■■               ',
         '■■■■■■■■■■■■■■■■■               ',
-        `■■■■■■■■■■■■■■■■■■   ${showNpc ? 'P' : ' '}          `,
+        `■■■■■■■■■■■■■■■■■■   P          `,
         '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
         '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
       ];
@@ -162,7 +161,7 @@ export const level_0: Level[] = [
     enemy: secondEnemy,
     npc: secretNpc,
     getMusic() {
-      return !secondEnemy.isDead ? 'platforming' : undefined;
+      return !secondEnemy.isDead ? 'platforming' : 'overworld';
     },
   },
   {
