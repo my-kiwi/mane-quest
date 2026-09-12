@@ -3,10 +3,10 @@ import { interactWithNpc } from './npcInteraction';
 import { Unicorn } from './unicorn';
 import { getElementById } from './dom-helpers';
 
-export const dialogueBubble = getElementById('npc-chat')!;
-export const dialogueName = getElementById('npc-chat-name')!;
-export const dialogueLine = getElementById('npc-chat-line')!;
-export const dialogueChoices = getElementById('npc-choices');
+export const dialogueBubble = getElementById('d')!;
+export const dialogueName = getElementById('q')!;
+export const dialogueLine = getElementById('l')!;
+export const dialogueChoices = getElementById('c');
 
 dialogueBubble?.addEventListener('pointerdown', (e) => {
   e.preventDefault();

@@ -24,7 +24,7 @@ canvas {
   touch-action: none;
 }
 
-#sound-toggle {
+#s {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
@@ -100,13 +100,13 @@ canvas {
   font-size: 1.3rem;
 }
 
-#npc-choices {
+#c {
   display: none;
   flex-direction: row;
   gap: 0.35rem;
   margin-top: 0.25rem;
 }
-#npc-choices.v {
+#c.v {
   display: flex;
 }
 
@@ -152,13 +152,13 @@ canvas {
 .i.Sword::before, .a.Sword::before { content: "🗡️"; }
 .i.Buckler::before, .a.Buckler::before { content: "🛡️"; }
 
-#action-bar {
+#b {
   position: absolute;
   right: 5%;
   bottom: 5%;
 }
 
-#action-bar .a {
+#b .a {
   position: relative;
   display: none;
   width: 50px;

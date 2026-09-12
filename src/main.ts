@@ -13,7 +13,7 @@ import { addFireBallToActionBar, addShovelToActionBar } from './action';
 // setTimeout(() => addShovelToActionBar(), 1000);
 // setTimeout(() => addFireBallToActionBar(), 1000);
 
-const soundToggle = document.querySelector('#sound-toggle') as HTMLButtonElement;
+const soundToggle = document.querySelector('#s') as HTMLButtonElement;
 const musicVolume = 0.28;
 let soundEnabled = true;
 let rememberedTrack = Music.getCurrentTrack() ?? 'overworld';
