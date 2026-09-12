@@ -108,10 +108,10 @@ export function updateNpcInteractionUi(): void {
       choices.forEach((choice, index) => {
         const option = createElement('button');
         option.type = 'button';
-        option.className = 'npc-choice ' + choice.name;
+        option.className = 'c ' + choice.name;
 
         const icon = createElement('span');
-        icon.className = 'npc-choice-icon ' + choice.name;
+        icon.className = 'i ' + choice.name;
 
         const label = createElement('span');
         label.textContent = choice.name;
@@ -127,11 +127,11 @@ export function updateNpcInteractionUi(): void {
         dialogueChoices!.append(option);
         option.focus();
       });
-      dialogueChoices.classList.add('is-visible');
+      dialogueChoices.classList.add('v');
       // fixme why not using :focus?
-      dialogueChoices.querySelectorAll('button')[0].classList.add('is-selected'); // default pre-selection
+      dialogueChoices.querySelectorAll('button')[0].classList.add('x'); // default pre-selection
     } else {
-      dialogueChoices.classList.remove('is-visible');
+      dialogueChoices.classList.remove('v');
     }
 
     showDialog();
@@ -139,7 +139,7 @@ export function updateNpcInteractionUi(): void {
   }
 
   hideDialog();
-  dialogueChoices.classList.remove('is-visible');
+  dialogueChoices.classList.remove('v');
 }
 
 export function getWeaponChoices(): WeaponChoice[] {
@@ -181,8 +181,8 @@ export function setWeaponSelection(index: number): boolean {
   selectedWeaponIndex = ((index % choices.length) + choices.length) % choices.length;
   const selectedWeapon = getSelectedWeapon();
   if (selectedWeapon) {
-    querySelectorAll('.npc-choice').forEach((el) => el.classList.remove('is-selected'));
-    querySelector('.npc-choice.' + selectedWeapon.name)?.classList.add('is-selected');
+    querySelectorAll('.c').forEach((el) => el.classList.remove('x'));
+    querySelector('.c.' + selectedWeapon.name)?.classList.add('x');
   }
   return true;
 }

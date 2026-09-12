@@ -13,8 +13,8 @@ dialogueBubble?.addEventListener('pointerdown', (e) => {
   interactWithNpc();
 });
 
-export const showDialog = () => dialogueBubble.classList.add('is-visible');
-export const hideDialog = () => dialogueBubble?.classList.remove('is-visible');
+export const showDialog = () => dialogueBubble.classList.add('v');
+export const hideDialog = () => dialogueBubble?.classList.remove('v');
 export const displayLine = (who: Unicorn | NPC, line: string) => {
   dialogueName.textContent = who.name;
   dialogueName.style.color = who.colors.maneColor;

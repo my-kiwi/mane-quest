@@ -36,7 +36,7 @@ soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
 
 if (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) {
   const orientationPrompt = document.createElement('div');
-  orientationPrompt.className = 'orientation';
+  orientationPrompt.className = 'o';
   orientationPrompt.innerHTML = `
     <p class="icon">↻</p>
     <p>Rotate your device</p>

@@ -48,12 +48,12 @@ canvas {
   -webkit-tap-highlight-color: transparent;
 }
 
-.orientation {
+.o {
   display: none;
 }
 
 @media (orientation: portrait) and (max-width: 900px) {
-  .orientation {
+  .o {
     position: fixed;
     inset: 0;
     z-index: 10;
@@ -69,7 +69,7 @@ canvas {
   }
 }
 
-.npc-chat {
+.n {
   display: none;
   position: absolute;
   z-index: 1;
@@ -78,7 +78,7 @@ canvas {
   touch-action: none;
 }
 
-.npc-chat.is-visible {
+.n.v {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
@@ -96,7 +96,7 @@ canvas {
   font: 1.3rem/1.5 sans-serif;
 }
 
-.npc-chat strong {
+.n strong {
   font-size: 1.3rem;
 }
 
@@ -106,11 +106,11 @@ canvas {
   gap: 0.35rem;
   margin-top: 0.25rem;
 }
-#npc-choices.is-visible {
+#npc-choices.v {
   display: flex;
 }
 
-.npc-choice {
+.c {
   font-size: 0.5rem;
   display: flex;
   align-items: center;
@@ -127,13 +127,13 @@ canvas {
   cursor: pointer;
 }
 
-.npc-choice.is-selected {
+.c.x {
   background: #dfeef6;
   border-color: #5d8fb9;
   box-shadow: inset 0 0 0 1px #5d8fb9;
 }
 
-.npc-choice-icon {
+.i {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -142,15 +142,15 @@ canvas {
   flex-shrink: 0;
 }
 
-.action::before {
+.a::before {
   font-size: 2rem;
   position: absolute;
   margin: -25px 0 0 -25px;
 }
 
-.npc-choice-icon.Bow::before, .action.Bow::before { content: "🏹"; }
-.npc-choice-icon.Sword::before, .action.Sword::before { content: "🗡️"; }
-.npc-choice-icon.Buckler::before, .action.Buckler::before { content: "🛡️"; }
+.i.Bow::before, .a.Bow::before { content: "🏹"; }
+.i.Sword::before, .a.Sword::before { content: "🗡️"; }
+.i.Buckler::before, .a.Buckler::before { content: "🛡️"; }
 
 #action-bar {
   position: absolute;
@@ -158,7 +158,7 @@ canvas {
   bottom: 5%;
 }
 
-#action-bar .action {
+#action-bar .a {
   position: relative;
   display: none;
   width: 50px;
@@ -169,11 +169,11 @@ canvas {
   background-color: rgba(255, 255, 255, 0.5);
 }
 
-.action:disabled {
+.a:disabled {
   opacity: 0.55;
 }
 
-.action.fireball[data-cooldown]::after {
+.a.f[data-cooldown]::after {
   content: attr(data-cooldown);
   position: absolute;
   inset: 0;
@@ -184,15 +184,15 @@ canvas {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.action.fireball::before {
+.a.f::before {
   content: "🔥";
 }
 
-.action.shovel::before {
+.a.s::before {
   content: "🥄";
 }
 
-.action .hint {
+.a .h {
   font-size: 1rem;
   position: absolute;
   margin-bottom: -1rem;
