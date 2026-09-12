@@ -9,6 +9,28 @@ import { startGameLoop } from './gameLoop';
 import { addEventListener, removeEventListener } from './dom-helpers';
 import Music from './music';
 
+const soundToggle = document.querySelector('#sound-toggle') as HTMLButtonElement;
+const musicVolume = 0.28;
+let soundEnabled = true;
+let rememberedTrack = Music.getCurrentTrack() ?? 'overworld';
+
+soundToggle.addEventListener('click', () => {
+  soundEnabled = !soundEnabled;
+
+  if (soundEnabled) {
+    Music.setVolume(musicVolume);
+    Music.play(Music.getCurrentTrack() ?? rememberedTrack);
+  } else {
+    rememberedTrack = Music.getCurrentTrack() ?? rememberedTrack;
+    Music.setVolume(0);
+    Music.stop();
+  }
+
+  soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
+});
+soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
+
+
 if (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) {
   const orientationPrompt = document.createElement('div');
   orientationPrompt.className = 'orientation';
