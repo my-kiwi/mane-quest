@@ -88,7 +88,10 @@ function drawTile(
   ctx.save();
   ctx.translate(x + width / 2, y + height / 2);
 
-  if (tile === TileType.PLATFORM) {
+  if (tile === TileType.WALL) {
+    ctx.fillStyle = '#8b5a2b';
+    ctx.fillRect(-width * 0.12, -height / 2, width * 0.24, height);
+  } else if (tile === TileType.PLATFORM) {
     ctx.fillStyle = '#8b5a2b';
     ctx.fillRect(-width / 2, -height * 0.12, width, height * 0.24);
   } else if (tile === TileType.ENEMY) {

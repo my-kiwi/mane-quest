@@ -10,6 +10,7 @@ import { isFireballTouchingEnemy, isUnicornTouchingEnemy } from './collisions';
 import { ENEMY_HIT_STUN_DURATION, updateEnemyMovement } from './enemy';
 import { TileType } from './levels/level-type';
 import { fireball, updateFireball } from './fireball';
+import { getTile, getTileDimensions, removeTile } from './levels/levelGeometry';
 
 const FRAME_DURATION = 1000 / 60;
 
@@ -29,6 +30,8 @@ export function update(currentTime = performance.now(), frameScale = 1): void {
   updatePhysics(frameScale);
 
   updateFireball(frameScale);
+
+  destroyWallWithFireball();
 
   // Update movement (handle input and target movement)
   updateMovement(frameScale);
@@ -53,6 +56,41 @@ export function update(currentTime = performance.now(), frameScale = 1): void {
     }
     if (!level.enemy.isDead && isUnicornTouchingEnemy(unicorn, level.enemy)) {
       killUnicorn(currentTime);
+    }
+  }
+}
+
+function destroyWallWithFireball(): void {
+  if (!fireball.isActive) {
+    return;
+  }
+
+  const level = getCurrentLevel();
+  const { width: tileWidth, height: tileHeight } = getTileDimensions();
+  const left = fireball.position.x - fireball.width / 2;
+  const right = fireball.position.x + fireball.width / 2;
+  const top = fireball.position.y - fireball.height / 2;
+  const bottom = fireball.position.y + fireball.height / 2;
+  const firstColumn = Math.max(0, Math.floor(left / tileWidth));
+  const lastColumn = Math.min(level.map[0].length - 1, Math.floor(right / tileWidth));
+  const firstRow = Math.max(0, Math.floor(top / tileHeight));
+  const lastRow = Math.min(level.map.length - 1, Math.floor(bottom / tileHeight));
+
+  for (let row = firstRow; row <= lastRow; row += 1) {
+    for (let column = firstColumn; column <= lastColumn; column += 1) {
+      if (getTile(row, column) !== TileType.WALL) {
+        continue;
+      }
+
+      const tileLeft = column * tileWidth;
+      const tileRight = tileLeft + tileWidth;
+      const tileTop = row * tileHeight;
+      const tileBottom = tileTop + tileHeight;
+      if (right >= tileLeft && left <= tileRight && bottom >= tileTop && top <= tileBottom) {
+        removeTile(row, column);
+        fireball.isActive = false;
+        return;
+      }
     }
   }
 }

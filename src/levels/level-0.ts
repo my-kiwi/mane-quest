@@ -1,7 +1,7 @@
 import { addFireBallToActionBar } from '../action';
 import { firstEnemy, secondEnemy } from '../enemy';
 import { TrackName } from '../music';
-import { randomNpc, sageNpc, secretNpc } from '../NPC';
+import { randomNpc, sageNpc, secretNpc, endNpc } from '../NPC';
 import { Level, mapGenerator, NB_OF_TILES_VERTICALLY, rowGenerator, TileType } from './level-type';
 
 const GROUND_LVL = 5;

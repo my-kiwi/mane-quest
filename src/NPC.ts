@@ -44,7 +44,7 @@ export const sageNpc = {
         { who: unicorn, line: '...' },
         { line: '...' },
         { who: unicorn, line: '...' },
-        { line: 'Wait, you actually did jump off the cliff? Why would you do that for?' },
+        { line: 'Did you jump off the cliff? Why would you do that?' },
         { who: unicorn, line: 'I...' },
         { line: "Oh, you're looking for the exit? " },
         { line: "⬅️ It's that way." },
@@ -56,11 +56,8 @@ export const sageNpc = {
         return [
           { line: 'Ah, you have returned once again.' },
           { line: 'This fiend? Yes I can help with that.' },
-          { line: 'See, you need a weapon to get rid of him.' },
+          { line: 'See, you need a weapon to beat him.' },
           // TODO ask for money=> greed talsiman=>death,
-          {
-            line: `Choose between 3 weapons, but choose wisely because as soon as you have chosen, the other ones will vanish in thin air for some reason.`,
-          },
           { line: 'Choose wisely:', weapons: ['Bow', 'Sword', 'Buckler'] },
           // nota bene: cannot add extra dialog lines since unicorn.weapon is truthy (jumps to other if branch)
         ];
@@ -126,9 +123,6 @@ export const randomNpc: NPC = {
       { line: 'Why, hello there!' },
       { line: 'You look lost.' },
       { who: unicorn, line: '...' },
-      { who: unicorn, line: `Yeah, and pissed! That "Sage" over there really screwed me over.` },
-      { line: `Yeah, he's a bit of a jerk.` },
-      { who: unicorn, line: '...' },
       { line: `So anyway, why are you here?` },
       {
         who: unicorn,
@@ -193,3 +187,35 @@ export const secretNpc: NPC = {
   },
 };
 secretNpc.image.src = encodeSvg(createUnicornSvg(secretNpc.colors));
+
+export const endNpc: NPC = {
+  name: '???',
+  image: new Image(),
+  scaleX: -1,
+  scaleY: 1,
+  colors: {
+    hornColor: '#f6d365',
+    tailColor: '#ff9f1c',
+    bodyColor: 'rgb(5, 221, 246)',
+    leftFootColor: '#f7a072',
+    rightFootColor: '#f7a072',
+    maneColor: '#ff9f1c',
+  },
+  get dialogue() {
+    return [
+      { line: `You broke this 3 walls to get me free, thanks!` },
+      { line: `There's one wall left to break though.` },
+      { who: unicorn, line: '?' },
+      {
+        get line() {
+          endNpc.name = 'Developper';
+          return `Hey you! Thanks a lot for playing my game, I hope you had as much fun as I had programming it.`;
+        },
+      },
+      {
+        line: `That's all folks, see you next year for js13k 2027!`,
+      },
+    ];
+  },
+};
+endNpc.image.src = encodeSvg(createUnicornSvg(endNpc.colors));

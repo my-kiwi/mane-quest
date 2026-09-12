@@ -8,7 +8,7 @@ import {
   TileType,
 } from './level-type';
 
-import { sageNpc } from '../NPC';
+import { endNpc } from '../NPC';
 import { thirdEnemy } from '../enemy';
 
 export const level_3: Level[] = [
@@ -55,6 +55,7 @@ export const level_3: Level[] = [
       '    ■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
       'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
     ],
+    npc: endNpc,
   },
   {
     map: [
@@ -101,30 +102,86 @@ export const level_3: Level[] = [
     ],
   },
   {
+    getMap() {
+      return [
+        '■                              ■',
+        '■                              ■',
+        '■                              ■',
+        '■                              ■',
+        '■                              ■',
+        '■                              ■',
+        '■                              ■',
+        '■■■■                       ■■■■■',
+        '■                              ■',
+        '■                              ■',
+        '■     ■■■             ■■■      ■',
+        '■                              ■',
+        '■                              ■',
+        '■                              ■',
+        '■               E              ■',
+        '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+        '                                ',
+        'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
+      ].map((row, index) =>
+        thirdEnemy.isDead &&
+        thirdEnemy.diedAt < performance.now() - 2000 &&
+        index < NB_OF_TILES_VERTICALLY - 3
+          ? rowGenerator(' ')
+          : row
+      );
+    },
+    enemy: thirdEnemy,
+  },
+  {
     map: [
-      '■                              ■',
-      '■                              ■',
-      '■                              ■',
-      '■                              ■',
-      '■                              ■',
-      '■                              ■',
-      '■                              ■',
-      '■■■■                       ■■■■■',
-      '■                              ■',
-      '■                              ■',
-      '■     ■■■             ■■■      ■',
-      '■                              ■',
-      '■                              ■',
-      '■                              ■',
-      '■               E              ■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '            |   |   |           ',
+      '            |   |   |           ',
+      '            |   |   |           ',
+      '            |   |   |           ',
+      '            |   |   |           ',
+      '            |   |   |           ',
+      '            |   |   |           ',
+      '            |   |   |      P    ',
       '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
       '                                ',
       'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
     ],
-    enemy: thirdEnemy,
+    npc: endNpc,
   },
+  // {
+  //   map: [
+  //     '       ■■■■■ ■   ■ ■■■■■        ',
+  //     '         ■   ■   ■ ■            ',
+  //     '         ■   ■■■■■ ■■■■         ',
+  //     '         ■   ■   ■ ■            ',
+  //     '         ■   ■   ■ ■■■■■        ',
+  //     '                                ',
+  //     '       ■■■■■ ■   ■ ■■■■         ',
+  //     '       ■     ■■  ■ ■   ■        ',
+  //     '       ■■■■  ■ ■ ■ ■   ■        ',
+  //     '       ■     ■  ■■ ■   ■        ',
+  //     '       ■■■■■ ■   ■ ■■■■         ',
+  //     '                                ',
+  //     '                                ',
+  //     '                                ',
+  //     '                                ',
+  //     '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+  //     '                                ',
+  //     'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
+  //   ],
+  // },
 ].map((level, index) => ({
   ...level,
+  get map() {
+    return level.map ?? level.getMap();
+  },
   position: { x: index, y: 3 },
   backgroundColor: '#bc0303', // Indigo - deeper/darker to distinguish from -1,0
   groundColor: '#440000', // Dark violet ground

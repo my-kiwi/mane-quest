@@ -77,7 +77,7 @@ secondEnemy.deadImage.src = encodeSvg(secondEnemySvg.replace('url(#b)', 'black')
 
 export const thirdEnemy = {
   ...firstEnemy,
-  hp: 3,
+  hp: 5, // todo revert
   image: new Image(),
   deadImage: new Image(),
   speed: canvas.width * 0.005,

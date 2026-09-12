@@ -24,6 +24,7 @@ export const TileType = {
   START: 'S',
   TOMB: 'T',
   LAVA: 'L',
+  WALL: '|',
 } as const; // Added "as const" to infer literal string types instead of generic strings
 
 export type TileTypeEntry = (typeof TileType)[keyof typeof TileType];
