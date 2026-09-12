@@ -49,7 +49,7 @@ const enemySvg = `<svg width="200" height="200" viewBox="0 0 200 200" xmlns="htt
 firstEnemy.image.src = encodeSvg(enemySvg);
 firstEnemy.deadImage.src = encodeSvg(enemySvg.replace('url(#a)', 'black'));
 
-export const  secondEnemy = {
+export const secondEnemy = {
   ...firstEnemy,
   image: new Image(),
   deadImage: new Image(),
@@ -75,8 +75,7 @@ const secondEnemySvg = enemySvg
 secondEnemy.image.src = encodeSvg(secondEnemySvg);
 secondEnemy.deadImage.src = encodeSvg(secondEnemySvg.replace('url(#b)', 'black'));
 
-
-export const  thirdEnemy = {
+export const thirdEnemy = {
   ...firstEnemy,
   hp: 3,
   image: new Image(),
@@ -93,12 +92,12 @@ export const  thirdEnemy = {
   },
 };
 
-const  thirdEnemySvg = enemySvg
+const thirdEnemySvg = enemySvg
   .replace('url(#a)', 'url(#c)')
   .replace(
     firstEnemyGradient,
     createLinearGradient('c', ['purple', 'black', 'rgb(255, 230, 0)', 'red', 'rgb(105, 3, 3)'])
   );
 
- thirdEnemy.image.src = encodeSvg( thirdEnemySvg);
- thirdEnemy.deadImage.src = encodeSvg( thirdEnemySvg.replace('url(#c)', 'black'));
+thirdEnemy.image.src = encodeSvg(thirdEnemySvg);
+thirdEnemy.deadImage.src = encodeSvg(thirdEnemySvg.replace('url(#c)', 'black'));

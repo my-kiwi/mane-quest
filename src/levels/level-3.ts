@@ -8,8 +8,8 @@ import {
   TileType,
 } from './level-type';
 
-import {sageNpc} from '../NPC'
-import {thirdEnemy} from '../enemy'
+import { sageNpc } from '../NPC';
+import { thirdEnemy } from '../enemy';
 
 export const level_3: Level[] = [
   {
@@ -56,7 +56,7 @@ export const level_3: Level[] = [
       'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
     ],
   },
-    {
+  {
     map: [
       '                                ',
       '                                ',
@@ -78,7 +78,7 @@ export const level_3: Level[] = [
       'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
     ],
   },
-    {
+  {
     map: [
       '                                ',
       '                                ',
@@ -121,7 +121,7 @@ export const level_3: Level[] = [
       '                                ',
       'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
     ],
-    enemy: thirdEnemy
+    enemy: thirdEnemy,
   },
 ].map((level, index) => ({
   ...level,

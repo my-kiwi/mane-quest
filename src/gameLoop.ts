@@ -42,9 +42,9 @@ export function update(currentTime = performance.now(), frameScale = 1): void {
       fireball.isActive &&
       isFireballTouchingEnemy({ ...fireball.position, ...fireball }, level.enemy)
     ) {
-      level.enemy.hp --;
+      level.enemy.hp--;
       fireball.isActive = false;
-      if(level.enemy.hp === 0) {
+      if (level.enemy.hp === 0) {
         level.enemy.isDead = true;
         level.enemy.diedAt = currentTime;
       } else {
