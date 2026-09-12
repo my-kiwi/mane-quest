@@ -8,6 +8,9 @@ import {
   TileType,
 } from './level-type';
 
+import {sageNpc} from '../NPC'
+import {thirdEnemy} from '../enemy'
+
 export const level_3: Level[] = [
   {
     map: [
@@ -44,7 +47,7 @@ export const level_3: Level[] = [
       '                                ',
       '                                ',
       '                                ',
-      '                                ',
+      '                          ■■■■■■',
       '                                ',
       '                                ',
       '                                ',
@@ -52,6 +55,73 @@ export const level_3: Level[] = [
       '    ■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
       'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
     ],
+  },
+    {
+    map: [
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                           ■■■  ',
+      '                                ',
+      '                                ',
+      '              ■■■■■■            ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '■■■■■■■■■                  ■■■  ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '              ■■■               ',
+      'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
+    ],
+  },
+    {
+    map: [
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '              ■■■■──────────────',
+      '                                ',
+      '                                ',
+      '                                ',
+      '    ■■■                         ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '──────────────.                 ',
+      '              ■■■               ',
+      'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
+    ],
+  },
+  {
+    map: [
+      '■                              ■',
+      '■                              ■',
+      '■                              ■',
+      '■                              ■',
+      '■                              ■',
+      '■                              ■',
+      '■                              ■',
+      '■■■■                       ■■■■■',
+      '■                              ■',
+      '■                              ■',
+      '■     ■■■             ■■■      ■',
+      '■                              ■',
+      '■                              ■',
+      '■                              ■',
+      '■               E              ■',
+      '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+      '                                ',
+      'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
+    ],
+    enemy: thirdEnemy
   },
 ].map((level, index) => ({
   ...level,

@@ -6,10 +6,11 @@ export type Enemy = typeof firstEnemy;
 
 const ENEMY_SIZE_MULTIPLIER = 2.5;
 export const ENEMY_DEATH_DURATION = 2000;
+export const ENEMY_HIT_STUN_DURATION = 2000;
 
-export function updateEnemyMovement(frameScale: number) {
+export function updateEnemyMovement(frameScale: number, currentTime = performance.now()) {
   const level = getCurrentLevel();
-  if (level.enemy && !level.enemy.isDead) {
+  if (level.enemy && !level.enemy.isDead && currentTime >= level.enemy.stunnedUntil) {
     level.enemy.x += level.enemy.speed * level.enemy.direction * frameScale;
     if (level.enemy.x > canvas.width - 10 || level.enemy.x < 0) {
       level.enemy.direction = -level.enemy.direction;
@@ -21,6 +22,7 @@ export const firstEnemy = {
   hp: 1, // TODO more hp?
   isDead: false,
   diedAt: 0,
+  stunnedUntil: 0,
   // svg etc
   image: new Image(),
   deadImage: new Image(),
@@ -47,7 +49,7 @@ const enemySvg = `<svg width="200" height="200" viewBox="0 0 200 200" xmlns="htt
 firstEnemy.image.src = encodeSvg(enemySvg);
 firstEnemy.deadImage.src = encodeSvg(enemySvg.replace('url(#a)', 'black'));
 
-export const secondEnemy = {
+export const  secondEnemy = {
   ...firstEnemy,
   image: new Image(),
   deadImage: new Image(),
@@ -72,3 +74,31 @@ const secondEnemySvg = enemySvg
 
 secondEnemy.image.src = encodeSvg(secondEnemySvg);
 secondEnemy.deadImage.src = encodeSvg(secondEnemySvg.replace('url(#b)', 'black'));
+
+
+export const  thirdEnemy = {
+  ...firstEnemy,
+  hp: 3,
+  image: new Image(),
+  deadImage: new Image(),
+  speed: canvas.width * 0.005,
+  get width() {
+    return canvas.width * 0.15 * ENEMY_SIZE_MULTIPLIER;
+  },
+  get height() {
+    return canvas.height * 0.3 * ENEMY_SIZE_MULTIPLIER;
+  },
+  get yOffset() {
+    return -canvas.height * 0.015 * ENEMY_SIZE_MULTIPLIER;
+  },
+};
+
+const  thirdEnemySvg = enemySvg
+  .replace('url(#a)', 'url(#c)')
+  .replace(
+    firstEnemyGradient,
+    createLinearGradient('c', ['purple', 'black', 'rgb(255, 230, 0)', 'red', 'rgb(105, 3, 3)'])
+  );
+
+ thirdEnemy.image.src = encodeSvg( thirdEnemySvg);
+ thirdEnemy.deadImage.src = encodeSvg( thirdEnemySvg.replace('url(#c)', 'black'));

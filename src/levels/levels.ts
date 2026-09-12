@@ -14,7 +14,7 @@ import {
 } from './level-type';
 import { getTileDimensions } from './levelGeometry';
 
-export const levels: Level[] = [...level_0, ...level_1, ...level_2, ...level_3] as const;
+export const levels: Level[] = [...level_0, ...level_1, ...level_2, ...level_3].filter(Boolean);
 
 const getStartLevel = (): Level => {
   const startLevel = levels.find((level) => level.map.some((row) => row.includes(TileType.START)));
