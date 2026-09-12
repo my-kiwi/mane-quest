@@ -4,6 +4,7 @@ import { createUnicornSvg, unicorn } from './unicorn';
 import { addFireBallToActionBar, addShovelToActionBar } from './action';
 import { firstEnemy } from './enemy';
 import { hideDialog } from './dialog';
+import { M } from './dom-helpers';
 
 export type NPC = typeof sageNpc;
 
@@ -210,6 +211,15 @@ export const endNpc: NPC = {
         get line() {
           endNpc.name = 'Developper';
           return `Hey you! Thanks a lot for playing my game, I hope you had as much fun as I had programming it.`;
+        },
+      },
+      {
+        get line() {
+          const playedSeconds = (Date.now() - unicorn.startDate) / 1000;
+          const minutes = Math.floor(playedSeconds / 60);
+          const seconds = Math.floor(playedSeconds % 60);
+
+          return `You played for ${minutes} minutes and ${seconds} seconds and died ${unicorn.deaths} times.`;
         },
       },
       {
