@@ -91,32 +91,70 @@ function drawTile(
   if (tile === TileType.PLATFORM) {
     ctx.fillStyle = '#8b5a2b';
     ctx.fillRect(-width / 2, -height * 0.12, width, height * 0.24);
-  } else if (tile === TileType.SPIKE) {
-    ctx.fillStyle = '#d64545';
-    ctx.beginPath();
-    ctx.moveTo(-width / 2, height / 2);
-    ctx.lineTo(0, -height / 2);
-    ctx.lineTo(width / 2, height / 2);
-    ctx.closePath();
-    ctx.fill();
-  } else if (tile === TileType.COIN) {
-    ctx.fillStyle = '#f4c542';
-    ctx.beginPath();
-    ctx.arc(0, 0, Math.min(width, height) * 0.28, 0, Math.PI * 2);
-    ctx.fill();
   } else if (tile === TileType.ENEMY) {
     // Enemy tile marker - enemy is drawn at its dynamic position in drawEnemies()
-  } else if (tile === TileType.EXIT) {
-    ctx.fillStyle = '#f2f2f2';
-    ctx.fillRect(-width * 0.3, -height * 0.4, width * 0.6, height * 0.8);
-    ctx.fillStyle = '#2f80ed';
-    ctx.fillRect(width * 0.05, -height * 0.1, width * 0.12, height * 0.12);
   } else if (tile === TileType.NPC && level.npc) {
     ctx.save();
 
     ctx.translate(0, height / 2 - unicorn.height / 2);
     drawNPC(level.npc);
     ctx.restore();
+  } else if (tile === TileType.TOMB) {
+    const bottom = height / 2;
+    const top = -height * 1.5;
+
+    ctx.beginPath();
+    ctx.moveTo(-width / 2, bottom);
+    ctx.lineTo(-width / 2, -height / 2);
+    ctx.quadraticCurveTo(0, top, width / 2, -height / 2);
+    ctx.lineTo(width / 2, bottom);
+    ctx.closePath();
+    ctx.fillStyle = '#6b7280';
+    ctx.fill();
+    ctx.strokeStyle = '#374151';
+    ctx.lineWidth = Math.max(1, width * 0.04);
+    ctx.stroke();
+
+    ctx.strokeStyle = '#d1d5db';
+    ctx.lineWidth = Math.max(1, width * 0.06);
+    ctx.beginPath();
+    ctx.moveTo(0, -height * 0.75);
+    ctx.lineTo(0, 0);
+    ctx.moveTo(-width * 0.2, -height * 0.5);
+    ctx.lineTo(width * 0.2, -height * 0.5);
+    ctx.stroke();
+  } else if (tile === TileType.LAVA) {
+    ctx.fillStyle = '#bc0303';
+    ctx.fillRect(-width / 2, -height / 2, width, height);
+
+    const lavaOffset = (performance.now() * 0.01) % width;
+    ctx.fillStyle = '#f04a16';
+    for (const offset of [lavaOffset, lavaOffset - width]) {
+      ctx.save();
+      ctx.translate(offset, 0);
+      ctx.beginPath();
+      ctx.moveTo(-width / 2, -height * 0.18);
+      ctx.quadraticCurveTo(-width * 0.25, -height * 0.38, 0, -height * 0.18);
+      ctx.quadraticCurveTo(width * 0.25, height * 0.02, width / 2, -height * 0.18);
+      ctx.lineTo(width / 2, height / 2);
+      ctx.lineTo(-width / 2, height / 2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    ctx.strokeStyle = '#ffb21c';
+    ctx.lineWidth = Math.max(1, height * 0.08);
+    for (const offset of [lavaOffset, lavaOffset - width]) {
+      ctx.save();
+      ctx.translate(offset, 0);
+      ctx.beginPath();
+      ctx.moveTo(-width / 2, -height * 0.2);
+      ctx.quadraticCurveTo(-width * 0.25, -height * 0.4, 0, -height * 0.2);
+      ctx.quadraticCurveTo(width * 0.25, 0, width / 2, -height * 0.2);
+      ctx.stroke();
+      ctx.restore();
+    }
   }
 
   ctx.restore();

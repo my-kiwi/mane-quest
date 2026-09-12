@@ -3,6 +3,8 @@ import Music from '../music';
 import { unicorn } from '../unicorn';
 import { level_0 } from './level-0';
 import { level_1 } from './level-1';
+import { level_2 } from './level-2';
+import { level_3 } from './level-3';
 import {
   Level,
   TileType,
@@ -12,7 +14,7 @@ import {
 } from './level-type';
 import { getTileDimensions } from './levelGeometry';
 
-export const levels: Level[] = [...level_0, ...level_1] as const;
+export const levels: Level[] = [...level_0, ...level_1, ...level_2, ...level_3] as const;
 
 const getStartLevel = (): Level => {
   const startLevel = levels.find((level) => level.map.some((row) => row.includes(TileType.START)));

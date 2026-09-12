@@ -27,7 +27,7 @@ export const unicorn = {
   isJumping: false,
   remainingAirJumps: 1,
   velocityY: 0,
-  deaths: 0,
+  deaths: 0, // todo revert
   isDead: false,
   diedAt: 0,
   hasFailedToUseWeapon: false,

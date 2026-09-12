@@ -8,6 +8,9 @@ import { initializeInput } from './input';
 import { startGameLoop } from './gameLoop';
 import { addEventListener, removeEventListener } from './dom-helpers';
 import Music from './music';
+import { addShovelToActionBar } from './action';
+
+// setTimeout(() => addShovelToActionBar(), 1000);
 
 const soundToggle = document.querySelector('#sound-toggle') as HTMLButtonElement;
 const musicVolume = 0.28;
@@ -29,7 +32,6 @@ soundToggle.addEventListener('click', () => {
   soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
 });
 soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
-
 
 if (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) {
   const orientationPrompt = document.createElement('div');

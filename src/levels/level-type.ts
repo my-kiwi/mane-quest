@@ -19,12 +19,11 @@ export const TileType = {
   GROUND: '■',
   PLATFORM: '═',
   INVISIBLE_PLATFORM: '─',
-  SPIKE: '▲',
-  COIN: '●',
   ENEMY: 'E',
-  EXIT: 'X',
   NPC: 'P',
   START: 'S',
+  TOMB: 'T',
+  LAVA: 'L',
 } as const; // Added "as const" to infer literal string types instead of generic strings
 
 export type TileTypeEntry = (typeof TileType)[keyof typeof TileType];
