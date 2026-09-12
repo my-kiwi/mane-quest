@@ -55,6 +55,7 @@ export function isNpcInRange(): boolean {
   if (!inRange) {
     activeNpc = undefined;
     selectedWeaponIndex = 0;
+    hideDialog();
   }
 
   return inRange;

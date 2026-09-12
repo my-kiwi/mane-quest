@@ -12,6 +12,7 @@ import { TileType } from './levels/level-type';
 import { fireball, updateFireball } from './fireball';
 import { getTile, getTileDimensions, removeTile } from './levels/levelGeometry';
 import { floor, max, min } from './dom-helpers';
+import { setTargetPosition } from './input';
 
 const FRAME_DURATION = 1000 / 60;
 
@@ -20,6 +21,7 @@ export function update(currentTime = Date.now(), frameScale = 1): void {
     if (Date.now() - unicorn.diedAt >= DEATH_SCREEN_DURATION) {
       resetToStartLevel();
       resetUnicornPosition();
+      setTargetPosition(unicorn.x, unicorn.y);
       return;
     }
 
