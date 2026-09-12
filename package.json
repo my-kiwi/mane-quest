@@ -24,6 +24,7 @@
     "eslint-plugin-prettier": "^5.5.4",
     "globals": "^16.4.0",
     "husky": "^9.1.7",
+    "js13k-vite-plugins": "^1.0.4",
     "jsdom": "^26.1.0",
     "prettier": "^3.6.2",
     "terser": "^5.51.2",

@@ -5,6 +5,7 @@ import { clamp } from './utils';
 import { getCurrentLevel, moveToNextXLevel, moveToPreviousXLevel } from './levels/levels';
 import { NB_OF_TILES_HORIZONTALLY, NB_OF_TILES_VERTICALLY } from './levels/level-type';
 import { getTile, getTileDimensions, isSolid } from './levels/levelGeometry';
+import { floor } from './dom-helpers';
 
 const BALANCE_ROTATION = 0.12;
 const BALANCE_STEP = 0.35;
@@ -28,15 +29,15 @@ function moveHorizontally(nextX: number): boolean {
   const movingLeft = nextX < currentX;
   const nextLeft = nextX - hitboxWidth;
   const nextRight = nextX + hitboxWidth;
-  const firstRow = Math.max(0, Math.floor(top / tileHeight));
+  const firstRow = Math.max(0, floor(top / tileHeight));
   const lastRow = Math.min(
     NB_OF_TILES_VERTICALLY - 1,
-    Math.floor((bottom - collisionTolerance) / tileHeight)
+    floor((bottom - collisionTolerance) / tileHeight)
   );
-  const firstColumn = Math.max(0, Math.floor(nextLeft / tileWidth));
+  const firstColumn = Math.max(0, floor(nextLeft / tileWidth));
   const lastColumn = Math.min(
     NB_OF_TILES_HORIZONTALLY - 1,
-    Math.floor((nextRight - collisionTolerance) / tileWidth)
+    floor((nextRight - collisionTolerance) / tileWidth)
   );
 
   let resolvedX = nextX;

@@ -17,7 +17,7 @@
 //   quote characters and replaces the name -> semitone table + regex
 //   parser with a single arithmetic expression.
 
-import { win } from "./dom-helpers";
+import { win, floor } from "./dom-helpers";
 
 type OscType = OscillatorType;
 type TrackName = 'overworld' | 'platforming' | 'cavern';
@@ -161,7 +161,7 @@ let ad = (g: GainNode, t0: number, vol: number, attack: number, decay: number): 
 
 // white-noise burst; `taper` bakes a linear fade into the buffer itself
 let noiseBuf = (dur: number, taper = false): AudioBufferSourceNode => {
-  let n = Math.floor(ctx!.sampleRate * dur);
+  let n = floor(ctx!.sampleRate * dur);
   let buf = ctx!.createBuffer(1, n, ctx!.sampleRate);
   let d = buf.getChannelData(0);
   for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (taper ? 1 - i / n : 1);

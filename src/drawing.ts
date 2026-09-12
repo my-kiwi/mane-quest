@@ -8,6 +8,7 @@ import { ENEMY_DEATH_DURATION, Enemy } from './enemy';
 import { isNpcInRange } from './npcInteraction';
 import { canvas } from './canvas';
 import { fireball } from './fireball';
+import { floor } from './dom-helpers';
 
 export const ctx = canvas.getContext('2d')!;
 ctx.imageSmoothingEnabled = true;
@@ -15,9 +16,9 @@ ctx.imageSmoothingQuality = 'high';
 
 const getRandomColor = (columnIndex: number, rowIndex: number) => {
   // get color based on column and row index to create a gradient effect
-  const red = Math.floor((columnIndex / NB_OF_TILES_HORIZONTALLY) * 255);
-  const green = Math.floor((rowIndex / getCurrentLevel().map.length) * 255);
-  const blue = Math.floor(
+  const red = floor((columnIndex / NB_OF_TILES_HORIZONTALLY) * 255);
+  const green = floor((rowIndex / getCurrentLevel().map.length) * 255);
+  const blue = floor(
     ((columnIndex + rowIndex) / (NB_OF_TILES_HORIZONTALLY + getCurrentLevel().map.length)) * 255
   );
   return `rgb(${red}, ${green}, ${blue})`;

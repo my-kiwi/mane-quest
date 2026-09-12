@@ -4,6 +4,7 @@ import { clamp } from './utils';
 import { canvas } from './canvas';
 import { getTile, getTileDimensions, isSolid, revealTile } from './levels/levelGeometry';
 import { moveToNextYLevel } from './levels/levels';
+import { floor } from './dom-helpers';
 
 export function triggerJump(): void {
   if (unicorn.isJumping && unicorn.remainingAirJumps <= 0) {
@@ -27,9 +28,9 @@ export function updatePhysics(frameScale = 1): void {
   }
 
   const { width: tileWidth, height: tileHeight } = getTileDimensions();
-  const column = Math.floor(unicorn.x / tileWidth);
+  const column = floor(unicorn.x / tileWidth);
   const feetY = unicorn.y + unicorn.height / 2;
-  const row = Math.floor(feetY / tileHeight);
+  const row = floor(feetY / tileHeight);
   const supportedTile = getTile(row, column);
   const isSupported = isSolid(supportedTile);
 
@@ -44,7 +45,7 @@ export function updatePhysics(frameScale = 1): void {
 
   unicorn.velocityY += unicorn.gravity * frameScale;
   const nextY = unicorn.y + unicorn.velocityY * frameScale;
-  const nextRow = Math.floor((nextY + unicorn.height / 2) / tileHeight);
+  const nextRow = floor((nextY + unicorn.height / 2) / tileHeight);
   const landingTile = getTile(nextRow, column);
   const willLand = unicorn.velocityY >= 0 && isSolid(landingTile);
 

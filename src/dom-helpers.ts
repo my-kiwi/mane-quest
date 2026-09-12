@@ -8,3 +8,6 @@ export const querySelectorAll = doc.querySelectorAll.bind(doc);
 export const querySelector = doc.querySelector.bind(doc);
 export const getElementById = doc.getElementById.bind(doc);
 export const createElement = doc.createElement.bind(doc);
+
+const M = Math;
+export const floor = M.floor;

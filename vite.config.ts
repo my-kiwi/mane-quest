@@ -1,5 +1,25 @@
 import { defineConfig } from 'vite';
 
+// vite.config.ts
+
+import {
+  advzipPlugin,
+  ectPlugin,
+  defaultViteBuildOptions,
+  roadrollerPlugin,
+  shaderMinifierPlugin,
+} from "js13k-vite-plugins";
+
+// export default defineConfig({
+//   build: defaultViteBuildOptions,
+//   plugins: [
+//     shaderMinifierPlugin(),
+//     roadrollerPlugin(),
+//     ectPlugin(),
+//     advzipPlugin(),
+//   ],
+// });
+
 function replaceCharPlugin(target: string, replacement: string) {
   return {
     name: 'vite-plugin-replace-char',
@@ -20,9 +40,12 @@ export default defineConfig({
   plugins: [
     replaceCharPlugin('■', 'w'), // Replaces all occurrences of '■' with 'W'
     replaceCharPlugin('─', 'p'), // Replaces all occurrences of '─' with 'p'
+    ectPlugin(),
+     advzipPlugin(),
   ],
   base: './', // Ensures relative paths are used in the generated HTML
   build: {
+    ...defaultViteBuildOptions,
     target: 'esnext',          // Emits raw modern JS without bulky polyfills
     minify: 'terser',          // Switched to Terser for more aggressive compression
     terserOptions: {
@@ -31,9 +54,23 @@ export default defineConfig({
         drop_debugger: true,   // Removes debugger statements
         passes: 5,             // Re-runs optimizer 3 times for max reduction
         pure_getters: true,    // Optimizes property access
+        booleans_as_integers: true,
+        unsafe_arrows: true,
+        unsafe_comps: true,
+        unsafe_math: true,
+        unsafe_methods: true,
+        unsafe_proto: true,
+      },
+      mangle: {
+        module: true,
+        toplevel: true,
+        properties:{
+          regex: /^_/
+        }
       },
       format: {
         comments: false,       // Strips all comments completely
+        ecma: 2020
       },
     },
     sourcemap: false,          // Eliminates heavy sourcemap files
