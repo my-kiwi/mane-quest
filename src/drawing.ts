@@ -130,7 +130,7 @@ function drawTile(
     ctx.fillStyle = '#bc0303';
     ctx.fillRect(-width / 2, -height / 2, width, height);
 
-    const lavaOffset = (performance.now() * 0.01) % width;
+    const lavaOffset = (Date.now() * 0.01) % width;
     ctx.fillStyle = '#f04a16';
     for (const offset of [lavaOffset, lavaOffset - width]) {
       ctx.save();
@@ -170,7 +170,7 @@ function drawEnemies(): void {
   }
 
   const enemy = level.enemy;
-  if (enemy.isDead && performance.now() - enemy.diedAt >= ENEMY_DEATH_DURATION) {
+  if (enemy.isDead && Date.now() - enemy.diedAt >= ENEMY_DEATH_DURATION) {
     return;
   }
 

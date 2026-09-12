@@ -15,9 +15,9 @@ import { floor, max, min } from './dom-helpers';
 
 const FRAME_DURATION = 1000 / 60;
 
-export function update(currentTime = performance.now(), frameScale = 1): void {
+export function update(currentTime = Date.now(), frameScale = 1): void {
   if (unicorn.isDead) {
-    if (currentTime - unicorn.diedAt >= DEATH_SCREEN_DURATION) {
+    if (Date.now() - unicorn.diedAt >= DEATH_SCREEN_DURATION) {
       resetToStartLevel();
       resetUnicornPosition();
       return;
@@ -50,7 +50,7 @@ export function update(currentTime = performance.now(), frameScale = 1): void {
       fireball.isActive = false;
       if (level.enemy.hp === 0) {
         level.enemy.isDead = true;
-        level.enemy.diedAt = currentTime;
+        level.enemy.diedAt = Date.now();
       } else {
         level.enemy.stunnedUntil = currentTime + ENEMY_HIT_STUN_DURATION;
       }

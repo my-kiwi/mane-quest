@@ -8,7 +8,7 @@ const ENEMY_SIZE_MULTIPLIER = 2.5;
 export const ENEMY_DEATH_DURATION = 2000;
 export const ENEMY_HIT_STUN_DURATION = 2000;
 
-export function updateEnemyMovement(frameScale: number, currentTime = performance.now()) {
+export function updateEnemyMovement(frameScale: number, currentTime = Date.now()) {
   const level = getCurrentLevel();
   if (level.enemy && !level.enemy.isDead && currentTime >= level.enemy.stunnedUntil) {
     level.enemy.x += level.enemy.speed * level.enemy.direction * frameScale;

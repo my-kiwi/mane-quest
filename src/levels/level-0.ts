@@ -107,7 +107,7 @@ export const level_0: Level[] = [
         '                                ',
         '                                ',
         '                                ',
-        '■■■■■■■■■■■■■■■■  ' + (firstEnemy?.isDead ? '──────────────' : '              '),
+        '■■■■■■■■■■■■■■■■                '.replaceAll(' ', firstEnemy?.isDead ? '─' : ' '),
         '■■■■■■■■■■■■■■■■                ',
         '■■■■■■■■■■■■■■■■                ',
         '■■■■■■■■■■■■■■■■                ',
@@ -137,7 +137,7 @@ export const level_0: Level[] = [
     backgroundColor: '#d60667',
     groundColor: '#0e390e',
     getMap() {
-      const showNpc = secondEnemy.isDead && secondEnemy.diedAt + 10000 < performance.now();
+      const showNpc = secondEnemy.isDead && secondEnemy.diedAt + 10000 < Date.now();
       return [
         '                                ',
         '                                ',

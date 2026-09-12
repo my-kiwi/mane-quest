@@ -69,6 +69,6 @@ export function updatePhysics(frameScale = 1): void {
       return;
     }
 
-    killUnicorn(performance.now());
+    killUnicorn(Date.now());
   }
 }

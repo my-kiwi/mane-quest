@@ -114,7 +114,7 @@ export function initializeInput(): void {
     const rect = canvas.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * canvas.width;
     const y = ((e.clientY - rect.top) / rect.height) * canvas.height;
-    const now = performance.now();
+    const now = Date.now();
     const isDoubleTap = now - lastPointerDownAt <= DOUBLE_TAP_DELAY;
     lastPointerDownAt = isDoubleTap ? 0 : now;
 

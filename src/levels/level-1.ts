@@ -20,7 +20,7 @@ const defaultLvl = mapGenerator(GROUND_LVL).map((row, index) =>
 export const level_1: Level[] = [
   {
     map: [
-      '■        ■■■■■■■■■■■■■■■■■■■■■■■',
+      '■              ■■■■■■■■■■■■■■■■■',
       '■                               ',
       '■                               ',
       '■                               ',
@@ -46,7 +46,7 @@ export const level_1: Level[] = [
   {
     visited: false,
     getMap() {
-      if (firstEnemy?.isDead && firstEnemy.diedAt < performance.now() + 1000) {
+      if (firstEnemy?.isDead && firstEnemy.diedAt < Date.now() - 1000) {
         // If the enemy is dead, create a hole in the ground for the unicorn to fall through
         const enemyColumn = floor((firstEnemy.x / canvas.width) * NB_OF_TILES_HORIZONTALLY);
         const holeWidth = 6;

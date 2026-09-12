@@ -10,6 +10,7 @@ const UNICORN_SIZE_MULTIPLIER = 1.3;
 
 // Unicorn properties and state
 export const unicorn = {
+  startDate: Date.now(),
   name: 'Mike the Unicorn',
   image: new Image(),
   x: 0, // Will be set to center in initialize
@@ -82,7 +83,7 @@ export function killUnicorn(currentTime: number): void {
 
   unicorn.deaths += 1;
   unicorn.isDead = true;
-  unicorn.diedAt = currentTime;
+  unicorn.diedAt = Date.now();
   setUnicornImage();
   Music.playDeathJingle();
 }

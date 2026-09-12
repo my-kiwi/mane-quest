@@ -6,7 +6,7 @@ import { initializeUnicorn } from './unicorn';
 import { resetToStartLevel } from './levels/levels';
 import { initializeInput } from './input';
 import { startGameLoop } from './gameLoop';
-import { addEventListener, removeEventListener } from './dom-helpers';
+import { addEventListener, doc, querySelectorAll, removeEventListener } from './dom-helpers';
 import Music from './music';
 import { addFireBallToActionBar, addShovelToActionBar } from './action';
 
@@ -37,12 +37,11 @@ soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
 if (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) {
   const orientationPrompt = document.createElement('div');
   orientationPrompt.className = 'o';
-  orientationPrompt.innerHTML = `
-    <p class="icon">↻</p>
-    <p>Rotate your device</p>
-    <p>This is best played in landscape mode.</p>
-  `;
+  orientationPrompt.innerHTML = `<p>↻</p><p>Rotate your device, landscape mode required</p>`;
   document.body.prepend(orientationPrompt);
+  querySelectorAll('.h').forEach((e) => {
+    (e as HTMLElement).style.display = 'none';
+  });
 }
 
 // Initialize all systems

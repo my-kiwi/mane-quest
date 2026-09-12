@@ -124,7 +124,7 @@ export const level_3: Level[] = [
         'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
       ].map((row, index) =>
         thirdEnemy.isDead &&
-        thirdEnemy.diedAt < performance.now() - 2000 &&
+        thirdEnemy.diedAt < Date.now() - 2000 &&
         index < NB_OF_TILES_VERTICALLY - 3
           ? rowGenerator(' ')
           : row

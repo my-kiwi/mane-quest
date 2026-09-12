@@ -20,7 +20,7 @@ import {
 //   ],
 // });
 
-function replaceCharPlugin(target: string, replacement: string) {
+function replaceStringPlugin(target: string, replacement: string) {
   return {
     name: 'vite-plugin-replace-char',
     transform(code: string, id: string) {
@@ -38,8 +38,9 @@ function replaceCharPlugin(target: string, replacement: string) {
 
 export default defineConfig({
   plugins: [
-    replaceCharPlugin('■', 'w'), // Replaces all occurrences of '■' with 'W'
-    replaceCharPlugin('─', 'p'), // Replaces all occurrences of '─' with 'p'
+    replaceStringPlugin('■', 'w'), // Replaces all occurrences of '■' with 'W'
+    replaceStringPlugin('─', 'p'), // Replaces all occurrences of '─' with 'p'
+    replaceStringPlugin('const ', 'let '),
     ectPlugin(),
      advzipPlugin(),
   ],
