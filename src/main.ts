@@ -9,6 +9,17 @@ import { startGameLoop } from './gameLoop';
 import { addEventListener, removeEventListener } from './dom-helpers';
 import Music from './music';
 
+if (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) {
+  const orientationPrompt = document.createElement('div');
+  orientationPrompt.className = 'orientation';
+  orientationPrompt.innerHTML = `
+    <p class="icon">↻</p>
+    <p>Rotate your device</p>
+    <p>This is best played in landscape mode.</p>
+  `;
+  document.body.prepend(orientationPrompt);
+}
+
 // Initialize all systems
 resizeCanvas();
 resetToStartLevel();
