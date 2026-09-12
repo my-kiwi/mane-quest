@@ -5,7 +5,7 @@ import { clamp } from './utils';
 import { getCurrentLevel, moveToNextXLevel, moveToPreviousXLevel } from './levels/levels';
 import { NB_OF_TILES_HORIZONTALLY, NB_OF_TILES_VERTICALLY } from './levels/level-type';
 import { getTile, getTileDimensions, isSolid } from './levels/levelGeometry';
-import { floor } from './dom-helpers';
+import { abs, floor, max, min } from './dom-helpers';
 
 const BALANCE_ROTATION = 0.12;
 const BALANCE_STEP = 0.35;
@@ -29,13 +29,13 @@ function moveHorizontally(nextX: number): boolean {
   const movingLeft = nextX < currentX;
   const nextLeft = nextX - hitboxWidth;
   const nextRight = nextX + hitboxWidth;
-  const firstRow = Math.max(0, floor(top / tileHeight));
-  const lastRow = Math.min(
+  const firstRow = max(0, floor(top / tileHeight));
+  const lastRow = min(
     NB_OF_TILES_VERTICALLY - 1,
     floor((bottom - collisionTolerance) / tileHeight)
   );
-  const firstColumn = Math.max(0, floor(nextLeft / tileWidth));
-  const lastColumn = Math.min(
+  const firstColumn = max(0, floor(nextLeft / tileWidth));
+  const lastColumn = min(
     NB_OF_TILES_HORIZONTALLY - 1,
     floor((nextRight - collisionTolerance) / tileWidth)
   );
@@ -56,12 +56,12 @@ function moveHorizontally(nextX: number): boolean {
         // moving right >>>>>>>>>
         // console.log(`moving right and will collide with tile at ${column},${row}`);
         // The unicorn is moving right and will collide with the left edge of a solid tile.
-        resolvedX = Math.min(resolvedX, tileLeft - hitboxWidth);
+        resolvedX = min(resolvedX, tileLeft - hitboxWidth);
       } else if (movingLeft && currentLeft >= tileRight && nextLeft < tileRight) {
         // moving left <<<<<<<<
         // console.log(`moving left and will collide with tile at ${column},${row}`);
         // The unicorn is moving left and will collide with the right edge of a solid tile.
-        resolvedX = Math.max(resolvedX, tileRight + hitboxWidth);
+        resolvedX = max(resolvedX, tileRight + hitboxWidth);
       }
     }
   }
@@ -116,10 +116,10 @@ export function updateMovement(frameScale = 1): void {
   // capped speed so the unicorn stops exactly on the target.
   if (!isKeyboardInput) {
     const dx = targetX - unicorn.x;
-    const distance = Math.abs(dx);
+    const distance = abs(dx);
 
     if (distance > 5) {
-      const moveSpeed = Math.min(unicorn.speed * frameScale, distance);
+      const moveSpeed = min(unicorn.speed * frameScale, distance);
       const moved = moveHorizontally(unicorn.x + (dx / distance) * moveSpeed);
       if (!moved) {
         setTargetPosition(unicorn.x, unicorn.y);
@@ -130,7 +130,7 @@ export function updateMovement(frameScale = 1): void {
 
   // Apply a small side-to-side rotation while moving to make the motion feel
   // less rigid. Jumping uses its own animation, so it is excluded here.
-  if (!unicorn.isJumping && (isKeyboardInput || Math.abs(targetX - unicorn.x) > 5)) {
+  if (!unicorn.isJumping && (isKeyboardInput || abs(targetX - unicorn.x) > 5)) {
     unicorn.balancePhase += BALANCE_STEP * frameScale;
     unicorn.rotation = Math.sin(unicorn.balancePhase) * BALANCE_ROTATION;
   }

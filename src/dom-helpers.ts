@@ -11,3 +11,7 @@ export const createElement = doc.createElement.bind(doc);
 
 const M = Math;
 export const floor = M.floor;
+export const max = M.max;
+export const min = M.min;
+export const abs = M.abs;
+export const random = M.random;

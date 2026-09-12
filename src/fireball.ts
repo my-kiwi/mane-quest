@@ -1,5 +1,6 @@
 import { encodeSvg } from './svg-helpers';
 import { getTileDimensions } from './levels/levelGeometry';
+import { max } from './dom-helpers';
 
 export const fireball = {
   width: getTileDimensions().width * 3,
@@ -20,7 +21,7 @@ export function isFireballOnCooldown(currentTime = Date.now()): boolean {
 }
 
 export function getFireballCooldownRemaining(currentTime = Date.now()): number {
-  return Math.max(0, fireball.cooldownUntil - currentTime);
+  return max(0, fireball.cooldownUntil - currentTime);
 }
 
 export function launchFireball(x: number, y: number, direction: number): boolean {

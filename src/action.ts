@@ -3,7 +3,7 @@ import { isInLevel } from './levels/levels';
 import { NB_OF_TILES_HORIZONTALLY } from './levels/level-type';
 import { getTileDimensions, removeTile } from './levels/levelGeometry';
 import { unicorn } from './unicorn';
-import { floor, querySelectorAll } from './dom-helpers';
+import { floor, max, min, querySelectorAll } from './dom-helpers';
 import { getFireballCooldownRemaining, launchFireball } from './fireball';
 
 let fireballCooldownTimer: ReturnType<typeof setTimeout> | undefined;
@@ -72,7 +72,7 @@ export const triggerShovel = () => {
   const { width: tileWidth, height: tileHeight } = getTileDimensions();
   const rowIndex = floor((unicorn.y + unicorn.height / 2) / tileHeight);
   const centerColumn = floor(unicorn.x / tileWidth);
-  const firstColumn = Math.max(0, Math.min(centerColumn - 1, NB_OF_TILES_HORIZONTALLY - 4));
+  const firstColumn = max(0, min(centerColumn - 1, NB_OF_TILES_HORIZONTALLY - 4));
 
   for (let column = firstColumn; column < firstColumn + 4; column += 1) {
     removeTile(rowIndex, column);

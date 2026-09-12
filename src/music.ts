@@ -17,7 +17,7 @@
 //   quote characters and replaces the name -> semitone table + regex
 //   parser with a single arithmetic expression.
 
-import { win, floor } from "./dom-helpers";
+import { floor, max, min, random, win } from "./dom-helpers";
 
 type OscType = OscillatorType;
 type TrackName = 'overworld' | 'platforming' | 'cavern';
@@ -142,7 +142,7 @@ let fadeTo = (target: number, dur: number): void => {
 let sustainEnv = (g: GainNode, t0: number, dur: number, vol: number, attack: number, release: number): void => {
   g.gain.setValueAtTime(0, t0);
   g.gain.linearRampToValueAtTime(vol, t0 + attack);
-  g.gain.setValueAtTime(vol, Math.max(t0 + attack, t0 + dur - release));
+  g.gain.setValueAtTime(vol, max(t0 + attack, t0 + dur - release));
   g.gain.linearRampToValueAtTime(0, t0 + dur);
 };
 
@@ -164,7 +164,7 @@ let noiseBuf = (dur: number, taper = false): AudioBufferSourceNode => {
   let n = floor(ctx!.sampleRate * dur);
   let buf = ctx!.createBuffer(1, n, ctx!.sampleRate);
   let d = buf.getChannelData(0);
-  for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (taper ? 1 - i / n : 1);
+  for (let i = 0; i < n; i++) d[i] = (random() * 2 - 1) * (taper ? 1 - i / n : 1);
   let src = ctx!.createBufferSource();
   src.buffer = buf;
   return src;
@@ -175,7 +175,7 @@ let playNote = (freqHz: number, t0: number, dur: number, type: OscType, vol: num
   let o = ctx!.createOscillator();
   o.type = type; o.frequency.value = freqHz; o.detune.value = detune;
   let g = ctx!.createGain();
-  sustainEnv(g, t0, dur, vol, 0.008, Math.min(0.15, dur * 0.5));
+  sustainEnv(g, t0, dur, vol, 0.008, min(0.15, dur * 0.5));
   o.connect(g); g.connect(master!);
   o.start(t0); o.stop(t0 + dur + 0.05);
 };
@@ -223,7 +223,7 @@ let playHihat = (t0: number, vol = 0.25): void => {
 // faster, giving the "shimmer then hollow out" character of a real bell.
 let playBell = (freqHz: number, t0: number, dur: number, vol = 0.5): void =>
   ([[1, 1], [2.01, 0.55], [2.74, 0.32], [3.98, 0.18], [5.43, 0.1]] as [number, number][]).forEach(([ratio, g0], i) => {
-    let decay = Math.max(0.3, dur * (1 - i * 0.15));
+    let decay = max(0.3, dur * (1 - i * 0.15));
     let o = ctx!.createOscillator();
     o.type = 'sine'; o.frequency.value = freqHz * ratio;
     let g = ctx!.createGain();
@@ -290,7 +290,7 @@ let scheduleLoop = (name: TrackName): void => {
           if (t.kk.includes(i)) playKick(hitTime);
           if (t.sn.includes(i)) playSnare(hitTime);
           if (t.hh.includes(i)) playHihat(hitTime);
-          else if (Math.random() < 0.08) playHihat(hitTime, 0.08);
+          else if (random() < 0.08) playHihat(hitTime, 0.08);
         }
       }
 

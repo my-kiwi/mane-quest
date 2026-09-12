@@ -11,6 +11,7 @@ import { ENEMY_HIT_STUN_DURATION, updateEnemyMovement } from './enemy';
 import { TileType } from './levels/level-type';
 import { fireball, updateFireball } from './fireball';
 import { getTile, getTileDimensions, removeTile } from './levels/levelGeometry';
+import { floor, max, min } from './dom-helpers';
 
 const FRAME_DURATION = 1000 / 60;
 
@@ -71,10 +72,10 @@ function destroyWallWithFireball(): void {
   const right = fireball.position.x + fireball.width / 2;
   const top = fireball.position.y - fireball.height / 2;
   const bottom = fireball.position.y + fireball.height / 2;
-  const firstColumn = Math.max(0, Math.floor(left / tileWidth));
-  const lastColumn = Math.min(level.map[0].length - 1, Math.floor(right / tileWidth));
-  const firstRow = Math.max(0, Math.floor(top / tileHeight));
-  const lastRow = Math.min(level.map.length - 1, Math.floor(bottom / tileHeight));
+  const firstColumn = max(0, floor(left / tileWidth));
+  const lastColumn = min(level.map[0].length - 1, floor(right / tileWidth));
+  const firstRow = max(0, floor(top / tileHeight));
+  const lastRow = min(level.map.length - 1, floor(bottom / tileHeight));
 
   for (let row = firstRow; row <= lastRow; row += 1) {
     for (let column = firstColumn; column <= lastColumn; column += 1) {
@@ -102,7 +103,7 @@ export function startGameLoop(): void {
     const frameScale =
       previousTime === undefined
         ? 1
-        : Math.min((currentTime - previousTime) / FRAME_DURATION, MAX_FRAME_SCALE);
+        : min((currentTime - previousTime) / FRAME_DURATION, MAX_FRAME_SCALE);
     previousTime = currentTime;
 
     update(currentTime, frameScale);

@@ -8,7 +8,7 @@ import { ENEMY_DEATH_DURATION, Enemy } from './enemy';
 import { isNpcInRange } from './npcInteraction';
 import { canvas } from './canvas';
 import { fireball } from './fireball';
-import { floor } from './dom-helpers';
+import { floor, max } from './dom-helpers';
 
 export const ctx = canvas.getContext('2d')!;
 ctx.imageSmoothingEnabled = true;
@@ -60,7 +60,7 @@ function drawDeathMessage(): void {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.font = `700 ${Math.max(32, canvas.width * 0.1)}px Georgia, serif`;
+  ctx.font = `700 ${max(32, canvas.width * 0.1)}px Georgia, serif`;
   ctx.fillStyle = '#b31217';
   ctx.fillText('U DIED', canvas.width / 2, canvas.height / 2);
   ctx.textAlign = 'start';
@@ -115,11 +115,11 @@ function drawTile(
     ctx.fillStyle = '#6b7280';
     ctx.fill();
     ctx.strokeStyle = '#374151';
-    ctx.lineWidth = Math.max(1, width * 0.04);
+    ctx.lineWidth = max(1, width * 0.04);
     ctx.stroke();
 
     ctx.strokeStyle = '#d1d5db';
-    ctx.lineWidth = Math.max(1, width * 0.06);
+    ctx.lineWidth = max(1, width * 0.06);
     ctx.beginPath();
     ctx.moveTo(0, -height * 0.75);
     ctx.lineTo(0, 0);
@@ -147,7 +147,7 @@ function drawTile(
     }
 
     ctx.strokeStyle = '#ffb21c';
-    ctx.lineWidth = Math.max(1, height * 0.08);
+    ctx.lineWidth = max(1, height * 0.08);
     for (const offset of [lavaOffset, lavaOffset - width]) {
       ctx.save();
       ctx.translate(offset, 0);
