@@ -1,5 +1,6 @@
 import { canvas } from '../canvas';
 import {
+  LEVEL_THEMES,
   mapGenerator,
   Level,
   NB_OF_TILES_HORIZONTALLY,
@@ -183,8 +184,6 @@ export const level_3: Level[] = [
     return level.map ?? level.getMap();
   },
   position: { x: index, y: 3 },
-  backgroundColor1: '#FF3030', // Indigo - deeper/darker to distinguish from -1,0
-  backgroundColor2: '#7A0000',
-  groundColor: '#440000', // Dark violet ground
+  ...LEVEL_THEMES.lava,
   music: 'platforming',
 }));

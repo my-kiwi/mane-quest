@@ -2,18 +2,24 @@ import { addFireBallToActionBar } from '../action';
 import { firstEnemy, secondEnemy } from '../enemy';
 import { TrackName } from '../music';
 import { randomNpc, sageNpc, secretNpc, endNpc } from '../NPC';
-import { Level, mapGenerator, NB_OF_TILES_VERTICALLY, rowGenerator, TileType } from './level-type';
+import {
+  LEVEL_THEMES,
+  Level,
+  mapGenerator,
+  NB_OF_TILES_VERTICALLY,
+  rowGenerator,
+  TileType,
+} from './level-type';
 
 const GROUND_LVL = 5;
+const { meadow, brightMeadow, sunset, ember, rose, magenta, crimson } = LEVEL_THEMES;
 
 // TODO do not commit
 // setTimeout(() => addFireBallToActionBar(), 1000);
 
 export const level_0: Level[] = [
   {
-    backgroundColor1: '#39C6F4', // Sky blue
-    backgroundColor2: '#0878D1',
-    groundColor: '#228B22', // Forest green
+    ...meadow,
     map: [
       '                                ',
       '                                ',
@@ -36,9 +42,7 @@ export const level_0: Level[] = [
     ],
   },
   {
-    backgroundColor1: '#39C6F4', // Sky blue
-    backgroundColor2: '#0878D1',
-    groundColor: '#228B22', // Forest green
+    ...meadow,
     map: [
       '                                ',
       '                                ',
@@ -61,9 +65,7 @@ export const level_0: Level[] = [
     ],
   },
   {
-    backgroundColor1: '#32D7FF', // Sky blue
-    backgroundColor2: '#0874D1',
-    groundColor: '#228B22', // Forest green
+    ...brightMeadow,
     map: [
       '                   S            ',
       '                                ',
@@ -88,15 +90,11 @@ export const level_0: Level[] = [
     enemy: firstEnemy,
   },
   {
-    backgroundColor1: '#39C6F4', // Sky blue
-    backgroundColor2: '#0878D1',
-    groundColor: '#228B22', // Forest green
+    ...meadow,
     map: mapGenerator(GROUND_LVL), //testMap,
   },
   {
-    backgroundColor1: '#39C6F4', // Sky blue
-    backgroundColor2: '#0878D1',
-    groundColor: '#228B22', // Forest greens
+    ...meadow,
     getMap() {
       return [
         '                                ',
@@ -122,15 +120,11 @@ export const level_0: Level[] = [
   },
   {
     // TODO next level
-    backgroundColor1: '#FFB000',
-    backgroundColor2: '#E43812',
-    groundColor: '#105c10',
+    ...sunset,
     map: mapGenerator(GROUND_LVL),
   },
   {
-    backgroundColor1: '#FF7518',
-    backgroundColor2: '#C91E3A',
-    groundColor: '#175c17',
+    ...ember,
     map: mapGenerator(GROUND_LVL).map((row, index) => {
       const rowIndex = NB_OF_TILES_VERTICALLY - GROUND_LVL - 1;
       const colIndex = 16;
@@ -141,9 +135,7 @@ export const level_0: Level[] = [
   },
   {
     /* 7, 0 */
-    backgroundColor1: '#FF2B85',
-    backgroundColor2: '#8E145F',
-    groundColor: '#0e390e',
+    ...rose,
     getMap() {
       return [
         '                                ',
@@ -174,9 +166,7 @@ export const level_0: Level[] = [
   },
   {
     /* 8, 0 */
-    backgroundColor1: '#F52D91',
-    backgroundColor2: '#71186F',
-    groundColor: '#0e390e',
+    ...magenta,
     map: [
       '                                ',
       '                                ',
@@ -200,9 +190,7 @@ export const level_0: Level[] = [
   },
   {
     /* 9, 0 */
-    backgroundColor1: '#E51B70',
-    backgroundColor2: '#52105E',
-    groundColor: '#0c2e0c',
+    ...crimson,
     map: [
       '                                ',
       '                                ',

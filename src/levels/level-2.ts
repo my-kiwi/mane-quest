@@ -1,5 +1,6 @@
 import { canvas } from '../canvas';
 import {
+  LEVEL_THEMES,
   mapGenerator,
   Level,
   NB_OF_TILES_HORIZONTALLY,
@@ -56,8 +57,6 @@ export const level_2: Level[] = [
 ].map((level, index) => ({
   ...level,
   position: { x: index, y: 2 },
-  backgroundColor1: '#B8004B', // Indigo - deeper/darker to distinguish from -1,0
-  backgroundColor2: '#4A001E',
-  groundColor: '#140008', // Dark violet ground
+  ...LEVEL_THEMES.burgundy,
   music: 'cavern',
 }));
