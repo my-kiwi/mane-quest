@@ -90,7 +90,26 @@ function destroyWallWithFireball(): void {
       const tileTop = row * tileHeight;
       const tileBottom = tileTop + tileHeight;
       if (right >= tileLeft && left <= tileRight && bottom >= tileTop && top <= tileBottom) {
-        removeTile(row, column);
+        const wallTiles: [number, number][] = [[row, column]];
+
+        while (wallTiles.length > 0) {
+          const [wallRow, wallColumn] = wallTiles.pop()!;
+          removeTile(wallRow, wallColumn);
+
+          for (const [rowOffset, columnOffset] of [
+            [-1, 0],
+            [1, 0],
+            [0, -1],
+            [0, 1],
+          ]) {
+            const adjacentRow = wallRow + rowOffset;
+            const adjacentColumn = wallColumn + columnOffset;
+            if (getTile(adjacentRow, adjacentColumn) === TileType.WALL) {
+              wallTiles.push([adjacentRow, adjacentColumn]);
+            }
+          }
+        }
+
         fireball.isActive = false;
         return;
       }
