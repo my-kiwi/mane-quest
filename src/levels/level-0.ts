@@ -11,7 +11,8 @@ const GROUND_LVL = 5;
 
 export const level_0: Level[] = [
   {
-    backgroundColor: '#87CEEB', // Sky blue
+    backgroundColor1: '#39C6F4', // Sky blue
+    backgroundColor2: '#0878D1',
     groundColor: '#228B22', // Forest green
     map: [
       '                                ',
@@ -35,7 +36,8 @@ export const level_0: Level[] = [
     ],
   },
   {
-    backgroundColor: '#87CEEB', // Sky blue
+    backgroundColor1: '#39C6F4', // Sky blue
+    backgroundColor2: '#0878D1',
     groundColor: '#228B22', // Forest green
     map: [
       '                                ',
@@ -59,7 +61,8 @@ export const level_0: Level[] = [
     ],
   },
   {
-    backgroundColor: '#87CEEB', // Sky blue
+    backgroundColor1: '#32D7FF', // Sky blue
+    backgroundColor2: '#0874D1',
     groundColor: '#228B22', // Forest green
     map: [
       '                   S            ',
@@ -85,13 +88,15 @@ export const level_0: Level[] = [
     enemy: firstEnemy,
   },
   {
-    backgroundColor: '#87CEEB', // Sky blue
+    backgroundColor1: '#39C6F4', // Sky blue
+    backgroundColor2: '#0878D1',
     groundColor: '#228B22', // Forest green
     map: mapGenerator(GROUND_LVL), //testMap,
   },
   {
-    backgroundColor: '#87CEEB', // Sky blue
-    groundColor: '#228B22', // Forest green
+    backgroundColor1: '#39C6F4', // Sky blue
+    backgroundColor2: '#0878D1',
+    groundColor: '#228B22', // Forest greens
     getMap() {
       return [
         '                                ',
@@ -117,12 +122,14 @@ export const level_0: Level[] = [
   },
   {
     // TODO next level
-    backgroundColor: '#c98a04',
+    backgroundColor1: '#FFB000',
+    backgroundColor2: '#E43812',
     groundColor: '#105c10',
     map: mapGenerator(GROUND_LVL),
   },
   {
-    backgroundColor: '#d65906',
+    backgroundColor1: '#FF7518',
+    backgroundColor2: '#C91E3A',
     groundColor: '#175c17',
     map: mapGenerator(GROUND_LVL).map((row, index) => {
       const rowIndex = NB_OF_TILES_VERTICALLY - GROUND_LVL - 1;
@@ -134,7 +141,8 @@ export const level_0: Level[] = [
   },
   {
     /* 7, 0 */
-    backgroundColor: '#d60667',
+    backgroundColor1: '#FF2B85',
+    backgroundColor2: '#8E145F',
     groundColor: '#0e390e',
     getMap() {
       return [
@@ -166,7 +174,8 @@ export const level_0: Level[] = [
   },
   {
     /* 8, 0 */
-    backgroundColor: '#c5065f',
+    backgroundColor1: '#F52D91',
+    backgroundColor2: '#71186F',
     groundColor: '#0e390e',
     map: [
       '                                ',
@@ -191,7 +200,8 @@ export const level_0: Level[] = [
   },
   {
     /* 9, 0 */
-    backgroundColor: '#b60557',
+    backgroundColor1: '#E51B70',
+    backgroundColor2: '#52105E',
     groundColor: '#0c2e0c',
     map: [
       '                                ',

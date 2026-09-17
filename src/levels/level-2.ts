@@ -56,7 +56,8 @@ export const level_2: Level[] = [
 ].map((level, index) => ({
   ...level,
   position: { x: index, y: 2 },
-  backgroundColor: '#610024', // Indigo - deeper/darker to distinguish from -1,0
+  backgroundColor1: '#B8004B', // Indigo - deeper/darker to distinguish from -1,0
+  backgroundColor2: '#4A001E',
   groundColor: '#140008', // Dark violet ground
   music: 'cavern',
 }));

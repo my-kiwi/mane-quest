@@ -32,7 +32,10 @@ export function draw() {
   const { width: tileWidth, height: tileHeight } = getTileDimensions();
 
   // Draw sky
-  ctx.fillStyle = level.backgroundColor;
+  const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  skyGradient.addColorStop(0, level.backgroundColor1);
+  skyGradient.addColorStop(1, level.backgroundColor2);
+  ctx.fillStyle = skyGradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   level.map.forEach((row, rowIndex) => {

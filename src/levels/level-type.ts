@@ -4,7 +4,8 @@ import { TrackName } from '../music';
 
 export type Level = {
   position: { x: number; y: number };
-  backgroundColor: string;
+  backgroundColor1: string;
+  backgroundColor2: string;
   groundColor: string;
   map: string[];
   removedTiles?: Set<string>;

@@ -183,7 +183,8 @@ export const level_3: Level[] = [
     return level.map ?? level.getMap();
   },
   position: { x: index, y: 3 },
-  backgroundColor: '#bc0303', // Indigo - deeper/darker to distinguish from -1,0
+  backgroundColor1: '#FF3030', // Indigo - deeper/darker to distinguish from -1,0
+  backgroundColor2: '#7A0000',
   groundColor: '#440000', // Dark violet ground
   music: 'platforming',
 }));
