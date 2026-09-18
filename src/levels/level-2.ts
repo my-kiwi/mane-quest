@@ -57,6 +57,6 @@ export const level_2: Level[] = [
 ].map((level, index) => ({
   ...level,
   position: { x: index, y: 2 },
-  ...LEVEL_THEMES.burgundy,
+  theme: LEVEL_THEMES.burgundy,
   music: 'cavern',
 }));

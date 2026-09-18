@@ -184,6 +184,6 @@ export const level_3: Level[] = [
     return level.map ?? level.getMap();
   },
   position: { x: index, y: 3 },
-  ...LEVEL_THEMES.lava,
+  theme: LEVEL_THEMES.lava,
   music: 'platforming',
 }));

@@ -99,7 +99,7 @@ export const level_1: Level[] = [
     return level.map ?? level.getMap();
   },
   position: { x: index, y: 1 },
-  ...LEVEL_THEMES.indigo,
+  theme: LEVEL_THEMES.indigo,
   get music() {
     return level.getMusic?.() ?? 'cavern';
   },

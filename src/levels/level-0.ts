@@ -12,14 +12,13 @@ import {
 } from './level-type';
 
 const GROUND_LVL = 5;
-const { meadow, brightMeadow, sunset, ember, rose, magenta, crimson } = LEVEL_THEMES;
 
 // TODO do not commit
 // setTimeout(() => addFireBallToActionBar(), 1000);
 
 export const level_0: Level[] = [
   {
-    ...meadow,
+    theme: LEVEL_THEMES.meadow,
     map: [
       '                                ',
       '                                ',
@@ -42,7 +41,7 @@ export const level_0: Level[] = [
     ],
   },
   {
-    ...meadow,
+    theme: LEVEL_THEMES.meadow,
     map: [
       '                                ',
       '                                ',
@@ -65,7 +64,7 @@ export const level_0: Level[] = [
     ],
   },
   {
-    ...brightMeadow,
+    theme: LEVEL_THEMES.brightMeadow,
     map: [
       '                   S            ',
       '                                ',
@@ -90,11 +89,11 @@ export const level_0: Level[] = [
     enemy: firstEnemy,
   },
   {
-    ...meadow,
+    theme: LEVEL_THEMES.meadow,
     map: mapGenerator(GROUND_LVL), //testMap,
   },
   {
-    ...meadow,
+    theme: LEVEL_THEMES.meadow,
     getMap() {
       return [
         '                                ',
@@ -120,11 +119,11 @@ export const level_0: Level[] = [
   },
   {
     // TODO next level
-    ...sunset,
+    theme: LEVEL_THEMES.sunset,
     map: mapGenerator(GROUND_LVL),
   },
   {
-    ...ember,
+    theme: LEVEL_THEMES.ember,
     map: mapGenerator(GROUND_LVL).map((row, index) => {
       const rowIndex = NB_OF_TILES_VERTICALLY - GROUND_LVL - 1;
       const colIndex = 16;
@@ -135,7 +134,7 @@ export const level_0: Level[] = [
   },
   {
     /* 7, 0 */
-    ...rose,
+    theme: LEVEL_THEMES.rose,
     getMap() {
       return [
         '                                ',
@@ -166,7 +165,7 @@ export const level_0: Level[] = [
   },
   {
     /* 8, 0 */
-    ...magenta,
+    theme: LEVEL_THEMES.magenta,
     map: [
       '                                ',
       '                                ',
@@ -190,7 +189,7 @@ export const level_0: Level[] = [
   },
   {
     /* 9, 0 */
-    ...crimson,
+    theme: LEVEL_THEMES.crimson,
     map: [
       '                                ',
       '                                ',

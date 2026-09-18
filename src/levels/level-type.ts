@@ -8,7 +8,7 @@ export type LevelTheme = {
   groundColor: string;
 };
 
-export type Level = LevelTheme & {
+export type Level = {
   position: { x: number; y: number };
   map: string[];
   removedTiles?: Set<string>;
@@ -16,6 +16,7 @@ export type Level = LevelTheme & {
   npc?: NPC;
   enemy?: Enemy;
   music: TrackName;
+  theme: LevelTheme;
 };
 
 export const LEVEL_THEMES = {

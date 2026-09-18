@@ -33,8 +33,8 @@ export function draw() {
 
   // Draw sky
   const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  skyGradient.addColorStop(0, level.backgroundColor1);
-  skyGradient.addColorStop(1, level.backgroundColor2);
+  skyGradient.addColorStop(0, level.theme.backgroundColor1);
+  skyGradient.addColorStop(1, level.theme.backgroundColor2);
   ctx.fillStyle = skyGradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -83,7 +83,7 @@ function drawTile(
   }
 
   if (tile === TileType.GROUND) {
-    ctx.fillStyle = level.groundColor;
+    ctx.fillStyle = level.theme.groundColor;
     ctx.fillRect(x, y, width, height);
     return;
   }
