@@ -41,6 +41,23 @@ canvas {
   opacity: 0.5;
 }
 
+#k {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #000;
+  font: 700 1rem sans-serif;
+}
+
+#k span:first-child {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
 * {
   -webkit-user-select: none;
   user-select: none;
