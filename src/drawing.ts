@@ -64,9 +64,9 @@ export function draw() {
 
 function drawClouds(): void {
   const clouds = [
-    { x: 0.08, y: 0.18, width: 170, height: 36, opacity: 0.58, speed: 0.018 },
-    { x: 0.52, y: 0.31, width: 250, height: 48, opacity: 0.38, speed: 0.011 },
-    { x: 0.78, y: 0.12, width: 105, height: 25, opacity: 0.46, speed: 0.025 },
+    { x: 0.08, y: 0.18, width: 170, height: 36, opacity: 0.58, speed: 0.018, leftLobeRadius: 35, rightLobeRadius: 29 },
+    { x: 0.52, y: 0.31, width: 250, height: 48, opacity: 0.38, speed: 0.011, leftLobeRadius: 35, rightLobeRadius: 29 },
+    { x: 0.78, y: 0.12, width: 105, height: 25, opacity: 0.46, speed: 0.025, leftLobeRadius: 35, rightLobeRadius: 29 },
   ];
 
   const elapsed = Date.now();
@@ -79,19 +79,36 @@ function drawClouds(): void {
     ctx.save();
     ctx.globalAlpha = cloud.opacity;
     ctx.fillStyle = '#ffffff';
-    drawCloudShape(x, y, cloud.width, cloud.height);
-    drawCloudShape(x + cycleWidth, y, cloud.width, cloud.height);
+    drawCloudShape(x, y, cloud.width, cloud.height, cloud.leftLobeRadius, cloud.rightLobeRadius);
+    drawCloudShape(x + cycleWidth, y, cloud.width, cloud.height, cloud.leftLobeRadius, cloud.rightLobeRadius);
     ctx.restore();
   });
 }
 
-function drawCloudShape(x: number, y: number, width: number, height: number): void {
+function drawCloudShape(
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  leftLobeRadius: number,
+  rightLobeRadius: number
+): void {
+  const baseRadius = height * 0.5;
+
   ctx.beginPath();
-  ctx.moveTo(x, y + height * 0.45);
-  ctx.quadraticCurveTo(x, y, x + width * 0.2, y);
-  ctx.quadraticCurveTo(x + width * 0.28, y - height * 0.58, x + width * 0.48, y - height * 0.18);
-  ctx.quadraticCurveTo(x + width * 0.62, y - height * 0.78, x + width * 0.78, y - height * 0.08);
-  ctx.quadraticCurveTo(x + width, y - height * 0.08, x + width, y + height * 0.45);
+  ctx.moveTo(x + baseRadius, y);
+  ctx.lineTo(x + width - baseRadius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + baseRadius);
+  ctx.lineTo(x + width, y + height - baseRadius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - baseRadius, y + height);
+  ctx.lineTo(x + baseRadius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - baseRadius);
+  ctx.lineTo(x, y + baseRadius);
+  ctx.quadraticCurveTo(x, y, x + baseRadius, y);
+  ctx.moveTo(x + width * 0.18 + leftLobeRadius, y + height - leftLobeRadius);
+  ctx.arc(x + width * 0.18 + leftLobeRadius, y + height - leftLobeRadius, leftLobeRadius, 0, Math.PI * 2);
+  ctx.moveTo(x + width * 0.88 - rightLobeRadius, y + height - rightLobeRadius);
+  ctx.arc(x + width * 0.88 - rightLobeRadius, y + height - rightLobeRadius, rightLobeRadius, 0, Math.PI * 2);
   ctx.closePath();
   ctx.fill();
 }
