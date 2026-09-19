@@ -14,8 +14,7 @@ import {
 } from './npcInteraction';
 import { triggerFireBall, triggerWeapon, triggerShovel } from './action';
 
-// Input state
-export const keys: { [key: string]: boolean } = {};
+export const keys: Record<string, boolean> = {};
 export let gamepadLeft = false;
 export let gamepadRight = false;
 export let targetX = 0;
@@ -24,10 +23,10 @@ export let targetY = 0;
 const DOUBLE_TAP_DELAY = 300;
 const GAMEPAD_DEADZONE = 0.35;
 const GamePadButtons = {
-  south: 0, // x
-  east: 1, // O
-  west: 2, // square
-  north: 3, // triangle
+  south: 0,
+  east: 1,
+  west: 2,
+  north: 3,
   start: 9,
   dpadUp: 12,
   dpadDown: 13,
@@ -36,42 +35,68 @@ const GamePadButtons = {
 } as const;
 type ControllerType = 'playstation' | 'xbox' | 'unknown';
 
-const PS_CONTROLLER_BUTTONS = [
-  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <circle cx="16" cy="16" r="15" fill="#1E2025" stroke="#3A3F4D" stroke-width="2"/>
-  <path d="M10.5 10.5L21.5 21.5M21.5 10.5L10.5 21.5" stroke="#5091F2" stroke-width="3" stroke-linecap="round"/>
-</svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <circle cx="16" cy="16" r="15" fill="#1E2025" stroke="#3A3F4D" stroke-width="2"/>
-  <circle cx="16" cy="16" r="6" stroke="#F25050" stroke-width="3"/>
-</svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <circle cx="16" cy="16" r="15" fill="#1E2025" stroke="#3A3F4D" stroke-width="2"/>
-  <rect x="10.5" y="10.5" width="11" height="11" rx="1.5" stroke="#E262C1" stroke-width="3"/>
-</svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <circle cx="16" cy="16" r="15" fill="#1E2025" stroke="#3A3F4D" stroke-width="2"/>
-  <path d="M16 9.5L22.5 21H9.5L16 9.5Z" stroke="#23D18B" stroke-width="2.8" stroke-linejoin="round"/>
-</svg>`,
-];
-const XBOX_CONTROLLER_BUTTONS = [
-  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <circle cx="16" cy="16" r="15" fill="#107C41" stroke="#159851" stroke-width="1.5"/>
-  <text x="16" y="21.5" fill="#FFFFFF" font-family="sans-serif" font-weight="800" font-size="16" text-anchor="middle">A</text>
-</svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <circle cx="16" cy="16" r="15" fill="#E81123" stroke="#F13848" stroke-width="1.5"/>
-  <text x="16" y="21.5" fill="#FFFFFF" font-family="sans-serif" font-weight="800" font-size="16" text-anchor="middle">B</text>
-</svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <circle cx="16" cy="16" r="15" fill="#0078D4" stroke="#2B93E1" stroke-width="1.5"/>
-  <text x="16" y="21.5" fill="#FFFFFF" font-family="sans-serif" font-weight="800" font-size="16" text-anchor="middle">X</text>
-</svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <circle cx="16" cy="16" r="15" fill="#FFB900" stroke="#FFC833" stroke-width="1.5"/>
-  <text x="16" y="21.5" fill="#111827" font-family="sans-serif" font-weight="800" font-size="16" text-anchor="middle">Y</text>
-</svg>`,
-];
+const createControllerButtonSvg = (
+  fill: string,
+  stroke: string,
+  body: string,
+  extra?: string
+): string => `
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <circle cx="16" cy="16" r="15" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>
+  ${body}
+  ${extra ?? ''}
+</svg>`;
+
+const BUTTON_ICONS: Record<Exclude<ControllerType, 'unknown'>, string[]> = {
+  playstation: [
+    createControllerButtonSvg(
+      '#1E2025',
+      '#3A3F4D',
+      '<path d="M10.5 10.5L21.5 21.5M21.5 10.5L10.5 21.5" stroke="#5091F2" stroke-width="3" stroke-linecap="round"/>'
+    ),
+    createControllerButtonSvg(
+      '#1E2025',
+      '#3A3F4D',
+      '<circle cx="16" cy="16" r="6" stroke="#F25050" stroke-width="3"/>'
+    ),
+    createControllerButtonSvg(
+      '#1E2025',
+      '#3A3F4D',
+      '<rect x="10.5" y="10.5" width="11" height="11" rx="1.5" stroke="#E262C1" stroke-width="3"/>'
+    ),
+    createControllerButtonSvg(
+      '#1E2025',
+      '#3A3F4D',
+      '<path d="M16 9.5L22.5 21H9.5L16 9.5Z" stroke="#23D18B" stroke-width="2.8" stroke-linejoin="round"/>'
+    ),
+  ],
+  xbox: [
+    createControllerButtonSvg(
+      '#107C41',
+      '#159851',
+      '',
+      '<text x="16" y="21.5" fill="#FFFFFF" font-family="sans-serif" font-weight="800" font-size="16" text-anchor="middle">A</text>'
+    ),
+    createControllerButtonSvg(
+      '#E81123',
+      '#F13848',
+      '',
+      '<text x="16" y="21.5" fill="#FFFFFF" font-family="sans-serif" font-weight="800" font-size="16" text-anchor="middle">B</text>'
+    ),
+    createControllerButtonSvg(
+      '#0078D4',
+      '#2B93E1',
+      '',
+      '<text x="16" y="21.5" fill="#FFFFFF" font-family="sans-serif" font-weight="800" font-size="16" text-anchor="middle">X</text>'
+    ),
+    createControllerButtonSvg(
+      '#FFB900',
+      '#FFC833',
+      '',
+      '<text x="16" y="21.5" fill="#111827" font-family="sans-serif" font-weight="800" font-size="16" text-anchor="middle">Y</text>'
+    ),
+  ],
+};
 
 let lastPointerDownAt = 0;
 let connectedGamepadIndex: number | undefined;
@@ -82,45 +107,34 @@ function detectControllerType(gamepad: Gamepad | undefined): ControllerType {
   if (!gamepad?.id) return 'unknown';
 
   const id = gamepad.id.toLowerCase();
-
-  // PS5 DualSense check (explicit Product/Vendor IDs + string match)
-  if (
+  const isPlaystation =
     id.includes('dualsense') ||
-    (id.includes('054c') && (id.includes('0ce6') || id.includes('0df2')))
-  ) {
-    return 'playstation';
-  }
+    id.includes('playstation') ||
+    (id.includes('054c') && (id.includes('0ce6') || id.includes('0df2')));
 
-  // Fallback for general PlayStation controllers (DualShock 4, etc.)
-  if (id.includes('playstation') || id.includes('054c')) {
-    return 'playstation';
-  }
-
-  // Xbox check (Includes Xbox One/Series, 360, and XInput wrappers)
-  if (id.includes('xbox') || id.includes('xinput') || id.includes('045e')) {
-    return 'xbox';
-  }
+  if (isPlaystation) return 'playstation';
+  if (id.includes('xbox') || id.includes('xinput') || id.includes('045e')) return 'xbox';
 
   return 'unknown';
 }
 
-// Detect when a controller is plugged in
 window.addEventListener('gamepadconnected', (event) => {
   const type = detectControllerType(event.gamepad);
   console.log(`Detected Controller: ${type} (Raw ID: "${event.gamepad.id}")`);
 });
 
-function updateActionHints(controllerType: ControllerType | 'keyboard'): void {
-  if (actionHintsControllerType === controllerType) {
-    return;
-  }
+function getControllerButtonIcon(
+  controllerType: ControllerType | 'keyboard',
+  buttonIndex: number
+): string {
+  if (controllerType === 'keyboard') return '';
 
-  const buttonLabels =
-    controllerType === 'xbox'
-      ? XBOX_CONTROLLER_BUTTONS
-      : controllerType === 'playstation'
-        ? PS_CONTROLLER_BUTTONS
-        : XBOX_CONTROLLER_BUTTONS;
+  const icons = controllerType === 'playstation' ? BUTTON_ICONS.playstation : BUTTON_ICONS.xbox;
+  return icons[buttonIndex] ?? '';
+}
+
+function updateActionHints(controllerType: ControllerType | 'keyboard'): void {
+  if (actionHintsControllerType === controllerType) return;
 
   document.querySelectorAll<HTMLElement>('.a .h').forEach((hint) => {
     if (controllerType === 'keyboard') {
@@ -136,8 +150,10 @@ function updateActionHints(controllerType: ControllerType | 'keyboard'): void {
         : actionButton?.classList.contains('w')
           ? 2
           : 0;
-    hint.innerHTML = buttonIndex === undefined || !buttonLabels ? '' : buttonLabels[buttonIndex];
+
+    hint.innerHTML = getControllerButtonIcon(controllerType, buttonIndex);
   });
+
   actionHintsControllerType = controllerType;
 }
 
@@ -145,9 +161,7 @@ function getConnectedGamepad(): Gamepad | undefined {
   const gamepads = navigator.getGamepads();
   if (connectedGamepadIndex !== undefined) {
     const gamepad = gamepads[connectedGamepadIndex];
-    if (gamepad) {
-      return gamepad;
-    }
+    if (gamepad) return gamepad;
   }
 
   const gamepad = Array.from(gamepads).find(Boolean);
@@ -159,14 +173,12 @@ function isGamepadButtonPressed(gamepad: Gamepad, buttonIndex: number): boolean 
   return gamepad.buttons[buttonIndex]?.pressed ?? false;
 }
 
-function wasGamepadButtonPressed(gamepad: Gamepad, buttonIndex: number): boolean {
+function wasGamepadButtonPressed(buttonIndex: number): boolean {
   return previousGamepadButtons[buttonIndex] ?? false;
 }
 
 function isNewGamepadPress(gamepad: Gamepad, buttonIndex: number): boolean {
-  return (
-    isGamepadButtonPressed(gamepad, buttonIndex) && !wasGamepadButtonPressed(gamepad, buttonIndex)
-  );
+  return isGamepadButtonPressed(gamepad, buttonIndex) && !wasGamepadButtonPressed(buttonIndex);
 }
 
 function updateGamepadButtons(gamepad: Gamepad): void {
@@ -196,18 +208,15 @@ export function updateGamepadInput(): void {
       isGamepadButtonPressed(gamepad, GamePadButtons.dpadRight));
 
   if (weaponChoicesOpen) {
-    if (
+    const leftWeapon =
       isNewGamepadPress(gamepad, GamePadButtons.dpadUp) ||
-      isNewGamepadPress(gamepad, GamePadButtons.dpadLeft)
-    ) {
-      moveWeaponSelection(-1);
-    }
-    if (
+      isNewGamepadPress(gamepad, GamePadButtons.dpadLeft);
+    const rightWeapon =
       isNewGamepadPress(gamepad, GamePadButtons.dpadDown) ||
-      isNewGamepadPress(gamepad, GamePadButtons.dpadRight)
-    ) {
-      moveWeaponSelection(1);
-    }
+      isNewGamepadPress(gamepad, GamePadButtons.dpadRight);
+
+    if (leftWeapon) moveWeaponSelection(-1);
+    if (rightWeapon) moveWeaponSelection(1);
     if (
       isNewGamepadPress(gamepad, GamePadButtons.south) ||
       isNewGamepadPress(gamepad, GamePadButtons.start)
@@ -216,22 +225,14 @@ export function updateGamepadInput(): void {
       interactWithNpc();
     }
   } else {
-    if (isNewGamepadPress(gamepad, GamePadButtons.south)) {
-      triggerJump();
-    }
+    if (isNewGamepadPress(gamepad, GamePadButtons.south)) triggerJump();
     if (isNewGamepadPress(gamepad, GamePadButtons.start)) {
       updateNpcInteractionUi();
       interactWithNpc();
     }
-    if (isNewGamepadPress(gamepad, GamePadButtons.east) && unicorn.hasFireball) {
-      triggerFireBall();
-    }
-    if (isNewGamepadPress(gamepad, GamePadButtons.west) && unicorn.weapon) {
-      triggerWeapon();
-    }
-    if (isNewGamepadPress(gamepad, GamePadButtons.north) && unicorn.hasShovel) {
-      triggerShovel();
-    }
+    if (isNewGamepadPress(gamepad, GamePadButtons.east) && unicorn.hasFireball) triggerFireBall();
+    if (isNewGamepadPress(gamepad, GamePadButtons.west) && unicorn.weapon) triggerWeapon();
+    if (isNewGamepadPress(gamepad, GamePadButtons.north) && unicorn.hasShovel) triggerShovel();
   }
 
   updateGamepadButtons(gamepad);
@@ -243,26 +244,21 @@ export function setTargetPosition(x: number, y: number): void {
 }
 
 export function getGroundY(): number {
-  const groundRow = getCurrentLevel().map.findIndex((row) => row.includes(TileType.GROUND));
-  const groundTop =
-    (groundRow >= 0 ? groundRow : getCurrentLevel().map.length) * getTileDimensions().height;
+  const level = getCurrentLevel();
+  const groundRow = level.map.findIndex((row) => row.includes(TileType.GROUND));
+  const groundTop = (groundRow >= 0 ? groundRow : level.map.length) * getTileDimensions().height;
 
   return groundTop - unicorn.height / 2;
 }
 
 function handleCanvasInteraction(x: number, y: number): boolean {
   updateNpcInteractionUi();
-  if (isPointOnNpc(x, y) && interactWithNpc()) {
-    return false;
-  }
+  if (isPointOnNpc(x, y) && interactWithNpc()) return false;
 
   setTargetPosition(x, getGroundY());
 
-  if (
-    y < unicorn.y - unicorn.height / 1.5 || // jump when y above unicorn
-    (x >= unicorn.x - unicorn.width / 2 && x <= unicorn.x + unicorn.width / 2) || // or when clicking on x unicorn
-    unicorn.isJumping // or if already jumping
-  ) {
+  const clickedOnUnicorn = x >= unicorn.x - unicorn.width / 2 && x <= unicorn.x + unicorn.width / 2;
+  if (y < unicorn.y - unicorn.height / 1.5 || clickedOnUnicorn || unicorn.isJumping) {
     triggerJump();
     return true;
   }
@@ -271,30 +267,24 @@ function handleCanvasInteraction(x: number, y: number): boolean {
 }
 
 export function initializeInput(): void {
-  // Keyboard input
   addEventListener('keydown', (e) => {
     const key = e.key.toLowerCase();
 
     if (getWeaponChoices().length > 0) {
-      if ((e.key === 'ArrowDown' || e.key === 'ArrowRight') && !e.repeat) {
-        e.preventDefault();
-        moveWeaponSelection(1);
-        return;
-      }
+      const moveSelection = (direction: -1 | 1) => {
+        if (!e.repeat) {
+          e.preventDefault();
+          moveWeaponSelection(direction);
+        }
+      };
 
-      if ((e.key === 'ArrowUp' || e.key === 'ArrowLeft') && !e.repeat) {
-        e.preventDefault();
-        moveWeaponSelection(-1);
-        return;
-      }
-
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') return moveSelection(1);
+      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') return moveSelection(-1);
       if (e.key === 'Enter' && !e.repeat) {
         e.preventDefault();
         confirmCurrentWeaponChoice();
         interactWithNpc();
-        return;
       }
-
       return;
     }
 
@@ -305,26 +295,16 @@ export function initializeInput(): void {
       interactWithNpc();
     }
 
-    if ((e.key === 'ArrowUp' || e.code === 'Space' || key === 'w') && !e.repeat) {
-      triggerJump();
-    }
-
-    if (e.key === 'u' && unicorn.weapon) {
-      triggerWeapon();
-    }
-    if (e.key === 'f' && unicorn.hasFireball) {
-      triggerFireBall();
-    }
-    if (e.key === 't' && unicorn.hasShovel) {
-      triggerShovel();
-    }
+    if ((e.key === 'ArrowUp' || e.code === 'Space' || key === 'w') && !e.repeat) triggerJump();
+    if (e.key === 'u' && unicorn.weapon) triggerWeapon();
+    if (e.key === 'f' && unicorn.hasFireball) triggerFireBall();
+    if (e.key === 't' && unicorn.hasShovel) triggerShovel();
   });
 
   addEventListener('keyup', (e) => {
     keys[e.key] = false;
   });
 
-  // click + touch input
   canvas.addEventListener('pointerdown', (e) => {
     const rect = canvas.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * canvas.width;
@@ -334,11 +314,8 @@ export function initializeInput(): void {
     lastPointerDownAt = isDoubleTap ? 0 : now;
 
     const jumped = handleCanvasInteraction(x, y);
-    if (isDoubleTap && !jumped) {
-      triggerJump();
-    }
+    if (isDoubleTap && !jumped) triggerJump();
   });
 
-  // Initialize target position
   setTargetPosition(unicorn.x, getGroundY());
 }
