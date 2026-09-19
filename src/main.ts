@@ -8,9 +8,10 @@ import { initializeInput } from './input';
 import { startGameLoop } from './gameLoop';
 import { addEventListener, doc, querySelectorAll, removeEventListener } from './dom-helpers';
 import Music from './music';
-import { addFireBallToActionBar, addShovelToActionBar } from './action';
+import { addFireBallToActionBar, addShovelToActionBar, addWeaponToActionBar } from './action';
 
 // setTimeout(() => addShovelToActionBar(), 1000);
+// setTimeout(() => addWeaponToActionBar(), 1000);
 // setTimeout(() => addFireBallToActionBar(), 1000);
 
 const soundToggle = document.querySelector('#s') as HTMLButtonElement;

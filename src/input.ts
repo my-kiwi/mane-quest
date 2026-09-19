@@ -34,9 +34,112 @@ const GamePadButtons = {
   dpadLeft: 14,
   dpadRight: 15,
 } as const;
+type ControllerType = 'playstation' | 'xbox' | 'unknown';
+
+const PS_CONTROLLER_BUTTONS = [
+  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <circle cx="16" cy="16" r="15" fill="#1E2025" stroke="#3A3F4D" stroke-width="2"/>
+  <path d="M10.5 10.5L21.5 21.5M21.5 10.5L10.5 21.5" stroke="#5091F2" stroke-width="3" stroke-linecap="round"/>
+</svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <circle cx="16" cy="16" r="15" fill="#1E2025" stroke="#3A3F4D" stroke-width="2"/>
+  <circle cx="16" cy="16" r="6" stroke="#F25050" stroke-width="3"/>
+</svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <circle cx="16" cy="16" r="15" fill="#1E2025" stroke="#3A3F4D" stroke-width="2"/>
+  <rect x="10.5" y="10.5" width="11" height="11" rx="1.5" stroke="#E262C1" stroke-width="3"/>
+</svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <circle cx="16" cy="16" r="15" fill="#1E2025" stroke="#3A3F4D" stroke-width="2"/>
+  <path d="M16 9.5L22.5 21H9.5L16 9.5Z" stroke="#23D18B" stroke-width="2.8" stroke-linejoin="round"/>
+</svg>`,
+];
+const XBOX_CONTROLLER_BUTTONS = [
+  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <circle cx="16" cy="16" r="15" fill="#107C41" stroke="#159851" stroke-width="1.5"/>
+  <text x="16" y="21.5" fill="#FFFFFF" font-family="sans-serif" font-weight="800" font-size="16" text-anchor="middle">A</text>
+</svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <circle cx="16" cy="16" r="15" fill="#E81123" stroke="#F13848" stroke-width="1.5"/>
+  <text x="16" y="21.5" fill="#FFFFFF" font-family="sans-serif" font-weight="800" font-size="16" text-anchor="middle">B</text>
+</svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <circle cx="16" cy="16" r="15" fill="#0078D4" stroke="#2B93E1" stroke-width="1.5"/>
+  <text x="16" y="21.5" fill="#FFFFFF" font-family="sans-serif" font-weight="800" font-size="16" text-anchor="middle">X</text>
+</svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <circle cx="16" cy="16" r="15" fill="#FFB900" stroke="#FFC833" stroke-width="1.5"/>
+  <text x="16" y="21.5" fill="#111827" font-family="sans-serif" font-weight="800" font-size="16" text-anchor="middle">Y</text>
+</svg>`,
+];
+
 let lastPointerDownAt = 0;
 let connectedGamepadIndex: number | undefined;
 let previousGamepadButtons: boolean[] = [];
+let actionHintsControllerType: ControllerType | 'keyboard' = 'keyboard';
+
+function detectControllerType(gamepad: Gamepad | undefined): ControllerType {
+  if (!gamepad?.id) return 'unknown';
+
+  const id = gamepad.id.toLowerCase();
+
+  // PS5 DualSense check (explicit Product/Vendor IDs + string match)
+  if (
+    id.includes('dualsense') ||
+    (id.includes('054c') && (id.includes('0ce6') || id.includes('0df2')))
+  ) {
+    return 'playstation';
+  }
+
+  // Fallback for general PlayStation controllers (DualShock 4, etc.)
+  if (id.includes('playstation') || id.includes('054c')) {
+    return 'playstation';
+  }
+
+  // Xbox check (Includes Xbox One/Series, 360, and XInput wrappers)
+  if (id.includes('xbox') || id.includes('xinput') || id.includes('045e')) {
+    return 'xbox';
+  }
+
+  return 'unknown';
+}
+
+// Detect when a controller is plugged in
+window.addEventListener('gamepadconnected', (event) => {
+  const type = detectControllerType(event.gamepad);
+  console.log(`Detected Controller: ${type} (Raw ID: "${event.gamepad.id}")`);
+});
+
+function updateActionHints(controllerType: ControllerType | 'keyboard'): void {
+  if (actionHintsControllerType === controllerType) {
+    return;
+  }
+
+  const buttonLabels =
+    controllerType === 'xbox'
+      ? XBOX_CONTROLLER_BUTTONS
+      : controllerType === 'playstation'
+        ? PS_CONTROLLER_BUTTONS
+        : XBOX_CONTROLLER_BUTTONS;
+
+  document.querySelectorAll<HTMLElement>('.a .h').forEach((hint) => {
+    if (controllerType === 'keyboard') {
+      hint.textContent = hint.dataset.keyboard ?? '';
+      return;
+    }
+
+    const actionButton = hint.parentElement;
+    const buttonIndex = actionButton?.classList.contains('s')
+      ? 3
+      : actionButton?.classList.contains('f')
+        ? 1
+        : actionButton?.classList.contains('w')
+          ? 2
+          : 0;
+    hint.innerHTML = buttonIndex === undefined || !buttonLabels ? '' : buttonLabels[buttonIndex];
+  });
+  actionHintsControllerType = controllerType;
+}
 
 function getConnectedGamepad(): Gamepad | undefined {
   const gamepads = navigator.getGamepads();
@@ -61,7 +164,9 @@ function wasGamepadButtonPressed(gamepad: Gamepad, buttonIndex: number): boolean
 }
 
 function isNewGamepadPress(gamepad: Gamepad, buttonIndex: number): boolean {
-  return isGamepadButtonPressed(gamepad, buttonIndex) && !wasGamepadButtonPressed(gamepad, buttonIndex);
+  return (
+    isGamepadButtonPressed(gamepad, buttonIndex) && !wasGamepadButtonPressed(gamepad, buttonIndex)
+  );
 }
 
 function updateGamepadButtons(gamepad: Gamepad): void {
@@ -70,6 +175,9 @@ function updateGamepadButtons(gamepad: Gamepad): void {
 
 export function updateGamepadInput(): void {
   const gamepad = getConnectedGamepad();
+  const controllerType = gamepad ? detectControllerType(gamepad) : 'keyboard';
+  updateActionHints(controllerType);
+
   if (!gamepad) {
     gamepadLeft = false;
     gamepadRight = false;
@@ -78,19 +186,32 @@ export function updateGamepadInput(): void {
   }
 
   const weaponChoicesOpen = getWeaponChoices().length > 0;
-  gamepadLeft = !weaponChoicesOpen &&
-    (gamepad.axes[0] < -GAMEPAD_DEADZONE || isGamepadButtonPressed(gamepad, GamePadButtons.dpadLeft));
-  gamepadRight = !weaponChoicesOpen &&
-    (gamepad.axes[0] > GAMEPAD_DEADZONE || isGamepadButtonPressed(gamepad, GamePadButtons.dpadRight));
+  gamepadLeft =
+    !weaponChoicesOpen &&
+    (gamepad.axes[0] < -GAMEPAD_DEADZONE ||
+      isGamepadButtonPressed(gamepad, GamePadButtons.dpadLeft));
+  gamepadRight =
+    !weaponChoicesOpen &&
+    (gamepad.axes[0] > GAMEPAD_DEADZONE ||
+      isGamepadButtonPressed(gamepad, GamePadButtons.dpadRight));
 
   if (weaponChoicesOpen) {
-    if (isNewGamepadPress(gamepad, GamePadButtons.dpadUp) || isNewGamepadPress(gamepad, GamePadButtons.dpadLeft)) {
+    if (
+      isNewGamepadPress(gamepad, GamePadButtons.dpadUp) ||
+      isNewGamepadPress(gamepad, GamePadButtons.dpadLeft)
+    ) {
       moveWeaponSelection(-1);
     }
-    if (isNewGamepadPress(gamepad, GamePadButtons.dpadDown) || isNewGamepadPress(gamepad, GamePadButtons.dpadRight)) {
+    if (
+      isNewGamepadPress(gamepad, GamePadButtons.dpadDown) ||
+      isNewGamepadPress(gamepad, GamePadButtons.dpadRight)
+    ) {
       moveWeaponSelection(1);
     }
-    if (isNewGamepadPress(gamepad, GamePadButtons.south) || isNewGamepadPress(gamepad, GamePadButtons.start)) {
+    if (
+      isNewGamepadPress(gamepad, GamePadButtons.south) ||
+      isNewGamepadPress(gamepad, GamePadButtons.start)
+    ) {
       confirmCurrentWeaponChoice();
       interactWithNpc();
     }

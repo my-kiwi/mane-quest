@@ -214,3 +214,9 @@ canvas {
   position: absolute;
   margin-bottom: -1rem;
 }
+
+.a .h svg {
+  display: block;
+  width: 1.75rem;
+  height: 1.75rem;
+}
