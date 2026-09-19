@@ -52,7 +52,7 @@ export function isNpcInRange(): boolean {
     Math.hypot(unicorn.x - npcPosition.x, unicorn.y - npcPosition.y) <=
       unicorn.width * INTERACTION_RANGE_MULTIPLIER;
 
-  if (!inRange) {
+  if (!inRange && activeNpc) {
     activeNpc = undefined;
     selectedWeaponIndex = 0;
     hideDialog();

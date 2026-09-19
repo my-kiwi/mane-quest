@@ -9,6 +9,7 @@ import { getFireballCooldownRemaining, launchFireball } from './fireball';
 let fireballCooldownTimer: ReturnType<typeof setTimeout> | undefined;
 
 export function triggerWeapon() {
+  console.log('trigger weapon');
   showDialog();
   const weapon = unicorn.weapon?.toLowerCase();
   if (isInLevel(2, 1)) {

@@ -99,10 +99,10 @@ canvas {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  width: 96%;
-  left: 1rem;
-  right: 1rem;
-  top: 1rem;
+  width: 90%;
+  left: 5%;
+  right: 5%;
+  top: 10%;
   min-height: 75px;
   box-sizing: border-box;
   padding: 0.65rem 0.8rem;

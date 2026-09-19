@@ -25,3 +25,6 @@ canvas.getContext = () =>
 // Attach it to the virtual DOM body
 document.body.appendChild(canvas);
 
+const dialoguePanel = document.createElement('div');
+dialoguePanel.id = 'dialogue-panel';
+document.body.appendChild(dialoguePanel);
