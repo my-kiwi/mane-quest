@@ -1,5 +1,5 @@
 import { unicorn } from './unicorn';
-import { keys, targetX, setTargetPosition } from './input';
+import { gamepadLeft, gamepadRight, keys, targetX, setTargetPosition } from './input';
 import { canvas } from './canvas';
 import { clamp } from './utils';
 import { getCurrentLevel, moveToNextXLevel, moveToPreviousXLevel } from './levels/levels';
@@ -96,13 +96,20 @@ export function updateMovement(frameScale = 1): void {
 
   // Keyboard input takes priority over the click-to-move target.
   const isKeyboardInput =
-    keys['ArrowLeft'] || keys['a'] || keys['A'] || keys['ArrowRight'] || keys['d'] || keys['D'];
+    gamepadLeft ||
+    gamepadRight ||
+    keys['ArrowLeft'] ||
+    keys['a'] ||
+    keys['A'] ||
+    keys['ArrowRight'] ||
+    keys['d'] ||
+    keys['D'];
 
-  if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
+  if (gamepadLeft || keys['ArrowLeft'] || keys['a'] || keys['A']) {
     moveHorizontally(unicorn.x - unicorn.speed * frameScale);
     unicorn.direction = -1;
   }
-  if (keys['ArrowRight'] || keys['d'] || keys['D']) {
+  if (gamepadRight || keys['ArrowRight'] || keys['d'] || keys['D']) {
     moveHorizontally(unicorn.x + unicorn.speed * frameScale);
     unicorn.direction = 1;
   }

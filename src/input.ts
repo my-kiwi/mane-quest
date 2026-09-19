@@ -16,11 +16,105 @@ import { triggerFireBall, triggerWeapon, triggerShovel } from './action';
 
 // Input state
 export const keys: { [key: string]: boolean } = {};
+export let gamepadLeft = false;
+export let gamepadRight = false;
 export let targetX = 0;
 export let targetY = 0;
 
 const DOUBLE_TAP_DELAY = 300;
+const GAMEPAD_DEADZONE = 0.35;
+const GamePadButtons = {
+  south: 0, // x
+  east: 1, // O
+  west: 2, // square
+  north: 3, // triangle
+  start: 9,
+  dpadUp: 12,
+  dpadDown: 13,
+  dpadLeft: 14,
+  dpadRight: 15,
+} as const;
 let lastPointerDownAt = 0;
+let connectedGamepadIndex: number | undefined;
+let previousGamepadButtons: boolean[] = [];
+
+function getConnectedGamepad(): Gamepad | undefined {
+  const gamepads = navigator.getGamepads();
+  if (connectedGamepadIndex !== undefined) {
+    const gamepad = gamepads[connectedGamepadIndex];
+    if (gamepad) {
+      return gamepad;
+    }
+  }
+
+  const gamepad = Array.from(gamepads).find(Boolean);
+  connectedGamepadIndex = gamepad?.index;
+  return gamepad ?? undefined;
+}
+
+function isGamepadButtonPressed(gamepad: Gamepad, buttonIndex: number): boolean {
+  return gamepad.buttons[buttonIndex]?.pressed ?? false;
+}
+
+function wasGamepadButtonPressed(gamepad: Gamepad, buttonIndex: number): boolean {
+  return previousGamepadButtons[buttonIndex] ?? false;
+}
+
+function isNewGamepadPress(gamepad: Gamepad, buttonIndex: number): boolean {
+  return isGamepadButtonPressed(gamepad, buttonIndex) && !wasGamepadButtonPressed(gamepad, buttonIndex);
+}
+
+function updateGamepadButtons(gamepad: Gamepad): void {
+  previousGamepadButtons = gamepad.buttons.map((button) => button.pressed);
+}
+
+export function updateGamepadInput(): void {
+  const gamepad = getConnectedGamepad();
+  if (!gamepad) {
+    gamepadLeft = false;
+    gamepadRight = false;
+    previousGamepadButtons = [];
+    return;
+  }
+
+  const weaponChoicesOpen = getWeaponChoices().length > 0;
+  gamepadLeft = !weaponChoicesOpen &&
+    (gamepad.axes[0] < -GAMEPAD_DEADZONE || isGamepadButtonPressed(gamepad, GamePadButtons.dpadLeft));
+  gamepadRight = !weaponChoicesOpen &&
+    (gamepad.axes[0] > GAMEPAD_DEADZONE || isGamepadButtonPressed(gamepad, GamePadButtons.dpadRight));
+
+  if (weaponChoicesOpen) {
+    if (isNewGamepadPress(gamepad, GamePadButtons.dpadUp) || isNewGamepadPress(gamepad, GamePadButtons.dpadLeft)) {
+      moveWeaponSelection(-1);
+    }
+    if (isNewGamepadPress(gamepad, GamePadButtons.dpadDown) || isNewGamepadPress(gamepad, GamePadButtons.dpadRight)) {
+      moveWeaponSelection(1);
+    }
+    if (isNewGamepadPress(gamepad, GamePadButtons.south) || isNewGamepadPress(gamepad, GamePadButtons.start)) {
+      confirmCurrentWeaponChoice();
+      interactWithNpc();
+    }
+  } else {
+    if (isNewGamepadPress(gamepad, GamePadButtons.south)) {
+      triggerJump();
+    }
+    if (isNewGamepadPress(gamepad, GamePadButtons.start)) {
+      updateNpcInteractionUi();
+      interactWithNpc();
+    }
+    if (isNewGamepadPress(gamepad, GamePadButtons.east) && unicorn.hasFireball) {
+      triggerFireBall();
+    }
+    if (isNewGamepadPress(gamepad, GamePadButtons.west) && unicorn.weapon) {
+      triggerWeapon();
+    }
+    if (isNewGamepadPress(gamepad, GamePadButtons.north) && unicorn.hasShovel) {
+      triggerShovel();
+    }
+  }
+
+  updateGamepadButtons(gamepad);
+}
 
 export function setTargetPosition(x: number, y: number): void {
   targetX = x;
