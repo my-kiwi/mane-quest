@@ -225,7 +225,10 @@ export function updateGamepadInput(): void {
       interactWithNpc();
     }
   } else {
-    if (isNewGamepadPress(gamepad, GamePadButtons.south)) triggerJump();
+    if (isNewGamepadPress(gamepad, GamePadButtons.south)) {
+      updateNpcInteractionUi();
+      if (!interactWithNpc()) triggerJump();
+    }
     if (isNewGamepadPress(gamepad, GamePadButtons.start)) {
       updateNpcInteractionUi();
       interactWithNpc();
