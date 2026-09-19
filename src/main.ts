@@ -15,9 +15,29 @@ import { addFireBallToActionBar, addShovelToActionBar, addWeaponToActionBar } fr
 // setTimeout(() => addFireBallToActionBar(), 1000);
 
 const soundToggle = document.querySelector('#sound-toggle') as HTMLButtonElement;
+const splashScreen = document.querySelector('#splash-screen') as HTMLElement;
+const startGameButton = document.querySelector('#start-game') as HTMLButtonElement;
 const musicVolume = 0.28;
 let soundEnabled = true;
 let rememberedTrack = Music.getCurrentTrack() ?? 'overworld';
+let gameStarted = false;
+
+function startGame(): void {
+  if (gameStarted) return;
+
+  gameStarted = true;
+  splashScreen.classList.add('splash-hidden');
+  startGameButton.blur();
+  startGameLoop();
+}
+
+startGameButton.addEventListener('click', startGame);
+addEventListener('keydown', (event) => {
+  if (gameStarted || (event.key !== 'Enter' && event.code !== 'Space')) return;
+
+  event.preventDefault();
+  startGame();
+});
 
 soundToggle.addEventListener('click', () => {
   soundEnabled = !soundEnabled;
@@ -52,7 +72,6 @@ initializeUnicorn();
 initializeInput();
 
 // Start the game loop
-startGameLoop();
 
 function startMusic() {
   removeEventListener('pointerdown', startMusic);

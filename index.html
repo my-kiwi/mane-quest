@@ -8,6 +8,17 @@
   <body>
     <main>
       <canvas id="game-canvas"></canvas>
+      <section id="splash-screen" aria-labelledby="game-title">
+        <div class="splash-stars" aria-hidden="true"></div>
+        <div class="splash-content">
+          <p class="splash-kicker">A tiny quest with a very big mane</p>
+          <h1 id="game-title">Mane <span>Quest</span></h1>
+          <p class="splash-intro">Help Mike the unicorn find his way through a world of wonder.</p>
+          <button id="start-game" type="button">Start adventure</button>
+          <p class="splash-controls">Keyboard, mouse and touch supported<br /><strong>Best played with a gamepad</strong></p>
+        </div>
+        <p class="splash-tip" aria-hidden="true">Explore <span>•</span> discover <span>•</span> survive</p>
+      </section>
       <button id="sound-toggle" type="button"></button>
       <div id="death-counter" aria-label="Deaths"><span aria-hidden="true">💀</span><span id="death-count">0</span></div>
       <div id="dialogue-panel" class="dialogue-bubble">

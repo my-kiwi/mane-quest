@@ -14,6 +14,7 @@ html, body {
 main {
   position: relative;
   width: min(100vw, calc(100vh * 16 / 9));
+  overflow: hidden;
 }
 
 canvas {
@@ -22,6 +23,162 @@ canvas {
   height: auto;
   aspect-ratio: 16 / 9;
   touch-action: none;
+}
+
+#splash-screen {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    linear-gradient(rgba(57, 198, 244, 0.12), rgba(8, 120, 209, 0.16)),
+    linear-gradient(180deg, #39c6f4 0%, #0878d1 100%);
+  color: #fff;
+  text-align: center;
+  transition: opacity 500ms ease, visibility 500ms ease;
+}
+
+#splash-screen::before,
+#splash-screen::after {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  bottom: 0;
+  width: 58%;
+  height: 30%;
+  background: #228b22;
+  clip-path: polygon(0 38%, 8% 38%, 8% 25%, 17% 25%, 17% 12%, 27% 12%, 27% 0, 39% 0, 39% 13%, 49% 13%, 49% 25%, 62% 25%, 62% 39%, 76% 39%, 76% 54%, 88% 54%, 88% 72%, 100% 72%, 100% 100%, 0 100%);
+}
+
+#splash-screen::before {
+  left: -15%;
+}
+
+#splash-screen::after {
+  right: -15%;
+  transform: scaleX(-1);
+  background: #176b24;
+}
+
+.splash-stars {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.7;
+  background-image:
+    linear-gradient(90deg, transparent 0 12%, rgba(255, 255, 255, 0.8) 12% 16%, transparent 16% 22%, rgba(255, 255, 255, 0.8) 22% 32%, transparent 32%),
+    linear-gradient(90deg, transparent 0 60%, rgba(255, 255, 255, 0.65) 60% 67%, transparent 67% 73%, rgba(255, 255, 255, 0.65) 73% 84%, transparent 84%);
+  background-position: 0 16%, 0 31%;
+  background-size: 260px 18px, 340px 14px;
+  background-repeat: no-repeat;
+}
+
+.splash-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(82%, 560px);
+  animation: splash-arrive 800ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.splash-kicker,
+.splash-controls,
+.splash-tip {
+  margin: 0;
+  font-family: 'Trebuchet MS', sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.splash-kicker {
+  color: #fff;
+  font-size: clamp(0.55rem, 1.4vw, 0.8rem);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+#game-title {
+  margin: 0.08em 0 0.12em;
+  color: #fff;
+  font: 900 clamp(3rem, 9vw, 6.4rem)/0.95 Impact, 'Arial Black', sans-serif;
+  text-shadow: 5px 5px 0 #ff69b4, 9px 9px 0 #8b4513;
+}
+
+#game-title span {
+  color: #ffd700;
+}
+
+.splash-intro {
+  max-width: 28rem;
+  margin: 0 0 1.7rem;
+  color: #fff;
+  font: 1rem/1.5 'Trebuchet MS', sans-serif;
+  text-shadow: 2px 2px 0 rgba(8, 120, 209, 0.7);
+}
+
+#start-game {
+  min-width: 11rem;
+  padding: 0.9rem 1.6rem;
+  border: 3px solid #8b4513;
+  border-radius: 4px;
+  background: #ff69b4;
+  color: #8b4513;
+  box-shadow: 0 5px 0 #8b4513, 0 10px 0 rgba(34, 139, 34, 0.45);
+  cursor: pointer;
+  font: 900 0.95rem 'Trebuchet MS', sans-serif;
+  letter-spacing: 0.04em;
+  transition: transform 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+}
+
+#start-game:hover,
+#start-game:focus-visible {
+  background: #ff8ac9;
+  box-shadow: 0 3px 0 #8b4513, 0 8px 0 rgba(34, 139, 34, 0.45);
+  outline: none;
+  transform: translateY(2px);
+}
+
+#start-game:active {
+  box-shadow: 0 1px 0 #8b4513, 0 3px 0 rgba(34, 139, 34, 0.45);
+  transform: translateY(4px);
+}
+
+.splash-controls {
+  margin-top: 1.35rem;
+  color: rgba(255, 255, 255, 0.85);
+  font: 0.72rem/1.7 'Trebuchet MS', sans-serif;
+  text-shadow: 1px 1px 0 rgba(8, 120, 209, 0.7);
+}
+
+.splash-controls strong {
+  color: #ffd700;
+  font-size: 0.8rem;
+}
+
+.splash-tip {
+  position: absolute;
+  bottom: 1.4rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.58rem;
+  text-transform: uppercase;
+}
+
+.splash-tip span {
+  padding: 0 0.65rem;
+  color: #ffd700;
+}
+
+.splash-hidden {
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+}
+
+@keyframes splash-arrive {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 #sound-toggle {
