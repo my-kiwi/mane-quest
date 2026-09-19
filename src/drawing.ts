@@ -38,6 +38,10 @@ export function draw() {
   ctx.fillStyle = skyGradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  if (level.position.y === 0) {
+    drawClouds();
+  }
+
   level.map.forEach((row, rowIndex) => {
     [...row].forEach((_tile, columnIndex) => {
       const tile = getTile(rowIndex, columnIndex);
@@ -56,6 +60,40 @@ export function draw() {
   if (unicorn.isDead) {
     drawDeathMessage();
   }
+}
+
+function drawClouds(): void {
+  const clouds = [
+    { x: 0.08, y: 0.18, width: 170, height: 36, opacity: 0.58, speed: 0.018 },
+    { x: 0.52, y: 0.31, width: 250, height: 48, opacity: 0.38, speed: 0.011 },
+    { x: 0.78, y: 0.12, width: 105, height: 25, opacity: 0.46, speed: 0.025 },
+  ];
+
+  const elapsed = Date.now();
+  clouds.forEach((cloud) => {
+    const cycleWidth = canvas.width + cloud.width;
+    const travel = (elapsed * cloud.speed) % cycleWidth;
+    const x = (cloud.x * canvas.width + travel) % cycleWidth - cloud.width;
+    const y = cloud.y * canvas.height;
+
+    ctx.save();
+    ctx.globalAlpha = cloud.opacity;
+    ctx.fillStyle = '#ffffff';
+    drawCloudShape(x, y, cloud.width, cloud.height);
+    drawCloudShape(x + cycleWidth, y, cloud.width, cloud.height);
+    ctx.restore();
+  });
+}
+
+function drawCloudShape(x: number, y: number, width: number, height: number): void {
+  ctx.beginPath();
+  ctx.moveTo(x, y + height * 0.45);
+  ctx.quadraticCurveTo(x, y, x + width * 0.2, y);
+  ctx.quadraticCurveTo(x + width * 0.28, y - height * 0.58, x + width * 0.48, y - height * 0.18);
+  ctx.quadraticCurveTo(x + width * 0.62, y - height * 0.78, x + width * 0.78, y - height * 0.08);
+  ctx.quadraticCurveTo(x + width, y - height * 0.08, x + width, y + height * 0.45);
+  ctx.closePath();
+  ctx.fill();
 }
 
 function drawDeathMessage(): void {

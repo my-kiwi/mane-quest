@@ -63,6 +63,65 @@ canvas {
   background: #176b24;
 }
 
+.splash-cloud {
+  position: absolute;
+  z-index: -1;
+  width: 10rem;
+  height: 2.8rem;
+  border-radius: 999px;
+  background: #fff;
+  filter: blur(0.3px);
+  pointer-events: none;
+  animation: clouds-drift 34s linear infinite;
+}
+
+.splash-cloud::before,
+.splash-cloud::after {
+  position: absolute;
+  content: '';
+  bottom: 0;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.splash-cloud::before {
+  left: 18%;
+  width: 4.4rem;
+  height: 4.4rem;
+}
+
+.splash-cloud::after {
+  right: 12%;
+  width: 3.6rem;
+  height: 3.6rem;
+}
+
+.splash-cloud-one {
+  top: 13%;
+  left: -13rem;
+  opacity: 0.72;
+}
+
+.splash-cloud-two {
+  top: 32%;
+  left: -18rem;
+  width: 15rem;
+  height: 3.5rem;
+  opacity: 0.42;
+  animation-duration: 46s;
+  animation-delay: -18s;
+}
+
+.splash-cloud-three {
+  top: 52%;
+  left: -9rem;
+  width: 7rem;
+  height: 2rem;
+  opacity: 0.56;
+  animation-duration: 27s;
+  animation-delay: -9s;
+}
+
 .splash-content {
   display: flex;
   flex-direction: column;
@@ -166,6 +225,11 @@ canvas {
 @keyframes splash-arrive {
   from { opacity: 0; transform: translateY(18px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes clouds-drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(100vw + 22rem)); }
 }
 
 #sound-toggle {
