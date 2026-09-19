@@ -83,7 +83,7 @@ export function killUnicorn(currentTime: number): void {
   }
 
   unicorn.deaths += 1;
-  getElementById('v')!.textContent = String(unicorn.deaths);
+  getElementById('death-count')!.textContent = String(unicorn.deaths);
   unicorn.isDead = true;
   unicorn.diedAt = Date.now();
   setUnicornImage();

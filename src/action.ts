@@ -25,7 +25,7 @@ export function triggerWeapon() {
 }
 
 export const addWeaponToActionBar = () => {
-  const actionButton = querySelectorAll('.a.w')[0] as HTMLButtonElement;
+  const actionButton = querySelectorAll('.action-button.weapon')[0] as HTMLButtonElement;
   actionButton.style.display = 'inline-block';
   actionButton.classList.add(unicorn.weapon!);
   actionButton.addEventListener('pointerdown', triggerWeapon);
@@ -39,7 +39,9 @@ export const triggerFireBall = () => {
 };
 
 const updateFireballActionButton = () => {
-  const actionButton = querySelectorAll('.a.f')[0] as HTMLButtonElement | undefined;
+  const actionButton = querySelectorAll('.action-button.fireball')[0] as
+    | HTMLButtonElement
+    | undefined;
   if (!actionButton) {
     return;
   }
@@ -58,7 +60,7 @@ const updateFireballActionButton = () => {
 
 export const addFireBallToActionBar = () => {
   unicorn.hasFireball = true;
-  const actionButton = querySelectorAll('.a.f')[0] as HTMLButtonElement;
+  const actionButton = querySelectorAll('.action-button.fireball')[0] as HTMLButtonElement;
   actionButton.style.display = 'inline-block';
   actionButton.addEventListener('pointerdown', triggerFireBall);
   if (fireballCooldownTimer) {
@@ -80,7 +82,7 @@ export const triggerShovel = () => {
 
 export const addShovelToActionBar = () => {
   unicorn.hasShovel = true;
-  const actionButton = querySelectorAll('.a.s')[0] as HTMLButtonElement;
+  const actionButton = querySelectorAll('.action-button.shovel')[0] as HTMLButtonElement;
   actionButton.style.display = 'inline-block';
   actionButton.addEventListener('pointerdown', () => {
     triggerShovel();

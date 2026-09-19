@@ -136,18 +136,18 @@ function getControllerButtonIcon(
 function updateActionHints(controllerType: ControllerType | 'keyboard'): void {
   if (actionHintsControllerType === controllerType) return;
 
-  document.querySelectorAll<HTMLElement>('.a .h').forEach((hint) => {
+  document.querySelectorAll<HTMLElement>('.action-button .action-hint').forEach((hint) => {
     if (controllerType === 'keyboard') {
       hint.textContent = hint.dataset.keyboard ?? '';
       return;
     }
 
     const actionButton = hint.parentElement;
-    const buttonIndex = actionButton?.classList.contains('s')
+    const buttonIndex = actionButton?.classList.contains('shovel')
       ? 3
-      : actionButton?.classList.contains('f')
+      : actionButton?.classList.contains('fireball')
         ? 1
-        : actionButton?.classList.contains('w')
+        : actionButton?.classList.contains('weapon')
           ? 2
           : 0;
 

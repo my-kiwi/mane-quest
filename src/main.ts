@@ -14,7 +14,7 @@ import { addFireBallToActionBar, addShovelToActionBar, addWeaponToActionBar } fr
 // setTimeout(() => addWeaponToActionBar(), 1000);
 // setTimeout(() => addFireBallToActionBar(), 1000);
 
-const soundToggle = document.querySelector('#s') as HTMLButtonElement;
+const soundToggle = document.querySelector('#sound-toggle') as HTMLButtonElement;
 const musicVolume = 0.28;
 let soundEnabled = true;
 let rememberedTrack = Music.getCurrentTrack() ?? 'overworld';
@@ -37,10 +37,10 @@ soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
 
 if (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) {
   const orientationPrompt = document.createElement('div');
-  orientationPrompt.className = 'o';
+  orientationPrompt.className = 'orientation-prompt';
   orientationPrompt.innerHTML = `<p>↻</p><p>Rotate your device, landscape mode required</p>`;
   document.body.prepend(orientationPrompt);
-  querySelectorAll('.h').forEach((e) => {
+  querySelectorAll('.action-hint').forEach((e) => {
     (e as HTMLElement).style.display = 'none';
   });
 }

@@ -7,18 +7,18 @@
   </head>
   <body>
     <main>
-      <canvas id="g"></canvas>
-      <button id="s" type="button"></button>
-      <div id="k" aria-label="Deaths"><span aria-hidden="true">💀</span><span id="v">0</span></div>
-      <div id="d" class="n">
-        <strong id="q"></strong>
-        <span id="l"></span>
-        <div id="c"></div>
+      <canvas id="game-canvas"></canvas>
+      <button id="sound-toggle" type="button"></button>
+      <div id="death-counter" aria-label="Deaths"><span aria-hidden="true">💀</span><span id="death-count">0</span></div>
+      <div id="dialogue-panel" class="dialogue-bubble">
+        <strong id="dialogue-name"></strong>
+        <span id="dialogue-line"></span>
+        <div id="dialogue-choices"></div>
       </div>
-      <div id="b">
-        <button class="a s"><span class="h" data-keyboard="(T)">(T)</span></button>
-        <button class="a f"><span class="h" data-keyboard="(F)">(F)</span></button>
-        <button class="a w"><span class="h" data-keyboard="(U)">(U)</span></button>
+      <div id="action-bar">
+        <button class="action-button shovel"><span class="action-hint" data-keyboard="(T)">(T)</span></button>
+        <button class="action-button fireball"><span class="action-hint" data-keyboard="(F)">(F)</span></button>
+        <button class="action-button weapon"><span class="action-hint" data-keyboard="(U)">(U)</span></button>
       </div>
     </main>
     <script type="module" src="./src/main.ts"></script>

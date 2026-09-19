@@ -3,18 +3,18 @@ import { interactWithNpc } from './npcInteraction';
 import { Unicorn } from './unicorn';
 import { getElementById } from './dom-helpers';
 
-export const dialogueBubble = getElementById('d')!;
-export const dialogueName = getElementById('q')!;
-export const dialogueLine = getElementById('l')!;
-export const dialogueChoices = getElementById('c');
+export const dialogueBubble = getElementById('dialogue-panel')!;
+export const dialogueName = getElementById('dialogue-name')!;
+export const dialogueLine = getElementById('dialogue-line')!;
+export const dialogueChoices = getElementById('dialogue-choices');
 
 dialogueBubble?.addEventListener('pointerdown', (e) => {
   e.preventDefault();
   interactWithNpc();
 });
 
-export const showDialog = () => dialogueBubble.classList.add('v');
-export const hideDialog = () => dialogueBubble?.classList.remove('v');
+export const showDialog = () => dialogueBubble.classList.add('dialogue-visible');
+export const hideDialog = () => dialogueBubble?.classList.remove('dialogue-visible');
 export const displayLine = (who: Unicorn | NPC, line: string) => {
   dialogueName.textContent = who.name;
   dialogueName.style.color = who.colors.maneColor;

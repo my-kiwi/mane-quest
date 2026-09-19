@@ -24,7 +24,7 @@ canvas {
   touch-action: none;
 }
 
-#s {
+#sound-toggle {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
@@ -41,7 +41,7 @@ canvas {
   opacity: 0.5;
 }
 
-#k {
+#death-counter {
   position: absolute;
   top: 0.5rem;
   left: 0.5rem;
@@ -53,7 +53,7 @@ canvas {
   font: 700 1rem sans-serif;
 }
 
-#k span:first-child {
+#death-counter span:first-child {
   font-size: 1.2rem;
   line-height: 1;
 }
@@ -65,12 +65,12 @@ canvas {
   -webkit-tap-highlight-color: transparent;
 }
 
-.o {
+.orientation-prompt {
   display: none;
 }
 
 @media (orientation: portrait) and (max-width: 900px) {
-  .o {
+  .orientation-prompt {
     position: fixed;
     inset: 0;
     z-index: 10;
@@ -86,7 +86,7 @@ canvas {
   }
 }
 
-.n {
+.dialogue-bubble {
   display: none;
   position: absolute;
   z-index: 1;
@@ -95,7 +95,7 @@ canvas {
   touch-action: none;
 }
 
-.n.v {
+.dialogue-bubble.dialogue-visible {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
@@ -113,21 +113,21 @@ canvas {
   font: 1.3rem/1.5 sans-serif;
 }
 
-.n strong {
+.dialogue-bubble strong {
   font-size: 1.3rem;
 }
 
-#c {
+#dialogue-choices {
   display: none;
   flex-direction: row;
   gap: 0.35rem;
   margin-top: 0.25rem;
 }
-#c.v {
+#dialogue-choices.dialogue-visible {
   display: flex;
 }
 
-.c {
+.dialogue-choice {
   font-size: 0.5rem;
   display: flex;
   align-items: center;
@@ -144,13 +144,13 @@ canvas {
   cursor: pointer;
 }
 
-.c.x {
+.dialogue-choice.selected {
   background: #dfeef6;
   border-color: #5d8fb9;
   box-shadow: inset 0 0 0 1px #5d8fb9;
 }
 
-.i {
+.dialogue-choice-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -159,23 +159,23 @@ canvas {
   flex-shrink: 0;
 }
 
-.a::before {
+.action-button::before {
   font-size: 2rem;
   position: absolute;
   margin: -25px 0 0 -25px;
 }
 
-.i.Bow::before, .a.Bow::before { content: "🏹"; }
-.i.Sword::before, .a.Sword::before { content: "🗡️"; }
-.i.Buckler::before, .a.Buckler::before { content: "🛡️"; }
+.dialogue-choice-icon.Bow::before, .action-button.Bow::before { content: "🏹"; }
+.dialogue-choice-icon.Sword::before, .action-button.Sword::before { content: "🗡️"; }
+.dialogue-choice-icon.Buckler::before, .action-button.Buckler::before { content: "🛡️"; }
 
-#b {
+#action-bar {
   position: absolute;
   right: 5%;
   bottom: 5%;
 }
 
-#b .a {
+#action-bar .action-button {
   position: relative;
   display: none;
   width: 50px;
@@ -186,11 +186,11 @@ canvas {
   background-color: rgba(255, 255, 255, 0.5);
 }
 
-.a:disabled {
+.action-button:disabled {
   opacity: 0.55;
 }
 
-.a.f[data-cooldown]::after {
+.action-button.fireball[data-cooldown]::after {
   content: attr(data-cooldown);
   position: absolute;
   inset: 0;
@@ -201,21 +201,21 @@ canvas {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.a.f::before {
+.action-button.fireball::before {
   content: "🔥";
 }
 
-.a.s::before {
+.action-button.shovel::before {
   content: "🥄";
 }
 
-.a .h {
+.action-button .action-hint {
   font-size: 1rem;
   position: absolute;
   margin-bottom: -1rem;
 }
 
-.a .h svg {
+.action-button .action-hint svg {
   display: block;
   width: 1.75rem;
   height: 1.75rem;
