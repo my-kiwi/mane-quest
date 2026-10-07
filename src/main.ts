@@ -84,13 +84,7 @@ function startMusic() {
 addEventListener('pointerdown', startMusic);
 addEventListener('keydown', startMusic);
 
-const Wavedash = (window as typeof window & { Wavedash: { init: () => void } }).Wavedash ?? null;
-if (Wavedash) {
-  Wavedash.init();
-} else {
-  console.warn('Wavedash not found');
-}
-
+// wavedash integration
 initWavedash();
 // test
 getLeaderboardId().then((leaderboardId) => {
