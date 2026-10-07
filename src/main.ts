@@ -9,6 +9,7 @@ import { startGameLoop } from './gameLoop';
 import { addEventListener, doc, querySelectorAll, removeEventListener } from './dom-helpers';
 import Music from './music';
 import { addFireBallToActionBar, addShovelToActionBar, addWeaponToActionBar } from './action';
+import { getLeaderboardId, initWavedash } from './wavedash';
 
 // setTimeout(() => addShovelToActionBar(), 1000);
 // setTimeout(() => addWeaponToActionBar(), 1000);
@@ -89,3 +90,13 @@ if (Wavedash) {
 } else {
   console.warn('Wavedash not found');
 }
+
+initWavedash();
+// test
+getLeaderboardId().then((leaderboardId) => {
+  if (leaderboardId) {
+    console.log('Leaderboard ID:', leaderboardId);
+  } else {
+    console.error('Failed to get leaderboard ID');
+  }
+});
