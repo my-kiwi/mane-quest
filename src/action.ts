@@ -5,8 +5,14 @@ import { getTileDimensions, removeTile } from './levels/levelGeometry';
 import { unicorn } from './unicorn';
 import { floor, max, min, querySelectorAll } from './dom-helpers';
 import { getFireballCooldownRemaining, launchFireball } from './fireball';
+import { unlockAchievement } from './wavedash';
 
 let fireballCooldownTimer: ReturnType<typeof setTimeout> | undefined;
+const weaponFailureAchievements: Record<string, string> = {
+  bow: 'BOW_FAILURE',
+  buckler: 'BUCKLER_FAILURE',
+  sword: 'SWORD_FAILURE',
+};
 
 export function triggerWeapon() {
   console.log('trigger weapon');
@@ -20,6 +26,10 @@ export function triggerWeapon() {
       `...how the hell am I supposed to use a ${weapon}? I'm a freaking unicorn! I knew I should have taken the ${otherWeapon}!`
     );
     unicorn.hasFailedToUseWeapon = true;
+    const achievementId = weapon && weaponFailureAchievements[weapon];
+    if (achievementId) {
+      unlockAchievement(achievementId);
+    }
   } else {
     displayLine(unicorn, `Cannot use ${weapon} now, no fiend in sight`);
   }
