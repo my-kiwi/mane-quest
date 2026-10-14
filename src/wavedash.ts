@@ -1,10 +1,11 @@
 import type WavedashSDK from '@wvdsh/sdk-js';
+import type { LeaderboardId } from '@wvdsh/sdk-js';
 
 const Wavedash: typeof WavedashSDK | null =
   typeof window !== 'undefined' && 'Wavedash' in window ? window.Wavedash : null;
 
-let leaderboardId: string | undefined;
-let leaderboardRequest: Promise<string | null> | undefined;
+let leaderboardId: LeaderboardId | undefined;
+let leaderboardRequest: Promise<LeaderboardId | null> | undefined;
 
 export const initWavedash = (): boolean => {
   if (!Wavedash) {
@@ -24,7 +25,7 @@ export const unlockAchievement = (achievementId: string): void => {
 
 // see https://docs.wavedash.com/sdk/leaderboards#getting-or-creating-a-leaderboard
 
-export const getLeaderboardId = async (): Promise<string | null> => {
+export const getLeaderboardId = async (): Promise<LeaderboardId | null> => {
   if (!Wavedash) {
     return null;
   }
