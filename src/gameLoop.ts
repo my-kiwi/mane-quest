@@ -7,7 +7,7 @@ import { DEATH_SCREEN_DURATION, MAX_FRAME_SCALE } from './constants';
 import { getCurrentLevel } from './levels/levels';
 import { canvas } from './canvas';
 import { isFireballTouchingEnemy, isUnicornTouchingEnemy } from './collisions';
-import { ENEMY_HIT_STUN_DURATION, updateEnemyMovement } from './enemy';
+import { ENEMY_HIT_STUN_DURATION, thirdEnemy, updateEnemyMovement } from './enemy';
 import { TileType } from './levels/level-type';
 import { fireball, updateFireball } from './fireball';
 import { getTile, getTileDimensions, removeTile } from './levels/levelGeometry';
@@ -57,6 +57,9 @@ export function update(currentTime = Date.now(), frameScale = 1): void {
         level.enemy.isDead = true;
         level.enemy.diedAt = Date.now();
         unlockAchievement('FIRST_FIREBALL_KILL');
+        if (level.enemy === thirdEnemy) {
+          unlockAchievement('FINAL_BOSS_DEFEATED');
+        }
       } else {
         level.enemy.stunnedUntil = currentTime + ENEMY_HIT_STUN_DURATION;
       }
