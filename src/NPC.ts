@@ -229,7 +229,7 @@ export const endNpc: NPC = {
         },
       },
       {
-        line: `That's all folks, see you next year for js13k 2027!`,
+        line: `That's all folks, let me know in comments if you liked it or not, and if you want me to make more games like this one!`,
       },
     ];
   },
