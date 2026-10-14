@@ -246,6 +246,18 @@ export function setTargetPosition(x: number, y: number): void {
   targetY = y;
 }
 
+export function clearMovementInput(): void {
+  gamepadLeft = false;
+  gamepadRight = false;
+  keys['ArrowLeft'] = false;
+  keys['a'] = false;
+  keys['A'] = false;
+  keys['ArrowRight'] = false;
+  keys['d'] = false;
+  keys['D'] = false;
+  setTargetPosition(unicorn.x, unicorn.y);
+}
+
 export function getGroundY(): number {
   const level = getCurrentLevel();
   const groundRow = level.map.findIndex((row) => row.includes(TileType.GROUND));
@@ -270,6 +282,8 @@ function handleCanvasInteraction(x: number, y: number): boolean {
 }
 
 export function initializeInput(): void {
+  addEventListener('blur', clearMovementInput);
+
   addEventListener('keydown', (e) => {
     const key = e.key.toLowerCase();
 
