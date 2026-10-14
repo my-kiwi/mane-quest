@@ -229,7 +229,10 @@ export const endNpc: NPC = {
         },
       },
       {
-        line: `That's all folks, let me know in comments if you liked it or not, and if you want me to make more games like this one!`,
+        get line() {
+          unlockAchievement('REACHED_THE_END');
+          return `That's all folks, let me know in comments if you liked it or not, and if you want me to make more games like this one!`;
+        },
       },
     ];
   },
