@@ -6,6 +6,7 @@ import { getTileDimensions } from './levels/levelGeometry';
 import Music from './music';
 import { encodeSvg } from './svg-helpers';
 import { getElementById } from './dom-helpers';
+import { unlockAchievement } from './wavedash';
 
 const UNICORN_SIZE_MULTIPLIER = 1.3;
 
@@ -83,6 +84,9 @@ export function killUnicorn(currentTime: number): void {
   }
 
   unicorn.deaths += 1;
+  if (unicorn.deaths === 1) {
+    unlockAchievement('FIRST_BLOOD');
+  }
   getElementById('death-count')!.textContent = String(unicorn.deaths);
   unicorn.isDead = true;
   unicorn.diedAt = Date.now();

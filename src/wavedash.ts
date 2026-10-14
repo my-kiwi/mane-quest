@@ -11,6 +11,12 @@ export const initWavedash = () => {
   }
 };
 
+export const unlockAchievement = (achievementId: string): void => {
+  if (Wavedash) {
+    Wavedash.setAchievement(achievementId, true);
+  }
+};
+
 // see https://docs.wavedash.com/sdk/leaderboards#getting-or-creating-a-leaderboard
 
 export const getLeaderboardId = async (): Promise<string | null> => {
