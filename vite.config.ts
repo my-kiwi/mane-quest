@@ -55,7 +55,7 @@ export default defineConfig({
         drop_debugger: true,   // Removes debugger statements
         passes: 5,             // Re-runs optimizer 3 times for max reduction
         pure_getters: true,    // Optimizes property access
-        booleans_as_integers: true,
+        booleans_as_integers: false, // Avoids converting booleans to 0/1
         unsafe_arrows: true,
         unsafe_comps: true,
         unsafe_math: true,
