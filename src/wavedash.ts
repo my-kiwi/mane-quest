@@ -1,14 +1,16 @@
-import WavedashSDK from '@wvdsh/sdk-js';
+import type WavedashSDK from '@wvdsh/sdk-js';
 
-// Re-assign to a typed variable that allows null
-const Wavedash: typeof WavedashSDK | null = WavedashSDK ? WavedashSDK : null;
+const Wavedash: typeof WavedashSDK | null =
+  typeof window !== 'undefined' && 'Wavedash' in window ? window.Wavedash : null;
 
-export const initWavedash = () => {
-  if (Wavedash) {
-    Wavedash.init();
-  } else {
-    console.warn('Wavedash not found');
+export const initWavedash = (): boolean => {
+  if (!Wavedash) {
+    console.info('Wavedash SDK unavailable; platform features are disabled.');
+    return false;
   }
+
+  Wavedash.init();
+  return true;
 };
 
 export const unlockAchievement = (achievementId: string): void => {

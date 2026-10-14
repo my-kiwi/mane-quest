@@ -84,13 +84,13 @@ function startMusic() {
 addEventListener('pointerdown', startMusic);
 addEventListener('keydown', startMusic);
 
-// wavedash integration
-initWavedash();
-// test
-getLeaderboardId().then((leaderboardId) => {
-  if (leaderboardId) {
-    console.log('Leaderboard ID:', leaderboardId);
-  } else {
-    console.error('Failed to get leaderboard ID');
-  }
-});
+// Wavedash platform features are optional when running the game outside its host.
+if (initWavedash()) {
+  getLeaderboardId().then((leaderboardId) => {
+    if (leaderboardId) {
+      console.log('Leaderboard ID:', leaderboardId);
+    } else {
+      console.error('Failed to get leaderboard ID');
+    }
+  });
+}
