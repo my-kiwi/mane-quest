@@ -5,7 +5,7 @@ import { addFireBallToActionBar, addShovelToActionBar } from './action';
 import { firstEnemy } from './enemy';
 import { hideDialog } from './dialog';
 import { M } from './dom-helpers';
-import { unlockAchievement } from './wavedash';
+import { submitCompletionScore, unlockAchievement } from './wavedash';
 
 export type NPC = typeof sageNpc;
 
@@ -201,6 +201,8 @@ export const secretNpc: NPC = {
 };
 secretNpc.image.src = encodeSvg(createUnicornSvg(secretNpc.colors));
 
+let completionSubmitted = false;
+
 export const endNpc: NPC = {
   name: '???',
   image: new Image(),
@@ -236,11 +238,18 @@ export const endNpc: NPC = {
       },
       {
         get line() {
-          unlockAchievement('REACHED_THE_END');
+          if (!completionSubmitted) {
+            completionSubmitted = true;
+            unlockAchievement('REACHED_THE_END');
+            void submitCompletionScore(Date.now() - unicorn.startDate, unicorn.deaths).catch(
+              (error: unknown) => console.error('Failed to submit completion score:', error)
+            );
+          }
           return `That's all folks, let me know in comments if you liked it or not, and if you want me to make more games like this one!`;
         },
       },
     ];
   },
 };
+
 endNpc.image.src = encodeSvg(createUnicornSvg(endNpc.colors));

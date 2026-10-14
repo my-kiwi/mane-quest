@@ -10,6 +10,7 @@ import { addEventListener, doc, querySelectorAll, removeEventListener } from './
 import Music from './music';
 import { addFireBallToActionBar, addShovelToActionBar, addWeaponToActionBar } from './action';
 import { getLeaderboardId, initWavedash } from './wavedash';
+import { unicorn } from './unicorn';
 
 // setTimeout(() => addShovelToActionBar(), 1000);
 // setTimeout(() => addWeaponToActionBar(), 1000);
@@ -27,6 +28,7 @@ function startGame(): void {
   if (gameStarted) return;
 
   gameStarted = true;
+  unicorn.startDate = Date.now();
   splashScreen.classList.add('splash-hidden');
   startGameButton.blur();
   startGameLoop();
