@@ -51,7 +51,7 @@ export default defineConfig({
     minify: 'terser',          // Switched to Terser for more aggressive compression
     terserOptions: {
       compress: {
-        drop_console: true,    // Removes console.log statements
+        drop_console: false,    // Removes console.log statements
         drop_debugger: true,   // Removes debugger statements
         passes: 5,             // Re-runs optimizer 3 times for max reduction
         pure_getters: true,    // Optimizes property access
