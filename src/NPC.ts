@@ -5,6 +5,7 @@ import { addFireBallToActionBar, addShovelToActionBar } from './action';
 import { firstEnemy } from './enemy';
 import { hideDialog } from './dialog';
 import { M } from './dom-helpers';
+import { unlockAchievement } from './wavedash';
 
 export type NPC = typeof sageNpc;
 
@@ -171,7 +172,12 @@ export const secretNpc: NPC = {
       ];
     }
     return [
-      { line: 'You found me!' },
+      {
+        get line() {
+          unlockAchievement('MEET_XANAXAIA');
+          return 'You found me!';
+        },
+      },
       { line: 'I am Xanaxaia, the secret unicorn!' },
       { who: unicorn, line: '...' },
       { line: 'I am here to give you a special gift.' },
