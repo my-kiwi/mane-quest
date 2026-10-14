@@ -1,3 +1,15 @@
+import { vi } from 'vitest';
+
+vi.mock('@wvdsh/sdk-js', () => ({
+  default: {
+    init: vi.fn(),
+    setAchievement: vi.fn(),
+    getOrCreateLeaderboard: vi.fn(),
+    LeaderboardSortOrder: { ASC: 'ASC' },
+    LeaderboardDisplayType: { TIME_MILLISECONDS: 'TIME_MILLISECONDS' },
+  },
+}));
+
 // Create and configure the canvas element
 const canvas = document.createElement('canvas');
 canvas.id = 'game-canvas';
