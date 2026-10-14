@@ -23,6 +23,12 @@ export const sageNpc = {
     maneColor: '#A7AFB7',
   },
   get dialogue() {
+    if (unicorn.hasShovel) {
+      return [
+        { line: 'Oh, you want to find treasure?' },
+        { line: "With that shovel, I'd personally loot corpses." },
+      ];
+    }
     if (unicorn.deaths === 0) {
       // addWeaponToActionBar();
       // addFireBallToActionBar();
